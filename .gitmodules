@@ -1,0 +1,3 @@
+[submodule "extern/extern/psrchive"]
+	path = extern/extern/psrchive
+	url = git://git.code.sf.net/p/psrchive/code
