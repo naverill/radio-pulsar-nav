@@ -1,0 +1,5 @@
+pulsar_spectra
+plotly
+pandas
+numpy
+psrqpy
