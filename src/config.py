@@ -1,3 +1,4 @@
+from astropy.coordinates import EarthLocation
 from antenna import Antenna
 
 parkes = Antenna(
@@ -8,8 +9,7 @@ parkes = Antenna(
     bandwidth = 340e6,      # (Hz)
     centre_freq = 1374,     # (MHz)
     half_beamwidth = 7. * 0.0166667,    # (degrees)
-    long = -32.99327814611731,
-    lat = 148.26503125664433,
+    pos = EarthLocation.from_geodetic(lat=-32.99327814611731, lon = 148.26503125664433),
     min_abs_galactic_lat = 20,
     max_abs_galactic_lat = 45,
 )
@@ -22,8 +22,7 @@ fast = Antenna(
     bandwidth = 512e6,      # (Hz)
     centre_freq = 1350,     # (MHz)
     half_beamwidth = 1. * 0.0166667,    # (degrees)
-    lat=106.85784898726897,
-    long=25.654006939684034,
+    pos = EarthLocation.from_geodetic(lat=25.654006939684034, lon = 106.85784898726897),
     min_abs_galactic_lat = 0,
     max_abs_galactic_lat = 90,
 )

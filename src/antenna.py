@@ -1,6 +1,11 @@
 import numpy as np
 
-class Antenna:
+from astroplan import Observer
+from astropy.coordinates import SkyCoord, EarthLocation
+import astropy.units as u
+
+
+class Antenna(Observer):
     def __init__(
         self,
         name: str,
@@ -10,8 +15,7 @@ class Antenna:
         bandwidth: float,
         centre_freq: float,
         half_beamwidth: float,
-        lat: float,
-        long: float,
+        pos: EarthLocation,
         min_abs_galactic_lat: float,
         max_abs_galactic_lat: float,
     ):
@@ -22,7 +26,7 @@ class Antenna:
             temp (float, K): System temperature
             gain (float): Antenna gain
             bandwidth (float, Hz): Antenna bandwidth
-            centre_freq (float, MHz): 
+            centre_freq (float, MHz):
             half_beamwidth (float, degrees):
         """
         self.name = name
@@ -32,10 +36,10 @@ class Antenna:
         self.bandwidth = bandwidth
         self.centre_freq = centre_freq
         self.half_beamwidth = half_beamwidth
-        self.lat = lat
-        self.long = long
+        self.pos = pos 
         self.min_abs_galactic_lat = min_abs_galactic_lat
         self.max_abs_galactic_lat = max_abs_galactic_lat
+        super().__init__(pos, elevation=0*u.m)
 
     def min_observable_flux_density(
         self,
@@ -47,7 +51,7 @@ class Antenna:
         """
         Parameters
         ----------
-            integration_time (float, s): 
+            integration_time (float, s):
             pulse_width_to_period (float):
             correction (float):
             num_polarisations (int):

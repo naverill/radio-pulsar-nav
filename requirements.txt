@@ -4,3 +4,4 @@ pandas
 numpy
 psrqpy
 scipy
+astroplan
