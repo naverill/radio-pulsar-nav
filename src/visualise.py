@@ -7,12 +7,14 @@ from astropy.table import Table
 from astropy.time import Time, TimeDelta
 
 from antenna import Antenna
-from psrcat import load_catalogue
+from psrcat import calculate_visible_pulsars, load_catalogue
 
 
 def plot_flux_density(pulsar_cat: pd.DataFrame, flux_cat) -> go.Figure:
     fig = go.Figure(
-        data=go.Scatter(x=pulsar_cat["P0"], y=flux_cat["S"], mode="markers", text=pulsar_cat["NAME"])
+        data=go.Scatter(
+            x=pulsar_cat["P0"], y=flux_cat["S"], mode="markers", text=pulsar_cat["NAME"]
+        )
     )
     fig.update_layout(
         title="Pulsar observability",
@@ -49,9 +51,9 @@ def plot_antenna_coverage(fig: go.Figure, antenna: Antenna, t: Time):
     http://astro.wsu.edu/worthey/astro/html/lec-celestial-sph.html
     https://www.rpi.edu/dept/phys/observatory/obsastro6.pdf
     """
-    zen = SkyCoord(90 * u.deg, 0 * u.deg, frame=AltAz(location=antenna.location, obstime=t)).transform_to(
-        ICRS
-    )
+    zen = SkyCoord(
+        90 * u.deg, 0 * u.deg, frame=AltAz(location=antenna.location, obstime=t)
+    ).transform_to(ICRS)
     ra = float(zen.ra / (1.0 * u.deg))
     dec = float(zen.dec / (1.0 * u.deg))
     n_horiz = 90 - dec if dec > 0 else -90 + dec
@@ -93,19 +95,6 @@ def plot_antenna_coverage(fig: go.Figure, antenna: Antenna, t: Time):
     )
 
 
-def calculate_visible_pulsars(
-    cat: Table, flux_cat: pd.DataFrame, antenna: Antenna, t: Time, integ_time: float
-) -> list[bool]:
-    vis: list[bool] = []
-    for i in range(len(cat)):
-        sky_pos = SkyCoord(frame="galactic", l=cat["GL"][i], b=cat["GB"][i], unit="deg")
-        is_vis = antenna.target_is_up(t, sky_pos) and flux_cat["S"][i] > antenna.min_observable_flux_density(
-            integ_time
-        )
-        vis.append(is_vis)
-    return vis
-
-
 if __name__ == "__main__":
     """ """
     from config import fast, kens, parkes
@@ -120,18 +109,17 @@ if __name__ == "__main__":
     ]:  # 5*60, 15*60]:
         fig_dens = plot_flux_density(cat, flux_cat)
         vis = calculate_visible_pulsars(cat, flux_cat, antenna, t, integ_time)
-        opacity = [1 if psr else 0.2 for psr in vis]
         col = ["rgba(238, 118,0, 0.7)" if psr else "rgba(104,131,139, 0.4)" for psr in vis]
         fig_dens.add_hline(
             y=kens.min_observable_flux_density(integ_time),
             line_dash="dash",
             label=dict(text=antenna.name, textposition="end"),
         )
-        fig_dens.update_traces(marker=dict(opacity=opacity, color=col))
+        fig_dens.update_traces(marker=dict(color=col))
         fig_dens.show()
 
         fig_pos = plot_pulsar_position(cat)
-        fig_pos.update_traces(marker=dict(opacity=opacity, color=col))
+        fig_pos.update_traces(marker=dict(color=col))
         plot_antenna_coverage(fig_pos, antenna, t)
         plot_antenna_coverage(fig_pos, antenna, t1)
         fig_pos.show()

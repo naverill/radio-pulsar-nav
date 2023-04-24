@@ -6,6 +6,8 @@ import numpy as np
 from astroplan import Observer
 from astropy.coordinates import EarthLocation
 
+from constants import BOLTZMANN_CONSTANT
+
 
 class Antenna(Observer):
     """
@@ -17,10 +19,11 @@ class Antenna(Observer):
         name: str,
         signal_to_noise: float,
         temp: float,
-        gain: float,
         bandwidth: float,
         centre_freq: float,
         pos: EarthLocation,
+        effective_area: float = None,
+        gain: float = None,
     ):
         """Instantiate antenna.
 
@@ -33,13 +36,13 @@ class Antenna(Observer):
             centre_freq (float, MHz):
             half_beamwidth (float, degrees):
         """
-        self.name = name
         self.signal_to_noise = signal_to_noise
         self.temp = temp
-        self.gain = gain
         self.bandwidth = bandwidth
+        self.effective_area = effective_area
         self.centre_freq = centre_freq
-        super().__init__(location=pos, elevation=0 * u.m)
+        self._gain = gain
+        super().__init__(name=name, location=pos, elevation=0 * u.m)
 
     def min_observable_flux_density(
         self,
@@ -67,3 +70,9 @@ class Antenna(Observer):
             / (self.gain * np.sqrt(num_polarisations * self.bandwidth * integration_time))
             * np.sqrt(pulse_width_to_period / (1 - pulse_width_to_period))
         ) * 1000
+
+    @property
+    def gain(self):
+        if self._gain is None:
+            self._gain = 2 * BOLTZMANN_CONSTANT / self.effective_area
+        return self._gain

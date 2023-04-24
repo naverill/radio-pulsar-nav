@@ -3,10 +3,14 @@ PSRCAT interface module
 """
 import pandas as pd
 import psrqpy
+from astropy.coordinates import SkyCoord
+from astropy.table import Table
+from astropy.time import Time
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
 from pulsar_spectra.spectral_fit import estimate_flux_density, find_best_spectral_fit
 
 from __init__ import logger
+from antenna import Antenna
 
 logger.disabled = True
 
@@ -40,7 +44,22 @@ def load_catalogue(centre_freq: float = 1400) -> pd.DataFrame:
 
         model, m, _, _, _ = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs)
         if model:
-            flux_cat["S"][pulsar], flux_cat["SERR"][pulsar] = estimate_flux_density(centre_freq, model, m)
+            flux_cat["S"][pulsar], flux_cat["SERR"][pulsar] = estimate_flux_density(
+                centre_freq, model, m
+            )
         else:
             logger.warning(f"Failed to find best fit spectral model for {pulsar}")
     return cat.table, flux_cat
+
+
+def calculate_visible_pulsars(
+    cat: Table, flux_cat: pd.DataFrame, antenna: Antenna, t: Time, integ_time: float
+) -> list[bool]:
+    vis: list[bool] = []
+    for i in range(len(cat)):
+        sky_pos = SkyCoord(frame="galactic", l=cat["GL"][i], b=cat["GB"][i], unit="deg")
+        is_vis = antenna.target_is_up(t, sky_pos) and flux_cat["S"][
+            i
+        ] > antenna.min_observable_flux_density(integ_time)
+        vis.append(is_vis)
+    return vis
