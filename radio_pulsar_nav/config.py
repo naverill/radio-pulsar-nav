@@ -1,8 +1,7 @@
 from math import pi
 
-from astropy.coordinates import EarthLocation
-
 from antenna import Antenna
+from astropy.coordinates import EarthLocation
 
 kens = Antenna(
     name="Marsfield telescope",

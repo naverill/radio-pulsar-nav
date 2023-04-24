@@ -1,13 +1,11 @@
 import astropy.units as u
 import pandas as pd
 import plotly.graph_objects as go
+from antenna import Antenna
 from astroplan import Observer
 from astropy.coordinates import ICRS, AltAz, SkyCoord
 from astropy.table import Table
-from astropy.time import Time, TimeDelta
-
-from antenna import Antenna
-from psrcat import calculate_visible_pulsars, load_catalogue
+from astropy.time import Time
 
 
 def plot_flux_density(pulsar_cat: pd.DataFrame, flux_cat) -> go.Figure:
@@ -93,33 +91,3 @@ def plot_antenna_coverage(fig: go.Figure, antenna: Antenna, t: Time):
             marker=dict(color="midnightblue"),
         )
     )
-
-
-if __name__ == "__main__":
-    """ """
-    from config import fast, kens, parkes
-
-    antenna = kens
-
-    cat, flux_cat = load_catalogue(antenna.centre_freq)
-    t = Time.now()
-    t1 = t + TimeDelta(6.0 * 60 * 60 * u.s)
-    for integ_time in [
-        60,
-    ]:  # 5*60, 15*60]:
-        fig_dens = plot_flux_density(cat, flux_cat)
-        vis = calculate_visible_pulsars(cat, flux_cat, antenna, t, integ_time)
-        col = ["rgba(238, 118,0, 0.7)" if psr else "rgba(104,131,139, 0.4)" for psr in vis]
-        fig_dens.add_hline(
-            y=kens.min_observable_flux_density(integ_time),
-            line_dash="dash",
-            label=dict(text=antenna.name, textposition="end"),
-        )
-        fig_dens.update_traces(marker=dict(color=col))
-        fig_dens.show()
-
-        fig_pos = plot_pulsar_position(cat)
-        fig_pos.update_traces(marker=dict(color=col))
-        plot_antenna_coverage(fig_pos, antenna, t)
-        plot_antenna_coverage(fig_pos, antenna, t1)
-        fig_pos.show()

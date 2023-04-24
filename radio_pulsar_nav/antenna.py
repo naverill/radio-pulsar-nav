@@ -5,7 +5,6 @@ import astropy.units as u
 import numpy as np
 from astroplan import Observer
 from astropy.coordinates import EarthLocation
-
 from constants import BOLTZMANN_CONSTANT
 
 

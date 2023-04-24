@@ -3,14 +3,13 @@ PSRCAT interface module
 """
 import pandas as pd
 import psrqpy
+from __init__ import logger
+from antenna import Antenna
 from astropy.coordinates import SkyCoord
 from astropy.table import Table
 from astropy.time import Time
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
 from pulsar_spectra.spectral_fit import estimate_flux_density, find_best_spectral_fit
-
-from __init__ import logger
-from antenna import Antenna
 
 logger.disabled = True
 
