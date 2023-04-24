@@ -1,40 +1,36 @@
+import astropy.units as u
 import pandas as pd
 import plotly.graph_objects as go
-from psrcat import load_catalogue
 from astroplan import Observer
-from astropy.time import Time
-from astropy.coordinates import SkyCoord
+from astropy.coordinates import ICRS, AltAz, SkyCoord
 from astropy.table import Table
-import astropy.units as u
+from astropy.time import Time, TimeDelta
 
 from antenna import Antenna
+from psrcat import load_catalogue
 
-def plot_flux_density(pulsar_cat: pd.DataFrame) -> go.Figure:
+
+def plot_flux_density(pulsar_cat: pd.DataFrame, flux_cat) -> go.Figure:
     fig = go.Figure(
-        data = go.Scatter(
-            x=pulsar_cat["P0"],
-            y=pulsar_cat["S1400"],
-            mode="markers",
-            text=pulsar_cat["NAME"]
-        )
+        data=go.Scatter(x=pulsar_cat["P0"], y=flux_cat["S"], mode="markers", text=pulsar_cat["NAME"])
     )
     fig.update_layout(
         title="Pulsar observability",
         xaxis_title="Pular period (s)",
         yaxis_title="Mean Flux Density (mJ)",
-        xaxis_type = "log",
-        yaxis_type = "log"
+        xaxis_type="log",
+        yaxis_type="log",
     )
     return fig
 
 
 def plot_pulsar_position(pulsar_cat: pd.DataFrame) -> go.Figure:
     fig = go.Figure(
-        data = go.Scatter(
+        data=go.Scatter(
             x=pulsar_cat["RAJD"],
             y=pulsar_cat["DECJD"],
             mode="markers",
-            text=pulsar_cat["NAME"]
+            text=pulsar_cat["NAME"],
         )
     )
     fig.update_layout(
@@ -47,83 +43,95 @@ def plot_pulsar_position(pulsar_cat: pd.DataFrame) -> go.Figure:
     return fig
 
 
-def plot_antenna_coverage(fig: go.Figure, antenna: Antenna):
+def plot_antenna_coverage(fig: go.Figure, antenna: Antenna, t: Time):
     """
     https://learn.astropy.org/tutorials/2-Coordinates-Transforms
     http://astro.wsu.edu/worthey/astro/html/lec-celestial-sph.html
     https://www.rpi.edu/dept/phys/observatory/obsastro6.pdf
     """
-    lat = float(antenna.location.lat  / (1.*u.deg))
-    lon = float(antenna.location.lon  / (1.*u.deg))
-    n_horiz =  90 - lat  if lat > 0 else -90 + lat
-    s_horiz =  -90 + lat if lat > 0 else 90 - lat
+    zen = SkyCoord(90 * u.deg, 0 * u.deg, frame=AltAz(location=antenna.location, obstime=t)).transform_to(
+        ICRS
+    )
+    ra = float(zen.ra / (1.0 * u.deg))
+    dec = float(zen.dec / (1.0 * u.deg))
+    n_horiz = 90 - dec if dec > 0 else -90 + dec
+    s_horiz = -90 + dec if dec > 0 else 90 - dec
+    e_horiz = ra - 90 if ra > 90 else 360 - ra
+    w_horiz = -90 + ra if ra > 270 else ra + 90
     fig.add_hrect(
         y0=s_horiz,
         y1=n_horiz,
         fillcolor="LightSalmon",
-        opacity=0.5,
+        opacity=0.3,
         layer="below",
         line_width=0,
     )
     fig.add_shape(
         type="circle",
-        x0=lon - 90,
-        x1=lon + 90,
+        x0=e_horiz,
+        x1=w_horiz,
         y0=s_horiz,
         y1=n_horiz,
-        opacity=0.3,
+        opacity=0.1,
         fillcolor="orange",
-        line_color="orange"
+        line_color="orange",
     )
     fig.add_trace(
         go.Scatter(
-            x=[lat,],
-            y=[lon,],
+            x=[
+                ra,
+            ],
+            y=[
+                dec,
+            ],
             mode="markers",
-            text=[antenna.name,],
-            marker=dict(color="orange"),
+            text=[
+                antenna.name,
+            ],
+            marker=dict(color="midnightblue"),
         )
     )
 
 
-def calculate_visible_pulsars(cat: Table, antenna: Antenna, t: Time, integ_time: float) -> list[bool]:
+def calculate_visible_pulsars(
+    cat: Table, flux_cat: pd.DataFrame, antenna: Antenna, t: Time, integ_time: float
+) -> list[bool]:
     vis: list[bool] = []
     for i in range(len(cat)):
         sky_pos = SkyCoord(frame="galactic", l=cat["GL"][i], b=cat["GB"][i], unit="deg")
-        is_vis = (
-            antenna.target_is_up(t, sky_pos) and cat["S1400"][i] > parkes.min_observable_flux_density(integ_time)
+        is_vis = antenna.target_is_up(t, sky_pos) and flux_cat["S"][i] > antenna.min_observable_flux_density(
+            integ_time
         )
         vis.append(is_vis)
     return vis
 
 
 if __name__ == "__main__":
-    """
-    """
-    from config import parkes, fast
-    cat = load_catalogue()
+    """ """
+    from config import fast, kens, parkes
 
+    antenna = kens
+
+    cat, flux_cat = load_catalogue(antenna.centre_freq)
     t = Time.now()
-    for integ_time in [60,]: # 5*60, 15*60]:
-        fig_dens = plot_flux_density(cat)
-        vis = calculate_visible_pulsars(cat, parkes, t, integ_time)
+    t1 = t + TimeDelta(6.0 * 60 * 60 * u.s)
+    for integ_time in [
+        60,
+    ]:  # 5*60, 15*60]:
+        fig_dens = plot_flux_density(cat, flux_cat)
+        vis = calculate_visible_pulsars(cat, flux_cat, antenna, t, integ_time)
         opacity = [1 if psr else 0.2 for psr in vis]
+        col = ["rgba(238, 118,0, 0.7)" if psr else "rgba(104,131,139, 0.4)" for psr in vis]
         fig_dens.add_hline(
-            y=parkes.min_observable_flux_density(integ_time),
+            y=kens.min_observable_flux_density(integ_time),
             line_dash="dash",
-            label=dict(
-                text=parkes.name,
-                textposition="end"
-            )
+            label=dict(text=antenna.name, textposition="end"),
         )
-        fig_dens.update_traces(
-            marker=dict(opacity=opacity)
-        )
+        fig_dens.update_traces(marker=dict(opacity=opacity, color=col))
         fig_dens.show()
 
         fig_pos = plot_pulsar_position(cat)
-        fig_pos.update_traces(
-            marker=dict(opacity=opacity)
-        )
-        plot_antenna_coverage(fig_pos, parkes)
+        fig_pos.update_traces(marker=dict(opacity=opacity, color=col))
+        plot_antenna_coverage(fig_pos, antenna, t)
+        plot_antenna_coverage(fig_pos, antenna, t1)
         fig_pos.show()

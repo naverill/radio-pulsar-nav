@@ -1,11 +1,17 @@
-import numpy as np
-
-from astroplan import Observer
-from astropy.coordinates import SkyCoord, EarthLocation
+"""
+Antenna observer object
+"""
 import astropy.units as u
+import numpy as np
+from astroplan import Observer
+from astropy.coordinates import EarthLocation
 
 
 class Antenna(Observer):
+    """
+    Antenna observer object
+    """
+
     def __init__(
         self,
         name: str,
@@ -14,12 +20,10 @@ class Antenna(Observer):
         gain: float,
         bandwidth: float,
         centre_freq: float,
-        half_beamwidth: float,
         pos: EarthLocation,
-        min_abs_galactic_lat: float,
-        max_abs_galactic_lat: float,
     ):
-        """
+        """Instantiate antenna.
+
         Parameters
         ----------
             signal_to_noise (float): Signal to noise ratio
@@ -35,11 +39,7 @@ class Antenna(Observer):
         self.gain = gain
         self.bandwidth = bandwidth
         self.centre_freq = centre_freq
-        self.half_beamwidth = half_beamwidth
-        self.pos = pos 
-        self.min_abs_galactic_lat = min_abs_galactic_lat
-        self.max_abs_galactic_lat = max_abs_galactic_lat
-        super().__init__(pos, elevation=0*u.m)
+        super().__init__(location=pos, elevation=0 * u.m)
 
     def min_observable_flux_density(
         self,
@@ -48,7 +48,9 @@ class Antenna(Observer):
         correction: float = 1,
         num_polarisations: int = 2,
     ):
-        """
+        """Calculate minimum flux density that can be measured by the antenna
+        given a fixed integration time.
+
         Parameters
         ----------
             integration_time (float, s):
@@ -62,10 +64,6 @@ class Antenna(Observer):
         """
         return (
             (correction * self.signal_to_noise * self.temp)
-            / (
-                self.gain * np.sqrt(num_polarisations * self.bandwidth * integration_time)
-            )
-            * np.sqrt(
-                pulse_width_to_period / (1 - pulse_width_to_period)
-            )
+            / (self.gain * np.sqrt(num_polarisations * self.bandwidth * integration_time))
+            * np.sqrt(pulse_width_to_period / (1 - pulse_width_to_period))
         ) * 1000
