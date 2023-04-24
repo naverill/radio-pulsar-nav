@@ -1,7 +1,8 @@
 from math import pi
 
-from antenna import Antenna
 from astropy.coordinates import EarthLocation
+
+from radio_pulsar_nav.antenna import Antenna
 
 kens = Antenna(
     name="Marsfield telescope",

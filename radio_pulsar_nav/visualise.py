@@ -1,11 +1,12 @@
 import astropy.units as u
 import pandas as pd
 import plotly.graph_objects as go
-from antenna import Antenna
 from astroplan import Observer
 from astropy.coordinates import ICRS, AltAz, SkyCoord
 from astropy.table import Table
 from astropy.time import Time
+
+from radio_pulsar_nav.antenna import Antenna
 
 
 def plot_flux_density(pulsar_cat: pd.DataFrame, flux_cat) -> go.Figure:
