@@ -50,20 +50,18 @@ def plot_antenna_coverage(fig: go.Figure, antenna: Antenna, t: Time):
     http://astro.wsu.edu/worthey/astro/html/lec-celestial-sph.html
     https://www.rpi.edu/dept/phys/observatory/obsastro6.pdf
     """
-    zen = SkyCoord(
-        90 * u.deg, 0 * u.deg, frame=AltAz(location=antenna.location, obstime=t)
-    ).transform_to(ICRS)
+    zen = antenna.location.get_itrs(t).transform_to(ICRS)
     ra = float(zen.ra / (1.0 * u.deg))
     dec = float(zen.dec / (1.0 * u.deg))
-    n_horiz = 90 - dec if dec > 0 else -90 + dec
-    s_horiz = -90 + dec if dec > 0 else 90 - dec
-    e_horiz = ra - 90 if ra > 90 else 360 - ra
-    w_horiz = -90 + ra if ra > 270 else ra + 90
+    n_horiz = (dec + 90 + 180) % 360 - 180
+    s_horiz = (dec - 90 + 180) % 360 - 180
+    w_horiz = (ra + 90) % 360
+    e_horiz = (ra - 90) % 360
     fig.add_hrect(
         y0=s_horiz,
         y1=n_horiz,
         fillcolor="LightSalmon",
-        opacity=0.3,
+        opacity=0.2,
         layer="below",
         line_width=0,
     )
