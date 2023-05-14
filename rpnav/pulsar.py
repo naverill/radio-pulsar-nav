@@ -10,7 +10,6 @@ from rpnav.antenna import Antenna
 # from pulsar_spectra.catalogue import collect_catalogue_fluxes
 # from pulsar_spectra.spectral_fit import estimate_flux_density, find_best_spectral_fit
 
-
 logger.disabled = True
 
 
@@ -45,7 +44,7 @@ class Pulsar(SkyCoord):
         self.pulse_width_10 = pulse_width_10
         super().__init__(frame=ICRS, ra=ra, dec=dec, unit="deg")
 
-    def to_sky_coord(self) -> SkyCoord:
+    def _to_sky_coord(self) -> SkyCoord:
         return SkyCoord(frame=ICRS, ra=self.ra, dec=self.dec, unit="deg")
 
     def is_observable(
@@ -63,7 +62,7 @@ class Pulsar(SkyCoord):
         return is_vis and observable
 
     def get_alt_az(self, antenna: Antenna, t: Time):
-        return self.to_sky_coord().transform_to(AltAz(obstime=t, location=antenna.location))
+        return self._to_sky_coord().transform_to(AltAz(obstime=t, location=antenna.location))
 
     @staticmethod
     def load_catalogue(centre_freq: float = 1400) -> pd.DataFrame:

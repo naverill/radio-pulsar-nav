@@ -6,9 +6,9 @@ nreal: 1
 
 <pulsars>
 psr: name=J0437-4715
-psr: name=J1022+1001
-psr: name=J1909-3744
-psr: name=J0613-0200
+#psr: name=J1022+1001
+#psr: name=J1909-3744
+#psr: name=J0613-0200
 </pulsars>
 
 <obsRun>

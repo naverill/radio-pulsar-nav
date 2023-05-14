@@ -57,6 +57,7 @@ def test_plot_pulsar_observability(antenna):
             )
         )
         # fig.show()
+        fig.write_image("tmp.png")
 
 
 def test_return_az_el_visible(antenna):
