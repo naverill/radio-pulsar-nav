@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name="radio_pulsar_nav",
+    name="rpnav",
     version="0.0.1",
     author="Nina Averill",
     author_email="averill.nina@gmail.com",

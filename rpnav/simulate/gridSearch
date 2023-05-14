@@ -1,0 +1,89 @@
+#!/usr/bin/tcsh
+#
+setenv TEMPO2 ~/workspace/rpnav/simulate/T2runtime/
+
+touch finalOffsetResults.txt
+echo "# ------------" >> finalOffsetResults.txt
+
+# Run the simulation
+foreach iteration (`seq 1 10`)
+/u/hob044/software/new_c/ptaSimulate/ptaSimulate sim.input
+pwd
+echo "Running sim1 script"
+
+source sim1/scripts/runScripts_master
+
+setenv TEMPO2 ~/workspace/marsfield_sim/T2runtime/
+
+
+cd sim1/output/real_0/
+# Replace the last data points site code
+echo "Running sed"
+sed s/"site1_actual"/"site1_guess"/g J0437-4715.tim >! tt.tim
+\mv tt.tim J0437-4715.tim
+echo "Do the grid search"
+
+
+# Now search for the minimum in X,Y,Z
+
+
+ set x = -4460892.6
+ set y = 2682358.9
+ set z = -3674756.0
+ \rm resultsX.txt
+ \rm resultsY.txt
+ \rm resultsZ.txt
+ touch resultsX.txt
+ touch resultsY.txt
+ touch resultsZ.txt
+
+ set p0 = `echo $x`
+ foreach x (`seq -4499892.6 1000 -4451892.6`)
+  \cp $TEMPO2/observatory/observatories.template $TEMPO2/observatory/observatories.dat
+  echo " $x $y $z site1_guess              site1_guess" >> $TEMPO2/observatory/observatories.dat
+  tempo2 -output general2 -s "{sat} {pre} {err}\n" -f J0437-4715.par J0437-4715.tim | awk '{if ($3 == 60) {print NR,$2,$3*1e-6,$2**2/($3*1e-6)**2}}' >! store_temp
+  set chisq = `/u/hob044/software/new_c/stats/stats -f store_temp -col 4 -sum | tail -1 | awk '{print $2}'`
+  echo $x $p0 $chisq
+  echo $x $p0 $chisq >> resultsX.txt
+ end
+
+ set x = -4460892.6
+ set y = 2682358.9
+ set z = -3674756.0
+ set p0 = `echo $y`
+ foreach y (`seq 2652358.9 1000 2732358.9`)
+  \cp $TEMPO2/observatory/observatories.template $TEMPO2/observatory/observatories.dat
+  echo " $x $y $z site1_guess              site1_guess" >> $TEMPO2/observatory/observatories.dat
+
+  tempo2 -output general2 -s "{sat} {pre} {err}\n" -f J0437-4715.par J0437-4715.tim | awk '{if ($3 == 60) {print NR,$2,$3*1e-6,$2**2/($3*1e-6)**2}}' >! store_temp
+  set chisq = `/u/hob044/software/new_c/stats/stats -f store_temp -col 4 -sum | tail -1 | awk '{print $2}'`
+  echo $y $p0 $chisq
+  echo $y $p0 $chisq >> resultsY.txt
+ end
+
+
+ set x = -4460892.6
+ set y = 2682358.9
+ set z = -3674756.0
+ set p0 = `echo $z`
+ foreach z (`seq -3719756.0 1000 -3664756.0`)
+  \cp $TEMPO2/observatory/observatories.template $TEMPO2/observatory/observatories.dat
+  echo " $x $y $z site1_guess              site1_guess" >> $TEMPO2/observatory/observatories.dat
+
+  tempo2 -output general2 -s "{sat} {pre} {err}\n" -f J0437-4715.par J0437-4715.tim | awk '{if ($3 == 60) {print NR,$2,$3*1e-6,$2**2/($3*1e-6)**2}}' >! store_temp
+  set chisq = `/u/hob044/software/new_c/stats/stats -f store_temp -col 4 -sum | tail -1 | awk '{print $2}'`
+  echo $z $p0 $chisq
+  echo $z $p0 $chisq >> resultsZ.txt
+ end
+
+set xOffset = `sort -k3g resultsX.txt | head -1 | awk '{print (($1-$2))}'`
+set yOffset = `sort -k3g resultsY.txt | head -1 | awk '{print (($1-$2))}'`
+set zOffset = `sort -k3g resultsZ.txt | head -1 | awk '{print (($1-$2))}'`
+echo "MAIN RESULTS"
+pwd
+echo $xOffset $yOffset $zOffset 
+cd ../../..
+echo $xOffset $yOffset $zOffset >> finalOffsetResults.txt
+# Now do another iteration
+end
+

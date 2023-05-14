@@ -1,0 +1,40 @@
+<define>
+name: msfd_sim 
+nproc: 1
+nreal: 1
+</define>
+
+<pulsars>
+psr: name=J0437-4715
+psr: name=J1022+1001
+psr: name=J1909-3744
+psr: name=J0613-0200
+</pulsars>
+
+<obsRun>
+name: pks
+tel: pks
+start: 57000.3
+finish: 60000.3
+sampling: cadence=7
+sched: sched1
+</obsRun>
+
+<obsRun>
+name: MSFD 
+tel: msfd_actual 
+start: 60002.3
+finish: 60002.8
+sampling: cadence=0.1
+sched: sched1
+</obsRun>
+
+<schedule>
+name: sched1
+observe: psr=J0437-4715,toaerr=1e-6,freq=1400,ha=8*(ran(linear)-0.5)
+</schedule>
+
+<schedule>
+name: sched2
+observe: psr=J0613-0200,toaerr=60e-6,freq=1400,ha=12*(ran(linear)-0.5)
+</schedule>
