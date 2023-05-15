@@ -1,16 +1,23 @@
 # Pulsar Timing Array (PTA) Simulation
-
+TODO outline simulation paramaters 
 ## Usage
+To set up Tempo2 local environment, 
+```
+export TEMPO2=/path/to/T2runtime
+```
+
+To set up the simulation environment, modify the `sim.input` file and run
+```
+ptaSimulate sim.input
+```
 
 ```
-ptaSimulate <.dat file>
-
-source <script name>/scripts/runScripts_master
-cd <script name>/output/real_<n>/
-tempo2 -gr plk -f J0437-4715.par J0437-4715.tim
+# Run simulation
+tcsh <script name>/scripts/runScripts_master
 
 # output to results file
-tempo2 -output general2 -s "{sat} {pre} {err} rslt\n" -f J0437-4715.par J0437-4715.tim  | grep rslt | awk '{print $1,$2,$3}' > results.txt
+outpath=<script name>/output/real_<n>
+tempo2 -output general2 -s "{sat} {pre} {err} rslt\n" -f ${outpath}/J0437-4715.par ${outpath}/J0437-4715.tim  | grep rslt | awk '{print $1,$2,$3}' > ${outpath}/results.txt
 ```
 
 
