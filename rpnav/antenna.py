@@ -6,11 +6,12 @@ from typing import Any
 
 import astropy.units as u
 import numpy as np
-from astroplan import Observer
 from astropy.coordinates import EarthLocation, SkyCoord
+from astropy.time import Time
 
 from rpnav.constants import BOLTZMANN_CONSTANT, SPEED_OF_LIGHT
 from rpnav.conversions import frequency_to_wavelength, wavelength_to_frequency
+from rpnav.timing.observer import Observer
 
 
 class Antenna(Observer):
@@ -24,7 +25,11 @@ class Antenna(Observer):
         signal_to_noise: float,
         system_temp: float,
         bandwidth: float,
-        pos: EarthLocation,
+        location: EarthLocation,
+        aliases: list[str] = [],
+        time: Time = None,
+        timescale: str = "TCB",
+        itoa_code: str = None,
         centre_frequency: float = None,
         wavelength: float = None,
         effective_area: float = None,
@@ -32,6 +37,7 @@ class Antenna(Observer):
         n_element_coherent: int = None,
         n_element_incoherent: int = None,
         astronomy_gain: float = None,
+        elevation: u = u.m,
     ):
         """Instantiate antenna.
 
@@ -59,7 +65,8 @@ class Antenna(Observer):
         self.diameter = diameter
         self._radio_gain = None
         self._propagate_calculations()
-        super().__init__(name=name, location=pos, elevation=0 * u.m)
+        self.elevation = elevation
+        super().__init__(name, location, aliases=aliases, timescale=timescale, time=time)
 
     def min_observable_flux_density(
         self,
