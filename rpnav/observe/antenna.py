@@ -11,7 +11,7 @@ from astropy.time import Time
 
 from rpnav.constants import BOLTZMANN_CONSTANT, SPEED_OF_LIGHT
 from rpnav.conversions import frequency_to_wavelength, wavelength_to_frequency
-from rpnav.timing.observer import Observer
+from rpnav.observe.observer import Observer
 
 
 class Antenna(Observer):

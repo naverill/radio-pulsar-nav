@@ -5,10 +5,10 @@ from astropy.table import Table
 from astropy.time import Time
 
 from rpnav import logger
-from rpnav.antenna import Antenna
+from rpnav.observe.antenna import Antenna
 
-# from pulsar_spectra.catalogue import collect_catalogue_fluxes
-# from pulsar_spectra.spectral_fit import estimate_flux_density, find_best_spectral_fit
+#from pulsar_spectra.catalogue import collect_catalogue_fluxes
+#from pulsar_spectra.spectral_fit import estimate_flux_density, find_best_spectral_fit
 
 logger.disabled = True
 
@@ -28,13 +28,15 @@ class Pulsar(SkyCoord):
         flux_density_err: float = None,
     ):
         """
-        "NAME",  # Pulsar name
-        "RAJD",  # Right ascension (J2000) (degrees)
-        "DecJD",  # Declination (J2000) (degrees)
-        "P0",  # Barycentric period of the pulsar (s)
-        "DM",  # Dispersion measure (cm-3 pc)
-        "W50",  # Width of pulse at 50% of peak (ms)
-        "W10",  # Width of pulse at 10% (ms)
+        Parameters
+        ----------
+            NAME:   Pulsar name
+            RAJD:   Right ascension (J2000) (degrees)
+            DecJD:  Declination (J2000) (degrees)
+            P0:     Barycentric period of the pulsar (s)
+            DM:     Dispersion measure (cm-3 pc)
+            W50:    Width of pulse at 50% of peak (ms)
+            W10:    Width of pulse at 10% (ms)
         """
         self.name = name
         self.flux_density = flux_density
@@ -65,42 +67,59 @@ class Pulsar(SkyCoord):
         return self._to_sky_coord().transform_to(AltAz(obstime=t, location=antenna.location))
 
     @staticmethod
-    def load_catalogue(centre_freq: float = 1400) -> pd.DataFrame:
-        """Load pulsar data from PSR Catalogue."""
+    def _interpolate_flux_density(row: Table, cat_dict: dict) -> tuple[float, float]:
+        flux_dens = None
+        flux_dens_err = None
+        if row["NAME"] not in cat_dict:
+            logger.warning("Pulsar config not found")
+        else:
+            model = None
+            freqs, bands, fluxs, flux_errs, refs = cat_dict[row["NAME"]]
+            if not freqs:
+                logger.warning("Frequency values not found")
+            else:
+                model, m, _, _, _ = find_best_spectral_fit(row["NAME"], freqs, bands, fluxs, flux_errs, refs)
+            if model:
+                flux_dens, flux_dens_err = estimate_flux_density(
+                    centre_freq, model, m
+                )
+            else:
+                logger.warning(f"Failed to find best fit spectral model for {row['NAME']}")
+        return flux_dens, flux_dens_err
+
+    @staticmethod
+    def load_catalogue(centre_freq: int = 1400, interpolate=False) -> list["Pulsar"]:
+        """Load pulsar data from PSR Catalogue (PSRCAT)."""
         cat = psrqpy.QueryATNF(
             params=[
-                "NAME",  # Pulsar name
-                "RAJD",  # Right ascension (J2000) (degrees)
-                "DECJD",  # Declination (J2000) (degrees)
-                "P0",  # Barycentric period of the pulsar (s)
-                "DM",  # Dispersion measure (cm-3 pc)
-                "W50",  # Width of pulse at 50% of peak (ms)
-                "W10",  # Width of pulse at 10% (ms)
-                "S1400",
+                "NAME",
+                "RAJD",
+                "DECJD",
+                "P0",
+                "DM",
+                "W50",
+                "W10",
+                f"S{centre_freq}",
             ]
         ).table
         pulsars: list[Pulsar] = []
-        # cat_dict = collect_catalogue_fluxes()
-        for row in cat:
-            flux_dens = row["S1400"]
-            flux_dens_err = None
-            #    if pid not in cat_dict:
-            #        logger.warning("Pulsar config not found")
-            #        continue
 
-            #    freqs, bands, fluxs, flux_errs, refs = cat_dict[pid]
-            #    if not freqs:
-            #        logger.warning("Frequency values not found")
-            #        continue
-            #    model, m, _, _, _ = find_best_spectral_fit(pulsar, freqs, bands, fluxs, flux_errs, refs)
-            #    if model:
-            #        flux_dens, flux_dens_err = estimate_flux_density(
-            #            centre_freq, model, m
-            #        )
-            #    else:
-            #        logger.warning(f"Failed to find best fit spectral model for {pulsar}")
+        cat_dict = None
+        if interpolate:
+            cat_dict = collect_catalogue_fluxes()
+
+        for row in cat:
+            flux_dens = None
+            flux_dens_err = None
+
+            if interpolate:
+                flux_dens, flux_dens_err = self._interpolate_flux_density(row, cat_dict)
+            else:
+                flux_dens = row[f"S{centre_freq}"]
+
             if not flux_dens:
                 continue
+
             pulsars.append(
                 Pulsar(
                     name=row["NAME"],

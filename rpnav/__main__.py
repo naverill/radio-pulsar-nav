@@ -3,10 +3,14 @@ import io
 import json
 
 import astropy.units as u
+from astropy.time import Time
 from astropy.coordinates import EarthLocation
 from pint.observatory.topo_obs import load_observatories
 
-from rpnav.timing.observer import Observer
+from math import pi
+
+from rpnav.observe.antenna import Antenna
+from rpnav.observe.observer import Observer
 from rpnav.timing.timing import fit_residuals
 from rpnav.timing.visualise import plot_residuals
 
@@ -34,13 +38,30 @@ msfd = Observer(
     itoa_code="MSFD",
     location=EarthLocation.from_geodetic(lat=-33.77290643916046, lon=151.0976937264337),
     origin="Actual location of CSIRO Marsfield site",
+    time=Time(57000.60227054031651480, format="mjd"),
+    signal_to_noise=1,
+    system_temp=30.0,  # K
+    bandwidth=40e6,  # (Hz)
+    centre_frequency=1400,  # (MHz)
+    location=EarthLocation.from_geodetic(lat=-33.77290643916046, lon=151.0976937264337),
+    diameter=2,
+    # n_element_coherent = 1,
+    # n_element_incoherent = 1,
 )
 msfd_est = Observer(
     name="msfd_estimated",
     itoa_code="MSFD_EST",
     location=EarthLocation.from_geodetic(lat=-33.77290643916046, lon=151.0976937264337),
-    origin="Estimated location of CSIRO Marsfield site"
-    # overwrite=True
+    origin="Estimated location of CSIRO Marsfield site",
+    time=Time(57000.60227054031651480, format="mjd"),
+    signal_to_noise=1,
+    system_temp=30.0,  # K
+    bandwidth=40e6,  # (Hz)
+    centre_frequency=1400,  # (MHz)
+    location=EarthLocation.from_geodetic(lat=-33.77290643916046, lon=151.0976937264337),
+    diameter=2,
+    # n_element_coherent = 1,
+    # n_element_incoherent = 1,
 )
 obs = msfd.to_json()
 obs.update(msfd_est.to_json())
@@ -52,4 +73,4 @@ fig = plot_residuals(
     fitter.toas.get_mjds().value.astype(float),
     fitter.toas.get_errors().to_value(u.us).astype(float),
 )
-fig.write_image("test.png")
+fig.show()

@@ -3,12 +3,11 @@ from math import log2
 import astropy.units as u
 import pandas as pd
 import plotly.graph_objects as go
-from astroplan import Observer
 from astropy.coordinates import ICRS, AltAz, SkyCoord
 from astropy.table import Table
 from astropy.time import Time
 
-from rpnav.antenna import Antenna
+from rpnav.observe.antenna import Antenna
 from rpnav.pulsar import Pulsar
 
 
@@ -17,7 +16,7 @@ def plot_flux_density(pulsars: list[Pulsar]) -> go.Figure:
     fluxs: list[float] = []
     names: list[float] = []
     for p in pulsars:
-        widths.append(p.pulse_width)
+        widths.append(p.pulse_width_10)
         fluxs.append(p.flux_density)
         names.append(p.name)
 
@@ -36,15 +35,17 @@ def plot_pulsar_position(pulsars: list[Pulsar]) -> go.Figure:
     ras: list[float] = []
     decs: list[float] = []
     names: list[float] = []
+    size: list[float] = []
     flux_dens: list[float] = []
     for p in pulsars:
         ras.append(p.ra.value)
         decs.append(p.dec.value)
         names.append(p.name)
-        flux_dens.append(log2(p.flux_density) if log2(p.flux_density) > 0 else 1e-2)
+        flux_dens.append(p.flux_density)
+        size.append(log2(p.flux_density)*2 if log2(p.flux_density)*2 > 2 else 2)
 
     fig = go.Figure(
-        data=go.Scatter(x=ras, y=decs, mode="markers", text=names, marker_size=flux_dens)
+        data=go.Scatter(x=ras, y=decs, mode="markers", text=names, marker_size=size)
     )
     fig.update_layout(
         title="Pulsar Positioning",

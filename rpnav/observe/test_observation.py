@@ -1,18 +1,55 @@
 import astropy.units as u
 import pytest
 from astropy.time import Time, TimeDelta
+from astropy.coordinates import EarthLocation
 
-from rpnav.config import fast, kens, parkes
 from rpnav.pulsar import Pulsar
-from rpnav.visualise import (
+from rpnav.observe.antenna import Antenna
+from rpnav.observe.visualise import (
     plot_antenna_coverage,
     plot_flux_density,
     plot_pulsar_position,
 )
 
+@pytest.fixture(scope="module")
+def parkes():
+    return Antenna(
+        name="Parkes telescope",
+        signal_to_noise=10,  #
+        system_temp=25.0,  # K
+        astronomy_gain=0.6,  # (K/Jy)
+        bandwidth=340e6,  # (Hz)
+        centre_frequency=1374,  # (MHz)
+        location=EarthLocation.from_geodetic(lat=-32.99327814611731, lon=148.26503125664433),
+    )
 
 @pytest.fixture(scope="module")
-def antenna():
+def fast():
+    return Antenna(
+        name="FAST Telescope",
+        signal_to_noise=9.0,  #
+        system_temp=25.0,  # (K)
+        astronomy_gain=16.0,  # (K/Jy)
+        bandwidth=512e6,  # (Hz)
+        centre_frequency=1350,  # (MHz)
+        location=EarthLocation.from_geodetic(lat=25.654006939684034, lon=106.85784898726897),
+    )
+
+
+@pytest.fixture(scope="module")
+def kens():
+    return Antenna(
+        name="msfd_actual",
+        signal_to_noise=1,
+        system_temp=30.0,  # K
+        bandwidth=40e6,  # (Hz)
+        centre_frequency=1400,  # (MHz)
+        location=EarthLocation.from_geodetic(lat=-33.77290643916046, lon=151.0976937264337),
+        diameter=2,
+    )
+
+@pytest.fixture(scope="module")
+def antenna(kens, parkes, fast):
     return kens
 
 
@@ -29,11 +66,12 @@ def test_plot_pulsar_position(antenna):
                 text=f"Pulsar Positioning over {integ_time}s integration time",
                 xanchor="center",
                 yanchor="top",
+                x=0.5
             )
         )
         plot_antenna_coverage(fig, antenna, t)
         # fig_pos.show()
-        fig.write_image("tmp.png")
+        fig.show()
 
 
 def test_plot_pulsar_observability(antenna):
@@ -54,10 +92,10 @@ def test_plot_pulsar_observability(antenna):
                 text=f"Pulsar observability over {integ_time}s integration time",
                 xanchor="center",
                 yanchor="top",
+                x=0.5
             )
         )
-        # fig.show()
-        fig.write_image("tmp.png")
+        fig.show()
 
 
 def test_return_az_el_visible(antenna):

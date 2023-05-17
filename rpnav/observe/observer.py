@@ -23,9 +23,7 @@ class Observer(Observatory):
         super().__init__(name, aliases, timescale)
 
     def to_json(self):
-        if self.time is None:
-            t = Time.now()
-
+        t = self.time if self.time is not None else Time.now()
         itrf = self.location.get_itrs(t)
         out = {
             self.name: {

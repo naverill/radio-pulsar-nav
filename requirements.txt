@@ -4,5 +4,5 @@ pandas
 numpy
 psrqpy
 poliastro
-pint
+pint-pulsar
 scipy
