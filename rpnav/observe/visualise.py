@@ -42,17 +42,37 @@ def plot_pulsar_position(pulsars: list[Pulsar]) -> go.Figure:
         decs.append(p.dec.value)
         names.append(p.name)
         flux_dens.append(p.flux_density)
-        size.append(log2(p.flux_density)*2 if log2(p.flux_density)*2 > 2 else 2)
+        size.append(log2(p.flux_density) * 2 if log2(p.flux_density) * 2 > 2 else 2)
 
-    fig = go.Figure(
-        data=go.Scatter(x=ras, y=decs, mode="markers", text=names, marker_size=size)
-    )
+    fig = go.Figure(data=go.Scatter(x=ras, y=decs, mode="markers", text=names, marker_size=size))
     fig.update_layout(
         title="Pulsar Positioning",
         xaxis_title="Right ascension (J2000) (degrees)",
         yaxis_title="Declination (J2000) (degrees)",
-        yaxis_range=[-180, 180],
+        yaxis_range=[-90, 90],
         xaxis_range=[0, 360],
+    )
+    return fig
+
+
+def plot_antenna(fig: go.Figure, antenna: Antenna, t: Time):
+    zen = antenna.location.get_itrs(t).transform_to(ICRS)
+    ra = zen.ra.value
+    dec = zen.dec.value
+    fig.add_trace(
+        go.Scatter(
+            x=[
+                ra,
+            ],
+            y=[
+                dec,
+            ],
+            mode="markers",
+            text=[
+                antenna.name,
+            ],
+            marker=dict(color="rgba(69, 139, 116, 1)"),
+        )
     )
     return fig
 
@@ -88,18 +108,4 @@ def plot_antenna_coverage(fig: go.Figure, antenna: Antenna, t: Time):
         fillcolor="orange",
         line_color="orange",
     )
-    fig.add_trace(
-        go.Scatter(
-            x=[
-                ra,
-            ],
-            y=[
-                dec,
-            ],
-            mode="markers",
-            text=[
-                antenna.name,
-            ],
-            marker=dict(color="midnightblue"),
-        )
-    )
+    return fig

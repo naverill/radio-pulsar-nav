@@ -3,12 +3,11 @@ import psrqpy
 from astropy.coordinates import ICRS, AltAz, SkyCoord
 from astropy.table import Table
 from astropy.time import Time
+from pulsar_spectra.catalogue import collect_catalogue_fluxes
+from pulsar_spectra.spectral_fit import estimate_flux_density, find_best_spectral_fit
 
 from rpnav import logger
 from rpnav.observe.antenna import Antenna
-
-#from pulsar_spectra.catalogue import collect_catalogue_fluxes
-#from pulsar_spectra.spectral_fit import estimate_flux_density, find_best_spectral_fit
 
 logger.disabled = True
 
@@ -67,7 +66,9 @@ class Pulsar(SkyCoord):
         return self._to_sky_coord().transform_to(AltAz(obstime=t, location=antenna.location))
 
     @staticmethod
-    def _interpolate_flux_density(row: Table, cat_dict: dict) -> tuple[float, float]:
+    def _interpolate_flux_density(
+        centre_freq: int, row: Table, cat_dict: dict
+    ) -> tuple[float, float]:
         flux_dens = None
         flux_dens_err = None
         if row["NAME"] not in cat_dict:
@@ -78,11 +79,11 @@ class Pulsar(SkyCoord):
             if not freqs:
                 logger.warning("Frequency values not found")
             else:
-                model, m, _, _, _ = find_best_spectral_fit(row["NAME"], freqs, bands, fluxs, flux_errs, refs)
-            if model:
-                flux_dens, flux_dens_err = estimate_flux_density(
-                    centre_freq, model, m
+                model, m, _, _, _ = find_best_spectral_fit(
+                    row["NAME"], freqs, bands, fluxs, flux_errs, refs
                 )
+            if model:
+                flux_dens, flux_dens_err = estimate_flux_density(centre_freq, model, m)
             else:
                 logger.warning(f"Failed to find best fit spectral model for {row['NAME']}")
         return flux_dens, flux_dens_err
@@ -90,30 +91,32 @@ class Pulsar(SkyCoord):
     @staticmethod
     def load_catalogue(centre_freq: int = 1400, interpolate=False) -> list["Pulsar"]:
         """Load pulsar data from PSR Catalogue (PSRCAT)."""
-        cat = psrqpy.QueryATNF(
-            params=[
-                "NAME",
-                "RAJD",
-                "DECJD",
-                "P0",
-                "DM",
-                "W50",
-                "W10",
-                f"S{centre_freq}",
-            ]
-        ).table
-        pulsars: list[Pulsar] = []
-
         cat_dict = None
+        params = [
+            "NAME",
+            "RAJD",
+            "DECJD",
+            "P0",
+            "DM",
+            "W50",
+            "W10",
+        ]
         if interpolate:
             cat_dict = collect_catalogue_fluxes()
+        else:
+            params.append(f"S{centre_freq}"),
+
+        cat = psrqpy.QueryATNF(params=params).table
+        pulsars: list[Pulsar] = []
 
         for row in cat:
             flux_dens = None
             flux_dens_err = None
 
             if interpolate:
-                flux_dens, flux_dens_err = self._interpolate_flux_density(row, cat_dict)
+                flux_dens, flux_dens_err = Pulsar._interpolate_flux_density(
+                    centre_freq, row, cat_dict
+                )
             else:
                 flux_dens = row[f"S{centre_freq}"]
 

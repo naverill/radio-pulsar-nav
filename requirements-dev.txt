@@ -2,6 +2,7 @@
 black
 flake8
 isort
-pytest
 plotly
+pre-commit
+pytest
 kaleido
