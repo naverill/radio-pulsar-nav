@@ -56,7 +56,7 @@ def plot_pulsar_position(pulsars: list[Pulsar]) -> go.Figure:
 
 
 def plot_antenna(fig: go.Figure, antenna: Antenna, t: Time):
-    zen = antenna.location.get_itrs(t).transform_to(ICRS)
+    zen = antenna.location.get_itrs(obstime=t).transform_to(ICRS)
     ra = zen.ra.value
     dec = zen.dec.value
     fig.add_trace(
@@ -86,18 +86,10 @@ def plot_antenna_coverage(fig: go.Figure, antenna: Antenna, t: Time):
     zen = antenna.location.get_itrs(t).transform_to(ICRS)
     ra = zen.ra.value
     dec = zen.dec.value
-    n_horiz = (dec + 90 + 180) % 360 - 180
+    n_horiz = (90 - dec + 180) % 360 - 180
     s_horiz = (dec - 90 + 180) % 360 - 180
     w_horiz = (ra + 90) % 360
     e_horiz = (ra - 90) % 360
-    fig.add_hrect(
-        y0=s_horiz,
-        y1=n_horiz,
-        fillcolor="LightSalmon",
-        opacity=0.2,
-        layer="below",
-        line_width=0,
-    )
     fig.add_shape(
         type="circle",
         x0=e_horiz,

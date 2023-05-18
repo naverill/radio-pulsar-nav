@@ -84,11 +84,11 @@ def test_plot_pulsar_position(antenna):
         fig.show()
 
 
-def test_plot_pulsar_horizon(antenna):
+def test_plot_pulsar_horizon_integ_time(antenna):
     pulsars = Pulsar.load_catalogue(antenna.centre_frequency)
     t = Time.now()
     below_horiz = [pulsar.is_observable(antenna, t, 1e10) for pulsar in pulsars]
-    for integ_time in [60 * 60, 6 * 60 * 60, 24 * 60 * 60]:
+    for integ_time in [5 * 60, 15 * 60, 60 * 60]:
         fig = plot_pulsar_position(pulsars)
         vis = [pulsar.is_observable(antenna, t, integ_time) for pulsar in pulsars]
         col = []
@@ -110,6 +110,39 @@ def test_plot_pulsar_horizon(antenna):
             )
         )
         plot_antenna(fig, antenna, t)
+        fig.update_layout({"paper_bgcolor": "rgba(0,0,0,0)"})
+        fig.update_xaxes(showgrid=True, gridwidth=1, minor_ticks="inside")
+        fig.update_yaxes(showgrid=True, gridwidth=1, minor_ticks="inside")
+        fig.show()
+
+
+def test_plot_pulsar_horizon_obs_time(antenna):
+    pulsars = Pulsar.load_catalogue(antenna.centre_frequency)
+    integ_time = 15 * 60
+    for t_delta in [0, 6 * 60 * 60, 12 * 60 * 60, 18 * 60 * 60]:
+        t = Time.now() - TimeDelta(t_delta * u.s)
+        fig = plot_pulsar_position(pulsars)
+        vis = [pulsar.is_observable(antenna, t, integ_time) for pulsar in pulsars]
+        below_horiz = [pulsar.is_observable(antenna, t, 1e10) for pulsar in pulsars]
+        col = []
+        for is_obs, is_vis in zip(below_horiz, vis):
+            if is_obs and is_vis:
+                col.append("rgba(102,205,170,0.8)")
+            elif is_obs:
+                col.append("rgba(238,118,0,0.8)")
+            else:
+                col.append("rgba(104,131,139,0.8)")
+
+        fig.update_traces(marker=dict(color=col))
+        fig.update_layout(
+            title=dict(
+                text=f"Pulsar Positioning over {integ_time}s integration time",
+                xanchor="center",
+                yanchor="top",
+                x=0.5,
+            )
+        )
+        # plot_antenna(fig, antenna, t)
         fig.update_layout({"paper_bgcolor": "rgba(0,0,0,0)"})
         fig.update_xaxes(showgrid=True, gridwidth=1, minor_ticks="inside")
         fig.update_yaxes(showgrid=True, gridwidth=1, minor_ticks="inside")
