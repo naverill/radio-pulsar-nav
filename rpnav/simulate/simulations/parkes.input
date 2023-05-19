@@ -1,0 +1,23 @@
+<define>
+name: parkes_sim 
+nproc: 1
+nreal: 1
+</define>
+
+<pulsars>
+psr: name=J0437-4715
+</pulsars>
+
+<obsRun>
+name: PARKES 
+tel: pks 
+start: 60002.3
+finish: 60002.8
+sampling: cadence=0.1
+sched: sched1
+</obsRun>
+
+<schedule>
+name: sched1
+observe: psr=J0437-4715,toaerr=1e-6,freq=1400,ha=8*(ran(linear)-0.5)
+</schedule>

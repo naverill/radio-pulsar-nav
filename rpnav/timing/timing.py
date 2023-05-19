@@ -10,5 +10,5 @@ def fit_residuals(
 ):
     model, toas = get_model_and_toas(parfile, timfile)
     fitter = Fitter.auto(toas, model)
-    fitter.fit_toas()
+    fitter.fit_toas(maxiter=100)
     return fitter

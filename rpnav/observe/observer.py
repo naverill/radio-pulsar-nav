@@ -1,5 +1,6 @@
 import json
 
+import astropy.units as u
 from astropy.coordinates import ITRS, EarthLocation
 from astropy.time import Time
 from pint.observatory import Observatory
@@ -27,7 +28,7 @@ class Observer(Observatory):
         itrf = self.location.get_itrs(t)
         out = {
             self.name: {
-                "itrf_xyz": [itrf.x.value, itrf.x.value, itrf.z.value],
+                "itrf_xyz": [itrf.x.to_value(u.m), itrf.y.to_value(u.m), itrf.z.to_value(u.m)],
             }
         }
         if self.origin:

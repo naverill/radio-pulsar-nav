@@ -6,9 +6,6 @@ nreal: 1
 
 <pulsars>
 psr: name=J0437-4715
-#psr: name=J1022+1001
-#psr: name=J1909-3744
-#psr: name=J0613-0200
 </pulsars>
 
 <obsRun>
@@ -37,4 +34,14 @@ observe: psr=J0437-4715,toaerr=1e-6,freq=1400,ha=8*(ran(linear)-0.5)
 <schedule>
 name: sched2
 observe: psr=J0613-0200,toaerr=60e-6,freq=1400,ha=12*(ran(linear)-0.5)
+</schedule>
+
+<schedule>
+name: sched3
+observe: psr=J1022+1001,toaerr=60e-6,freq=1400,ha=12*(ran(linear)-0.5)
+</schedule>
+
+<schedule>
+name: sched4
+observe: psr=J1909-3744,toaerr=60e-6,freq=1400,ha=12*(ran(linear)-0.5)
 </schedule>
