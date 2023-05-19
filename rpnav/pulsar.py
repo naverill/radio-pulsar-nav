@@ -138,3 +138,7 @@ class Pulsar(SkyCoord):
                 )
             )
         return pulsars
+
+    @property
+    def timing_uncertainty(self):
+        return self.pulse_width_10 / 10

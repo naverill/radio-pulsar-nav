@@ -18,6 +18,9 @@ tcsh <script name>/scripts/runScripts_master
 # output to results file
 outpath=<script name>/output/real_<n>
 tempo2 -output general2 -s "{sat} {pre} {err} rslt\n" -f ${outpath}/J0437-4715.par ${outpath}/J0437-4715.tim  | grep rslt | awk '{print $1,$2,$3}' > ${outpath}/results.txt
+
+# convert from TCB to TDB
+tempo2 -gr transform ${outpath}/J0835-4510.par ${outpath}/J0835-4510.tdb.par back
 ```
 
 

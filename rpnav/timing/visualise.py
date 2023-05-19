@@ -2,7 +2,6 @@ import plotly.graph_objects as go
 
 
 def plot_residuals(resids: list[float], mjd: list[float], t_err: list[float]):
-    print(len(resids), len(mjd), len(t_err))
     fig = go.Figure(
         data=go.Scatter(
             x=mjd,

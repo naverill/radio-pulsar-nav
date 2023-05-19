@@ -2,6 +2,7 @@ import argparse
 import io
 import json
 from math import pi
+from pathlib import Path
 
 import astropy.units as u
 import pytest
@@ -14,10 +15,13 @@ from rpnav.observe.observer import Observer
 from rpnav.timing.timing import fit_residuals
 from rpnav.timing.visualise import plot_residuals
 
+FILE_DIR = Path(__file__).parent
+
 
 class Args:
-    timfile = "rpnav/simulate/msfd_sim/output/real_0/J0437-4715.tim"
-    parfile = "rpnav/simulate/msfd_sim/output/real_0/J0437-4715.par"
+    sim = "parkes_sim"
+    timfile = f"{FILE_DIR}/../simulate/parkes_sim/output/real_0/J0835-4510.tim"
+    parfile = f"{FILE_DIR}/../simulate/parkes_sim/output/real_0/J0835-4510.tdb.par"
     est = [-4460892.6, 3682358.9, -3696756.0]
     frame = "geocentric"
     err = None
@@ -28,13 +32,35 @@ def args():
     return Args()
 
 
+def test_residuals_parkes(args):
+    est_loc = process_estimate(args)
+    pks_sim = Observer(
+        name="pks",
+        itoa_code="PARKES",
+        location=est_loc,
+        origin="Actual location of Parkes telescope site",
+        time=Time(60002.3, format="mjd"),
+    )
+    load_observatories(io.StringIO(json.dumps(pks_sim.to_json())), overwrite=True)
+    fitter = fit_residuals(args.parfile, args.timfile, args.est, args.err)
+    fig = plot_residuals(
+        fitter.resids.time_resids.to_value(u.us).astype(float),
+        fitter.toas.get_mjds().value.astype(float),
+        fitter.toas.get_errors().to_value(u.us).astype(float),
+    )
+    fig.update_layout(width=1000, height=1000)
+    fig.write_image("parkes.png")
+    # fig.show()
+
+
 def test_residuals_msfd(args):
     est_loc = process_estimate(args)
     msfd_sim = Observer(
         name="msfd_actual",
         itoa_code="MSFD",
-        location=EarthLocation.from_geodetic(
-            lat=-32.99327814611731 * u.deg, lon=148.26503125664433 * u.deg
+        #        location=est_loc,
+        location=EarthLocation.from_geocentric(
+            x=-4460892.6 * u.m, u=3682358.9 * u.m, z=-3696756.0 * u.m
         ),
         origin="Actual location of Parkes telescope site",
         time=Time(60002.3, format="mjd"),
@@ -56,7 +82,9 @@ def test_residuals_msfd(args):
         fitter.toas.get_mjds().value.astype(float),
         fitter.toas.get_errors().to_value(u.us).astype(float),
     )
-    fig.show()
+    fig.update_layout(width=1000, height=1000)
+    fig.write_image("test.png")
+    # fig.show()
 
 
 def process_estimate(args) -> EarthLocation:
