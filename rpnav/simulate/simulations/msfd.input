@@ -9,6 +9,15 @@ psr: name=J0835-4510
 </pulsars>
 
 <obsRun>
+name: MSFD
+tel: msfd_actual
+start: 57000.3
+finish: 60000.3
+sampling: cadence=7
+sched: sched1
+</obsRun>
+
+<obsRun>
 name: MSFD_EST 
 tel: msfd_estimated
 start: 60002.3

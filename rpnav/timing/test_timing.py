@@ -1,20 +1,20 @@
 import argparse
-import io
 import json
 from math import pi
 from pathlib import Path
 
 import astropy.units as u
+import numpy as np
 import pytest
 from astropy.coordinates import EarthLocation
 from astropy.time import Time
 from pint.observatory import get_observatory
-from pint.observatory.topo_obs import load_observatories
 
+from rpnav.constants import SPEED_OF_LIGHT
 from rpnav.observe.antenna import Antenna
 from rpnav.observe.observer import Observer
 from rpnav.timing.timing import fit_residuals
-from rpnav.timing.visualise import plot_residuals
+from rpnav.timing.visualise import plot_residuals, plot_residuals_mse
 
 FILE_DIR = Path(__file__).parent
 
@@ -77,7 +77,7 @@ def msfd():
     )
 
 
-def test_residuals_parkes(parkes):
+def test_residuals_parkes_correct_position(parkes):
     est_loc = process_estimate(parkes)
     pks_sim = Observer(
         name="pks",
@@ -86,7 +86,7 @@ def test_residuals_parkes(parkes):
         origin="Actual location of Parkes telescope site",
         time=Time(60002.3, format="mjd"),
     )
-    load_observatories(io.StringIO(json.dumps(pks_sim.to_json())), overwrite=True)
+    pks_sim.update()
     fitter = fit_residuals(parkes.parfile, parkes.timfile, parkes.est, parkes.err)
     fig = plot_residuals(
         fitter.resids.time_resids.to_value(u.us).astype(float),
@@ -98,7 +98,7 @@ def test_residuals_parkes(parkes):
     # fig.show()
 
 
-def test_residuals_msfd(msfd):
+def test_residuals_msfd_true(msfd):
     est_loc = process_estimate(msfd)
     msfd_sim = Observer(
         name="msfd_actual",
@@ -109,6 +109,7 @@ def test_residuals_msfd(msfd):
         origin="Actual location of Parkes telescope site",
         time=Time(60002.3, format="mjd"),
     )
+    msfd_sim.update()
     msfd_est = Observer(
         name="msfd_estimated",
         itoa_code="MSFD_EST",
@@ -116,10 +117,7 @@ def test_residuals_msfd(msfd):
         location=est_loc,
         time=Time(60002.3, format="mjd"),
     )
-    obs = msfd_sim.to_json()
-    obs.update(msfd_est.to_json())
-
-    load_observatories(io.StringIO(json.dumps(obs)), overwrite=True)
+    msfd_est.update()
     fitter = fit_residuals(msfd.parfile, msfd.timfile, msfd.est, msfd.err)
     fig = plot_residuals(
         fitter.resids.time_resids.to_value(u.us).astype(float),
@@ -127,7 +125,90 @@ def test_residuals_msfd(msfd):
         fitter.toas.get_errors().to_value(u.us).astype(float),
     )
     fig.update_layout(width=1000, height=1000)
-    fig.write_image("test.png")
+    fig.write_image("msfd.png")
+    # fig.show()
+
+
+def test_residuals_msfd_incorrect(msfd):
+    msfd.est = (msfd.est[0], msfd.est[1], msfd.est[2] + 10000)
+    est_loc = process_estimate(msfd)
+    msfd_sim = Observer(
+        name="msfd_actual",
+        itoa_code="MSFD",
+        location=EarthLocation.from_geocentric(
+            x=-4646251.90 * u.m, y=2565112.87 * u.m, z=-3525535.83 * u.m
+        ),
+        origin="True location of CSIRO Marsfield telescope site",
+        time=Time(60002.3, format="mjd"),
+    )
+    msfd_sim.update()
+    msfd_est = Observer(
+        name="msfd_estimated",
+        itoa_code="MSFD_EST",
+        origin="Estimated location of CSIRO Marsfield site",
+        location=est_loc,
+        time=Time(60002.3, format="mjd"),
+    )
+    msfd_est.update()
+
+    fitter = fit_residuals(msfd.parfile, msfd.timfile, msfd.est, msfd.err)
+    fig = plot_residuals(
+        fitter.resids.time_resids.to_value(u.us).astype(float),
+        fitter.toas.get_mjds().value.astype(float),
+        fitter.toas.get_errors().to_value(u.us).astype(float),
+    )
+    fig.update_layout(width=1000, height=1000)
+    fig.write_image("msfd_incorrect.png")
+    # fig.show()
+
+
+def test_residuals_msfd_mse(msfd):
+    # Vela pulse half width (m)
+    half_pulsar_width = 0.08932838502359318 * SPEED_OF_LIGHT
+    # establish initial true position of observers
+    msfd_sim = Observer(
+        name="msfd_actual",
+        itoa_code="MSFD",
+        location=EarthLocation.from_geocentric(
+            x=-4646251.90 * u.m, y=2565112.87 * u.m, z=-3525535.83 * u.m
+        ),
+        origin="True location of CSIRO Marsfield telescope site",
+        time=Time(60002.3, format="mjd"),
+    )
+    msfd_sim.update()
+    msfd_est = Observer(
+        name="msfd_estimated",
+        itoa_code="MSFD_EST",
+        origin="Estimated location of CSIRO Marsfield site",
+        location=process_estimate(msfd),
+        time=Time(60002.3, format="mjd"),
+    )
+    msfd_est.update()
+    fitter = fit_residuals(msfd.parfile, msfd.timfile, msfd.est, msfd.err)
+    residuals_true = fitter.resids.time_resids.to_value(u.us).astype(float)
+
+    # Adjust position in range (x +- P0 / 2, y += P0 /2, z)
+    x_range = np.linspace(msfd.est[0] - half_pulsar_width, msfd.est[0] + half_pulsar_width, 20)
+    y_range = np.linspace(msfd.est[1] - half_pulsar_width, msfd.est[1] + half_pulsar_width, 20)
+    residuals_mse = np.empty(shape=(len(x_range), len(y_range)))
+    for i, x in enumerate(x_range):
+        for j, y in enumerate(y_range):
+            msfd.est = (x, y, msfd.est[2])
+            est_loc = process_estimate(msfd)
+            msfd_est.location = est_loc
+            msfd_est.update()
+            fitter = fit_residuals(msfd.parfile, msfd.timfile, msfd.est, msfd.err)
+            # calculate mean squared error (MSE) of timing residuals
+            mse = np.square(
+                np.subtract(fitter.resids.time_resids.to_value(u.us).astype(float), residuals_true)
+            ).mean()
+            residuals_mse[i][j] = mse
+            print(mse)
+
+    print(residuals_mse)
+    fig = plot_residuals_mse(x_range, y_range, residuals_mse)
+    fig.update_layout(width=1000, height=1000)
+    fig.write_image("msfd_mse_surface.png")
     # fig.show()
 
 
@@ -154,4 +235,4 @@ if __name__ == "__main__":
         "-f", dest="frame", type=str, help="Reference frame for position", required=True
     )
     args = parser.parse_args()  # noqa: F811
-    test_residuals_msfd(args)
+    test_residuals_msfd_true(args)

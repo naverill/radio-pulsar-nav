@@ -1,9 +1,11 @@
+import io
 import json
 
 import astropy.units as u
 from astropy.coordinates import ITRS, EarthLocation
 from astropy.time import Time
 from pint.observatory import Observatory
+from pint.observatory.topo_obs import load_observatories
 
 
 class Observer(Observatory):
@@ -36,3 +38,10 @@ class Observer(Observatory):
         if self.itoa_code:
             out[self.name]["itoa_code"] = self.itoa_code
         return out
+
+    def update(self):
+        try:
+            load_observatories(io.StringIO(json.dumps(self.to_json())), overwrite=True)
+        except ValueError:
+            load_observatories(io.StringIO(json.dumps(self.to_json())))
+        return self

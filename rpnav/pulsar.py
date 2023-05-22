@@ -106,9 +106,14 @@ class Pulsar(SkyCoord):
         else:
             params.append(f"S{centre_freq}"),
 
-        cat = psrqpy.QueryATNF(params=params).table
-        pulsars: list[Pulsar] = []
+        try:
+            cat = psrqpy.QueryATNF(params=params).table
+        except ValueError:
+            raise Exception(
+                "Failed to read from psrcat. Check that centre frequency" " is a valid table option"
+            )
 
+        pulsars: list[Pulsar] = []
         for row in cat:
             flux_dens = None
             flux_dens_err = None
