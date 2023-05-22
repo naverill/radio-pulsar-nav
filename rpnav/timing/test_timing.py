@@ -8,6 +8,7 @@ import numpy as np
 import pytest
 from astropy.coordinates import EarthLocation
 from astropy.time import Time
+from pint.fitter import DownhillWLSFitter
 from pint.observatory import get_observatory
 
 from rpnav.constants import SPEED_OF_LIGHT
@@ -87,7 +88,7 @@ def test_residuals_parkes_correct_position(parkes):
         time=Time(60002.3, format="mjd"),
     )
     pks_sim.update()
-    fitter = fit_residuals(parkes.parfile, parkes.timfile, parkes.est, parkes.err)
+    fitter = fit_residuals(parkes.parfile, parkes.timfile, fitter=DownhillWLSFitter)
     fig = plot_residuals(
         fitter.resids.time_resids.to_value(u.us).astype(float),
         fitter.toas.get_mjds().value.astype(float),
@@ -118,7 +119,7 @@ def test_residuals_msfd_true(msfd):
         time=Time(60002.3, format="mjd"),
     )
     msfd_est.update()
-    fitter = fit_residuals(msfd.parfile, msfd.timfile, msfd.est, msfd.err)
+    fitter = fit_residuals(msfd.parfile, msfd.timfile, fitter=DownhillWLSFitter)
     fig = plot_residuals(
         fitter.resids.time_resids.to_value(u.us).astype(float),
         fitter.toas.get_mjds().value.astype(float),
@@ -151,7 +152,7 @@ def test_residuals_msfd_incorrect(msfd):
     )
     msfd_est.update()
 
-    fitter = fit_residuals(msfd.parfile, msfd.timfile, msfd.est, msfd.err)
+    fitter = fit_residuals(msfd.parfile, msfd.timfile, fitter=DownhillWLSFitter)
     fig = plot_residuals(
         fitter.resids.time_resids.to_value(u.us).astype(float),
         fitter.toas.get_mjds().value.astype(float),
@@ -184,7 +185,7 @@ def test_residuals_msfd_mse(msfd):
         time=Time(60002.3, format="mjd"),
     )
     msfd_est.update()
-    fitter = fit_residuals(msfd.parfile, msfd.timfile, msfd.est, msfd.err)
+    fitter = fit_residuals(msfd.parfile, msfd.timfile, fitter=DownhillWLSFitter)
     residuals_true = fitter.resids.time_resids.to_value(u.us).astype(float)
 
     # Adjust position in range (x +- P0 / 2, y += P0 /2, z)
@@ -197,7 +198,7 @@ def test_residuals_msfd_mse(msfd):
             est_loc = process_estimate(msfd)
             msfd_est.location = est_loc
             msfd_est.update()
-            fitter = fit_residuals(msfd.parfile, msfd.timfile, msfd.est, msfd.err)
+            fitter = fit_residuals(msfd.parfile, msfd.timfile, fitter=DownhillWLSFitter)
             # calculate mean squared error (MSE) of timing residuals
             mse = np.square(
                 np.subtract(fitter.resids.time_resids.to_value(u.us).astype(float), residuals_true)

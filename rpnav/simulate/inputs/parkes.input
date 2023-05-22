@@ -1,3 +1,4 @@
+# Simulate Parkes telescope observing Vela 
 <define>
 name: parkes_sim 
 nproc: 1

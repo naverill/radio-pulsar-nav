@@ -1,14 +1,28 @@
+from enum import Enum, auto
 from typing import TextIO, Union
 
 import astropy.units as u
-from pint.fitter import Fitter
+from pint.fitter import Fitter, MaxiterReached
 from pint.models import get_model, get_model_and_toas
 
 
 def fit_residuals(
-    parfile: Union[TextIO, str], timfile: Union[TextIO, str], pos: list[float], err: list[float]
+    parfile: Union[TextIO, str],
+    timfile: Union[TextIO, str],
+    fitter: Fitter = None,
+    maxiter: int = None,
 ):
+    """
+    Fit timing model based on input .par and .tim file
+    """
     model, toas = get_model_and_toas(parfile, timfile)
-    fitter = Fitter.auto(toas, model)
-    fitter.fit_toas(maxiter=100)
-    return fitter
+    if fitter is None:
+        fit = Fitter.auto(toas, model)
+    else:
+        fit = fitter(toas=toas, model=model)
+
+    try:
+        fit.fit_toas(maxiter=maxiter)
+    except MaxiterReached:
+        raise Exception("PINT Residuals Fitter failed to fully converge.")
+    return fit

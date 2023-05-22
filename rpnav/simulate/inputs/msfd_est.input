@@ -1,3 +1,4 @@
+# Simulate estimated Marsfield antenna observing Vela
 <define>
 name: msfd_sim 
 nproc: 1
