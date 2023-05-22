@@ -4,6 +4,6 @@
 # The last column contains the old-style telescope ID code
 #
  -4554231.5     2816759.1       -3454036.3       PARKES         pks
- -4460892.6     2682358.9       -3674756.0       MSFD           msfd_actual 
- -4460892.6     3682358.9       -3696756.0       MSFD_EST       msfd_estimated
+ -4646251.90    2565112.87      -3525535.83      MSFD           msfd_actual 
+ -4646251.90    2565112.87      -3525535.83      MSFD_EST       msfd_estimated
 
