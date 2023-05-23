@@ -8,6 +8,7 @@ import numpy as np
 import pytest
 from astropy.coordinates import EarthLocation
 from astropy.time import Time
+from pint import logging
 from pint.fitter import DownhillWLSFitter
 from pint.observatory import get_observatory
 
@@ -17,6 +18,7 @@ from rpnav.observe.observer import Observer
 from rpnav.timing.timing import fit_residuals
 from rpnav.timing.visualise import plot_residuals, plot_residuals_mse
 
+logging.setup(level="ERROR")
 FILE_DIR = Path(__file__).parent
 
 
@@ -165,7 +167,8 @@ def test_residuals_msfd_incorrect(msfd):
 
 def test_residuals_msfd_mse(msfd):
     # Vela pulse half width (m)
-    half_pulsar_width = 0.08932838502359318 * SPEED_OF_LIGHT
+    n_pulses = 3
+    half_pulsar_width = (0.08932838502359318 / 2) * SPEED_OF_LIGHT
     # establish initial true position of observers
     msfd_sim = Observer(
         name="msfd_actual",
@@ -189,27 +192,37 @@ def test_residuals_msfd_mse(msfd):
     residuals_true = fitter.resids.time_resids.to_value(u.us).astype(float)
 
     # Adjust position in range (x +- P0 / 2, y += P0 /2, z)
-    x_range = np.linspace(msfd.est[0] - half_pulsar_width, msfd.est[0] + half_pulsar_width, 20)
-    y_range = np.linspace(msfd.est[1] - half_pulsar_width, msfd.est[1] + half_pulsar_width, 20)
-    residuals_mse = np.empty(shape=(len(x_range), len(y_range)))
+    x_range = np.linspace(
+        msfd.est[0] - half_pulsar_width * n_pulses, msfd.est[0] + half_pulsar_width * n_pulses, 51
+    )
+    y_range = np.linspace(
+        msfd.est[1] - half_pulsar_width * n_pulses, msfd.est[1] + half_pulsar_width * n_pulses, 51
+    )
+    residuals_rmse = np.empty(shape=(len(x_range), len(y_range)))
     for i, x in enumerate(x_range):
         for j, y in enumerate(y_range):
+            print(i, j)
             msfd.est = (x, y, msfd.est[2])
             est_loc = process_estimate(msfd)
             msfd_est.location = est_loc
             msfd_est.update()
             fitter = fit_residuals(msfd.parfile, msfd.timfile, fitter=DownhillWLSFitter)
-            # calculate mean squared error (MSE) of timing residuals
-            mse = np.square(
-                np.subtract(fitter.resids.time_resids.to_value(u.us).astype(float), residuals_true)
-            ).mean()
-            residuals_mse[i][j] = mse
-            print(mse)
+            # calculate root mean squared error (RMSE) of timing residuals
+            rmse = np.sqrt(
+                np.square(
+                    np.subtract(
+                        fitter.resids.time_resids.to_value(u.us).astype(float), residuals_true
+                    )
+                ).mean()
+            )
+            residuals_rmse[i][j] = rmse
+            print(rmse)
 
-    print(residuals_mse)
-    fig = plot_residuals_mse(x_range, y_range, residuals_mse)
-    fig.update_layout(width=1000, height=1000)
-    fig.write_image("msfd_mse_surface.png")
+    print(residuals_rmse)
+    np.savetxt("residuals.csv", residuals_rmse, delimiter=",")
+    fig = plot_residuals_mse(x_range, y_range, residuals_rmse)
+    fig.update_layout(width=9000, height=9000)
+    fig.write_image("msfd_rmse_surface.png")
     # fig.show()
 
 
