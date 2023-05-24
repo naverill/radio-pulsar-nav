@@ -13,6 +13,7 @@ from pint.fitter import DownhillWLSFitter
 from pint.observatory import get_observatory
 
 from rpnav.constants import SPEED_OF_LIGHT
+from rpnav.navigate.gradient_descent import rmse
 from rpnav.observe.antenna import Antenna
 from rpnav.observe.observer import Observer
 from rpnav.timing.timing import fit_residuals
@@ -89,7 +90,6 @@ def test_residuals_parkes_correct_position(parkes):
         origin="Actual location of Parkes telescope site",
         time=Time(60002.3, format="mjd"),
     )
-    pks_sim.update()
     fitter = fit_residuals(parkes.parfile, parkes.timfile, fitter=DownhillWLSFitter)
     fig = plot_residuals(
         fitter.resids.time_resids.to_value(u.us).astype(float),
@@ -112,7 +112,6 @@ def test_residuals_msfd_true(msfd):
         origin="Actual location of Parkes telescope site",
         time=Time(60002.3, format="mjd"),
     )
-    msfd_sim.update()
     msfd_est = Observer(
         name="msfd_estimated",
         itoa_code="MSFD_EST",
@@ -120,7 +119,6 @@ def test_residuals_msfd_true(msfd):
         location=est_loc,
         time=Time(60002.3, format="mjd"),
     )
-    msfd_est.update()
     fitter = fit_residuals(msfd.parfile, msfd.timfile, fitter=DownhillWLSFitter)
     fig = plot_residuals(
         fitter.resids.time_resids.to_value(u.us).astype(float),
@@ -144,7 +142,6 @@ def test_residuals_msfd_incorrect(msfd):
         origin="True location of CSIRO Marsfield telescope site",
         time=Time(60002.3, format="mjd"),
     )
-    msfd_sim.update()
     msfd_est = Observer(
         name="msfd_estimated",
         itoa_code="MSFD_EST",
@@ -152,7 +149,6 @@ def test_residuals_msfd_incorrect(msfd):
         location=est_loc,
         time=Time(60002.3, format="mjd"),
     )
-    msfd_est.update()
 
     fitter = fit_residuals(msfd.parfile, msfd.timfile, fitter=DownhillWLSFitter)
     fig = plot_residuals(
@@ -168,26 +164,23 @@ def test_residuals_msfd_incorrect(msfd):
 def test_residuals_msfd_mse(msfd):
     # Vela pulse half width (m)
     n_pulses = 3
-    half_pulsar_width = (0.08932838502359318 / 2) * SPEED_OF_LIGHT
+    half_pulse_width = (0.08932838502359318 * u.s / 2) * SPEED_OF_LIGHT
     # establish initial true position of observers
+    loc_true = process_estimate(msfd)
     msfd_sim = Observer(
         name="msfd_actual",
         itoa_code="MSFD",
-        location=EarthLocation.from_geocentric(
-            x=-4646251.90 * u.m, y=2565112.87 * u.m, z=-3525535.83 * u.m
-        ),
+        location=loc_true,
         origin="True location of CSIRO Marsfield telescope site",
         time=Time(60002.3, format="mjd"),
     )
-    msfd_sim.update()
     msfd_est = Observer(
         name="msfd_estimated",
         itoa_code="MSFD_EST",
         origin="Estimated location of CSIRO Marsfield site",
-        location=process_estimate(msfd),
+        location=loc_true,
         time=Time(60002.3, format="mjd"),
     )
-    msfd_est.update()
     fitter = fit_residuals(msfd.parfile, msfd.timfile, fitter=DownhillWLSFitter)
     residuals_true = fitter.resids.time_resids.to_value(u.us).astype(float)
 
@@ -202,20 +195,13 @@ def test_residuals_msfd_mse(msfd):
     for i, x in enumerate(x_range):
         for j, y in enumerate(y_range):
             print(i, j)
-            msfd.est = (x, y, msfd.est[2])
-            est_loc = process_estimate(msfd)
-            msfd_est.location = est_loc
-            msfd_est.update()
+            est_loc = EarthLocation.from_geocentric(x=x, y=y, z=msfd.est[2])
+            msfd_est.update(location=est_loc)
             fitter = fit_residuals(msfd.parfile, msfd.timfile, fitter=DownhillWLSFitter)
             # calculate root mean squared error (RMSE) of timing residuals
-            rmse = np.sqrt(
-                np.square(
-                    np.subtract(
-                        fitter.resids.time_resids.to_value(u.us).astype(float), residuals_true
-                    )
-                ).mean()
+            residuals_rmse[i][j] = rmse(
+                np.subtract(fitter.resids.time_resids.to_value(u.us).astype(float), residuals_true)
             )
-            residuals_rmse[i][j] = rmse
             print(rmse)
 
     print(residuals_rmse)

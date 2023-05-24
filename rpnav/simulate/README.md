@@ -1,4 +1,4 @@
-# Pulsar Timing Array (PTA) Simulation
+#Pulsar Timing Array (PTA) Simulation
 TODO outline simulation paramaters 
 ## Usage
 To set up Tempo2 local environment, 

@@ -10,7 +10,7 @@ from pint.fitter import DownhillWLSFitter
 from pint.models import get_model_and_toas
 
 from rpnav.constants import SPEED_OF_LIGHT
-from rpnav.navigate.gradient_descent import localise
+from rpnav.navigate.gradient_descent import localise, rmse
 from rpnav.observe.observer import Observer
 
 logging.setup(level="ERROR")
@@ -62,9 +62,12 @@ def parkes():
 
 @pytest.fixture(scope="module")
 def msfd():
-    sim = "msfd_sim"
-    loc = EarthLocation.from_geodetic(
-        lat=-33.77290643916046 * u.deg, lon=151.0976937264337 * u.deg
+    sim = "msfd_est_sim"
+    loc = EarthLocation.from_geocentric(
+        #        lat=-33.77290643916046 * u.deg, lon=151.0976937264337 * u.deg
+        x=-4646251.90 * u.m,
+        y=2565112.87 * u.m,
+        z=-3525535.83 * u.m,
     ).geocentric
     return Args(
         timfile=f"{FILE_DIR}/../simulate/{sim}/output/real_0/J0835-4510.tim",
@@ -76,36 +79,50 @@ def msfd():
 
 
 def test_gradient_descent(msfd):
-    half_pulsar_width = (0.08932838502359318 * u.s / 2) * SPEED_OF_LIGHT
-    true_loc = process_estimate(msfd)
-    loc_err = EarthLocation.from_geocentric(
-        x=true_loc.x + np.random.normal(scale=np.sqrt(half_pulsar_width.to_value(u.m) * 2)) * u.m,
-        y=true_loc.y + np.random.normal(scale=np.sqrt(half_pulsar_width.to_value(u.m) * 2)) * u.m,
-        z=true_loc.z,
-    )
-    start = (loc_err.geodetic.lon.to_value(u.deg), loc_err.geodetic.lat.to_value(u.deg))
+    half_pulse_width = (0.08932838502359318 * u.s / 2) * SPEED_OF_LIGHT
+    loc_true = process_estimate(msfd)
+    N_ITER = 100
     msfd_sim = Observer(
         name="msfd_actual",
         itoa_code="MSFD",
-        location=true_loc,
+        location=loc_true,
         origin="True location of CSIRO Marsfield telescope site",
         time=Time(60002.3, format="mjd"),
     )
-    msfd_sim.update()
     msfd_est = Observer(
         name="msfd_estimated",
         itoa_code="MSFD_EST",
         origin="Estimated location of CSIRO Marsfield site",
-        location=loc_err,
+        location=loc_true,
         time=Time(60002.3, format="mjd"),
     )
-    msfd_est.update()
-
     model, toas = get_model_and_toas(msfd.parfile, msfd.timfile)
     fitter = DownhillWLSFitter(toas, model)
-    est_loc = localise(start, msfd_est, fitter)
-    est_loc = EarthLocation.from_geodetic(lon=est_loc[0], lat=est_loc[1])
-    print(
-        np.abs(true_loc.x - est_loc.x),
-        np.abs(true_loc.y - est_loc.y),
-    )
+    fitter.fit_toas()
+    resids = fitter.resids.time_resids.to_value(u.us)
+    initial_err = np.empty(shape=(N_ITER, 2))
+    fitted_err = np.empty(shape=(N_ITER, 2))
+    for i in range(N_ITER):
+        print(i)
+        loc_err = EarthLocation.from_geocentric(
+            x=np.random.uniform(
+                low=(loc_true.x - half_pulse_width).to_value(u.m),
+                high=(loc_true.x + half_pulse_width).to_value(u.m),
+            )
+            * u.m,
+            y=np.random.uniform(
+                low=(loc_true.y - half_pulse_width).to_value(u.m),
+                high=(loc_true.y + half_pulse_width).to_value(u.m),
+            )
+            * u.m,
+            z=loc_true.z,
+        )
+        msfd_est.update(location=loc_err)
+        start = (loc_err.geodetic.lon.to_value(u.arcsec), loc_err.geodetic.lat.to_value(u.arcsec))
+        loc_est = localise(start, msfd_est, fitter)
+        loc_est = EarthLocation.from_geodetic(lon=loc_est[0] * u.arcsec, lat=loc_est[1] * u.arcsec)
+        initial_err[i][0] = (loc_err.lon - loc_true.lon).to_value(u.arcmin)
+        initial_err[i][1] = (loc_err.lat - loc_true.lat).to_value(u.arcmin)
+        fitted_err[i][0] = (loc_est.lon - loc_true.lon).to_value(u.arcmin)
+        fitted_err[i][1] = (loc_est.lat - loc_true.lat).to_value(u.arcmin)
+    print("Fitted errors", np.mean(fitted_errors, axis=0))
