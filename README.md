@@ -1,22 +1,15 @@
-# Radio Pulsar Navigation Package
+# Radio Pulsar Navigation (RPNAV) Package
 
 ## Dependencies
-
-### Install psrcat
-
-The module can be downloaded (here)[https://www.atnf.csiro.au/research/pulsar/psrcat/download.html].
-```
-> cd psrcat
-> source makeit
-```
-
-### Install GNUplot
-```
-brew install gnuplot
-```
+    - PSRCAT
+    - PSARCHIVE 
+    - DSPSR
+    - TEMPO2
 
 ### Install PSRCHIVE
-The install and build instructions can be found (here)[https://psrchive.sourceforge.net/current/build.shtml]
+Firstly, make sure you have the lastest version of GNU autotools installed (instructions can be found [here](https://psrchive.sourceforge.net/third/autotools/)). 
+
+The install and build instructions for the package can be found (here)[https://psrchive.sourceforge.net/current/build.shtml]. 
 ```
 git submodule add git://git.code.sf.net/p/psrchive/code psrchive
 ```
@@ -29,24 +22,27 @@ cd psrchive
 ./configure
 ```
 
+The PSRCHIVE has inbuilt process to install the package dependencies listed above, most notable TEMPO2 and PSRCAT. The installation instructions can be found [here](https://psrchive.sourceforge.net/third/install.shtml). To persist the environment variables configuring the location of the packages, it is recommended that you add the following to `.bashrc`:
+
+```
+# Pulsar definitions
+LD_LIBRARY_PATH=/usr/local/lib
+TEMPO2=/usr/local/tempo2
+PGPLOT_DIR=/usr/local/pgplot
+PGPLOT_FONT=$PGPLOT_DIR/grfont.dat
+PSRCAT_FILE=/usr/local/psrcat/psrcat.db
+```
+
+it is recommended 
+
 ### Install DSPSR
-The install and build instructions can be found (here)[https://dspsr.sourceforge.net/current/build.shtml]
+The install and build instructions can be found (here)[https://dspsr.sourceforge.net/current/build.shtml]. 
 ```
 git clone git://git.code.sf.net/p/dspsr/code dspsr
 ```
 
-### Install TEMPO2
+# List of RPNAV Components
 ```
-git clone https://bitbucket.org/psrsoft/tempo2.git
-```
-
-# Build
-Build by making a build directory (i.e. build/), run cmake in that dir, and then use 
-make to build the desired target.
-
-```
-> mkdir build && cd build
-> cmake .. -DCMAKE_BUILD_TYPE=[Debug | Coverage | Release]
-> make
-> ./simulate    # Run simulator
+navigate:   Contains the navigation algorithms, including Delta-correction and Absolute Navigation
+observe:    Contains logic for defining the pulsar observer
 ```

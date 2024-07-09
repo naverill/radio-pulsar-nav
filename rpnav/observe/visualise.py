@@ -12,6 +12,9 @@ from rpnav.pulsar import Pulsar
 
 
 def plot_flux_density(pulsars: list[Pulsar]) -> go.Figure:
+    """
+    Plot the pulsar luminosity
+    """
     widths: list[float] = []
     fluxs: list[float] = []
     names: list[float] = []
