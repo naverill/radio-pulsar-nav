@@ -178,6 +178,7 @@ class Pulsar(SkyCoord):
         else:
             params.append(f"S{centre_freq}"),
 
+        # Query PSRCAT to get complete list of pulsar profiles
         try:
             cat = psrqpy.QueryATNF(params=params).table
         except ValueError:
@@ -185,21 +186,25 @@ class Pulsar(SkyCoord):
                 "Failed to read from psrcat. Check that centre frequency" " is a valid table option"
             )
 
+        # Extract pulsar profile for selected centre frequency 
         pulsars: list[Pulsar] = []
         for row in cat:
             flux_dens = None
             flux_dens_err = None
 
+            # Interpolate centre frequency if requested
             if interpolate:
                 flux_dens, flux_dens_err = Pulsar._interpolate_flux_density(
                     centre_freq, row, cat_dict
                 )
+            # Check for specific centre frequency
             else:
-                flux_dens = row[f"S{centre_freq}"]
+                flux_dens = row.get(f"S{centre_freq}")
 
             if not flux_dens:
                 continue
 
+            # Create pulsar object from profile
             pulsars.append(
                 Pulsar(
                     name=row["NAME"],

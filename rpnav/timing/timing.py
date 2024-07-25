@@ -14,7 +14,23 @@ def fit_residuals(
     maxiter: int = 100,
 ):
     """
-    Fit timing model based on input .par and .tim file
+    Fit timing model based on input parameter and timing file
+
+    Args:
+        parfile:    Pulsar parameter file (.par)
+        timfile:    Pulsar timing observation file (.tim)
+        fitter:     Object to fit timing models to TOAs can be 
+                    pint.fitter.WLSFitter for basic fitting, 
+                    pint.fitter.GLSFitter for fitting with noise
+                    models that imply correlated errors, and 
+                    pint.fitter.WidebandTOAFitter for TOAs that 
+                    contain DM information. If none is supplied,
+                    automatic fitting is applied 
+        maxiter:    Maximum number of steps allowed in fitting 
+                    process
+
+    Returns:
+        Fitted timing model
     """
     model, toas = get_model_and_toas(parfile, timfile)
     if fitter is None:

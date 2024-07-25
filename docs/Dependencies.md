@@ -26,14 +26,19 @@ The PSRCHIVE has inbuilt process to install the package dependencies listed abov
 
 ```
 # Pulsar definitions
-LD_LIBRARY_PATH=/usr/local/lib
-TEMPO2=/usr/local/tempo2
-PGPLOT_DIR=/usr/local/pgplot
-PGPLOT_FONT=$PGPLOT_DIR/grfont.dat
-PSRCAT_FILE=/usr/local/psrcat/psrcat.db
+export LD_LIBRARY_PATH=/usr/local/lib
+export TEMPO2=/usr/local/tempo2
+export PGPLOT_DIR=/usr/local/pgplot
+export PGPLOT_FONT=$PGPLOT_DIR/grfont.dat
+export PSRCAT_FILE=/usr/local/psrcat/psrcat.db
+export PSRCAT_RUNDIR=/usr/local/bin/psrcat
 ```
 
-it is recommended 
+To make the tempo2 scripts and ptasimulate scripts readily accessible, further add the following
+```
+alias ptasimulate="/home/naverill/external/ptasimulate/ptaSimulate"
+alias tempo2="/usr/local/tempo2/bin/tempo2"
+```
 
 ## Install DSPSR
 The install and build instructions can be found (here)[https://dspsr.sourceforge.net/current/build.shtml]. 

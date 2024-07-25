@@ -2,6 +2,17 @@ import plotly.graph_objects as go
 
 
 def plot_residuals(resids: list[float], mjd: list[float], t_err: list[float]):
+    """
+    Plot timing residuals 
+
+    Args:
+        resids:     List of timing residuals
+        mjd:        List of timestamps in format mean julian day
+        t_err:      List of timing error
+
+    Returns:
+        Plotted residuals
+    """
     fig = go.Figure(
         data=go.Scatter(
             x=mjd,
