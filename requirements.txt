@@ -3,6 +3,7 @@ plotly
 pandas
 numpy
 psrqpy
+psrchive
 poliastro
 pint-pulsar
 scipy
