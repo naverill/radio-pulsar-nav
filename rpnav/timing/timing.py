@@ -5,6 +5,9 @@ import astropy.units as u
 from pint import logging
 from pint.fitter import Fitter, MaxiterReached
 from pint.models import get_model, get_model_and_toas
+from loguru import logger as log
+
+logging.setup()
 
 
 def fit_residuals(
@@ -12,7 +15,7 @@ def fit_residuals(
     timfile: Union[TextIO, str],
     fitter: Fitter = None,
     maxiter: int = 100,
-):
+) -> Union[Fitter, None]:
     """
     Fit timing model based on input parameter and timing file
 
@@ -32,7 +35,7 @@ def fit_residuals(
     Returns:
         Fitted timing model
     """
-    model, toas = get_model_and_toas(parfile, timfile)
+    model, toas = get_model_and_toas(parfile, timfile, allow_T2=True, allow_tcb=True)
     if fitter is None:
         fit = Fitter.auto(toas, model)
     else:
@@ -41,5 +44,6 @@ def fit_residuals(
     try:
         fit.fit_toas(maxiter=maxiter)
     except MaxiterReached:
-        logging.error("PINT Residuals Fitter failed to fully converge.")
+        log.warning("PINT Residuals Fitter failed to fully converge.")
+        return None
     return fit

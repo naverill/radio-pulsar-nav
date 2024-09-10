@@ -11,7 +11,7 @@ dspsr -P accel.txt pointing.dat
 
 ## Fold Pulse Profile
 A new survey candidate has very few parameters: the spin period, trial dispersion measure, and perhaps an acceleration. These can be input to dspsr using a simple text file; for example: 
-```txt
+```
 SOURCE: SC0001_04151
 PERIOD: 1.362819517 s
 DM: 50.6
@@ -104,3 +104,14 @@ to be y.par.
 parameters)
 
 `-residuals` outputs the residuals to a file called “residuals.dat”.
+
+## TEMPO2 Plugin 
+To build, navigate to the plugins/ directory and run the following
+```
+sudo g++ -I/usr/local/tempo2/include -fPIC -shared -o ${TEMPO2}/plugins/pulsar_positioning_Linux_plug.t2 plugin/pulsar_positioning_plug.C
+```
+
+To execute the positioning script, run the following
+```
+tempo2 -gr pulsar_positioning
+```

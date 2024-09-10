@@ -3,6 +3,7 @@ import psrqpy
 from astropy.coordinates import ICRS, AltAz, SkyCoord
 from astropy.table import Table
 from astropy.time import Time
+from astropy.coordinates.angles import Angle
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
 from pulsar_spectra.spectral_fit import estimate_flux_density, find_best_spectral_fit
 

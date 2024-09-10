@@ -1,0 +1,22 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Pulsar Positioning Launch",
+            "type": "node-terminal",
+            "request": "launch",
+            // "preLaunchTask": "renameT2File",
+            // "program": "runTEMPO2",
+            // "environment": [{ "name": "config", "value": "Debug" }],
+            "command": "/usr/local/tempo2/bin/tempo2 -gr pulsar_positioning -f rpnav/simulate/inputs/navigate.par rpnav/simulate/inputs/navigate.tim -observer NAVIGATE",
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb"
+            },
+            "cwd": "${workspaceFolder}/",
+        }
+    ]
+}

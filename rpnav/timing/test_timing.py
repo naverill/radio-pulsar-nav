@@ -11,6 +11,7 @@ from astropy.time import Time
 from pint import logging
 from pint.fitter import DownhillWLSFitter
 from pint.observatory import get_observatory
+from loguru import logger as log
 
 from rpnav.constants import SPEED_OF_LIGHT
 from rpnav.navigate.gradient_descent import rmse
@@ -47,7 +48,7 @@ def process_estimate(args) -> EarthLocation:
             )
     elif args.frame == "geocentric":
         est_loc = EarthLocation.from_geocentric(
-            x=args.est[0] * u.m, y=args.est[1] * u.m, z=args.est[2] * u.m
+            x=args.est[0], y=args.est[1], z=args.est[2]
         )
     else:
         parser.error("Invalid reference frame. Must be geodetic or geocentric")
@@ -60,7 +61,19 @@ def parkes():
     return Args(
         timfile=f"{FILE_DIR}/../simulate/{sim}/output/real_0/J0835-4510.tim",
         parfile=f"{FILE_DIR}/../simulate/{sim}/output/real_0/J0835-4510.tdb.par",
-        est=[-4554231.5, 2816759.1, -3454036.3],
+        est=[-4554231.5 * u.m, 2816759.1 * u.m, -3454036.3 * u.m],
+        frame="geocentric",
+        err=None,
+    )
+
+@pytest.fixture(scope="module")
+def navigate():
+    sim = ("navigate",)
+    return Args(
+        timfile=f"{FILE_DIR}/../simulate/inputs/navigate.tim",
+        parfile=f"{FILE_DIR}/../simulate/inputs/navigate.par",
+        est=[-4554231.5 * u.m, 2816759.1 * u.m, -3454036.3 * u.m],
+        # est=[-4564231.5, 2815759.1, -3455036.3  ],
         frame="geocentric",
         err=None,
     )
@@ -100,6 +113,25 @@ def test_residuals_parkes_correct_position(parkes):
     fig.write_image("parkes.png")
     # fig.show()
 
+
+def test_residuals_navigate_correct_position(navigate):
+    est_loc = process_estimate(navigate)
+    pks_sim = Observer(
+        name="navigate",
+        itoa_code="NAVIGATE",
+        location=est_loc,
+        origin="Actual location of Parkes telescope site",
+        time=Time(60002.3, format="mjd"),
+    )
+    fitter = fit_residuals(navigate.parfile, navigate.timfile, fitter=DownhillWLSFitter)
+    fig = plot_residuals(
+        fitter.resids.time_resids.to_value(u.us).astype(float),
+        fitter.toas.get_mjds().value.astype(float),
+        fitter.toas.get_errors().to_value(u.us).astype(float),
+    )
+    fig.update_layout(width=1000, height=1000)
+    fig.write_image("navigate.png")
+    # fig.show()
 
 def test_residuals_msfd_true(msfd):
     est_loc = process_estimate(msfd)
@@ -186,15 +218,14 @@ def test_residuals_msfd_mse(msfd):
 
     # Adjust position in range (x +- P0 / 2, y += P0 /2, z)
     x_range = np.linspace(
-        msfd.est[0] - half_pulsar_width * n_pulses, msfd.est[0] + half_pulsar_width * n_pulses, 51
+        msfd.est[0] - half_pulse_width * n_pulses, msfd.est[0] + half_pulse_width * n_pulses, 51
     )
     y_range = np.linspace(
-        msfd.est[1] - half_pulsar_width * n_pulses, msfd.est[1] + half_pulsar_width * n_pulses, 51
+        msfd.est[1] - half_pulse_width * n_pulses, msfd.est[1] + half_pulse_width * n_pulses, 51
     )
     residuals_rmse = np.empty(shape=(len(x_range), len(y_range)))
     for i, x in enumerate(x_range):
         for j, y in enumerate(y_range):
-            print(i, j)
             est_loc = EarthLocation.from_geocentric(x=x, y=y, z=msfd.est[2])
             msfd_est.update(location=est_loc)
             fitter = fit_residuals(msfd.parfile, msfd.timfile, fitter=DownhillWLSFitter)
@@ -211,6 +242,61 @@ def test_residuals_msfd_mse(msfd):
     fig.write_image("msfd_rmse_surface.png")
     # fig.show()
 
+
+def test_residuals_navigate_rmse(navigate):
+    # Vela pulse half width (m)
+    n_pulses = 1
+    half_pulse_width = (4.57 * 1000 * u.s / 2) * SPEED_OF_LIGHT
+
+    # establish initial true position of observers
+    loc_true = process_estimate(navigate)
+    parkes_true = Observer(
+        name="pks",
+        itoa_code="PARKES",
+        location=loc_true,
+        origin="True location of test telescope site",
+        time=Time(59854.197893398821169, format="mjd"),
+    )
+    nav_est = Observer(
+        name="navigate",
+        itoa_code="NAVIGATE",
+        origin="Estimated location of test telescope site",
+        location=loc_true,
+        time=Time(59907.059068694133261, format="mjd"),
+    )
+    fitter = fit_residuals(navigate.parfile, navigate.timfile, fitter=DownhillWLSFitter)
+    residuals_true = fitter.resids.time_resids.to_value(u.us).astype(float)
+
+    # Adjust position in range (x +- P0 / 2, y += P0 /2, z)
+    x_range = np.linspace(
+        navigate.est[0] - half_pulse_width * n_pulses, navigate.est[0] + half_pulse_width * n_pulses, 21
+    )
+    y_range = np.linspace(
+        navigate.est[1] - half_pulse_width * n_pulses, navigate.est[1] + half_pulse_width * n_pulses, 21
+    )
+
+    residuals_rmse = np.empty(shape=(len(x_range), len(y_range)))
+    for i, x in enumerate(x_range):
+        for j, y in enumerate(y_range):
+            print(f"{i}, {j}\n")
+
+            est_loc = EarthLocation.from_geocentric(x=x, y=y, z=navigate.est[2])
+            nav_est.update(location=est_loc)
+            fitter = fit_residuals(navigate.parfile, navigate.timfile, fitter=DownhillWLSFitter)
+            # calculate root mean squared error (RMSE) of timing residuals
+            if fitter is not None:
+                residuals_rmse[i][j] = rmse(
+                    np.subtract(fitter.resids.time_resids.to_value(u.us).astype(float), residuals_true)
+                )
+            else:
+                residuals_rmse[i][j] = np.nan
+
+    print(residuals_rmse)
+    np.savetxt("residuals.csv", residuals_rmse, delimiter=",")
+    fig = plot_residuals_mse(x_range, y_range, residuals_rmse)
+    fig.update_layout(width=18000, height=18000)
+    fig.write_image("navigate_rmse_surface.png")
+    # fig.show()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

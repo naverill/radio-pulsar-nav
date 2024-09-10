@@ -5,6 +5,7 @@ The RPNAV package has the following dependencies:
     - TEMPO2
     - PSARCHIVE 
     - DSPSR
+    - PSRDADA
 
 ## PSRCAT 
 PSRCAT is a library for interacting with the ANTF pulsar catalogue of all known pulsars, maintained by the Australian National Telescope Facility (ANTF). The catalogue includes all published rotation-powered pulsars and their unique profile, including those detected only at high energies. The pulsar profiles consist of their physical properies and their uncertainties. [1]. This package is a dependency of most, if not all, of the following packages and is used in RPNAV to identify the observed pulsar from its reference characteristics, and provide position information that is used in the navigation algorithms.[1] The python package psrqpy will also be used, which provides a tool for interacting with the ANTF pulsar catalogue. [2] 
@@ -88,10 +89,20 @@ The install and build instructions can be found (here)[https://dspsr.sourceforge
 git clone git://git.code.sf.net/p/dspsr/code dspsr
 ```
 
+## PSRDADA
+
+PSRDADA is library that supports Data Acquisition and Distributed Analysis (DADA) systems and is commonly used to handle baseband recording and processing instrumentation for pulsar astronomy.
+
+### Install PSRDADA
+The official install instructions can be found (here)[https://psrdada.sourceforge.net/download.shtml]
+```
+git clone git://git.code.sf.net/p/psrdada/code psrdada
+```
+
 ## References
 [1] Manchester, R. N., Hobbs, G. B., Teoh, A. & Hobbs, M., Astron. J., 129, 1993-2006 (2005) (astro-ph/0412641)
 [2] Pitkin, (2018). psrqpy: a python interface for querying the ATNF pulsar catalogue. Journal of Open Source Software, 3(22), 538
 [3] (TEMPO2 User Manual)[https://www.jb.man.ac.uk/research/pulsar/Resources/tempo2_manual.pdf]
 [4] (TEMPO2 examples)[https://www.jb.man.ac.uk/~pulsar/Resources/tempo2_examples_ver1.pdf]
 [5] van Straten, Willem, Paul Demorest, and Stefan Osłowski. "Pulsar data analysis with PSRCHIVE." arXiv preprint arXiv:1205.6276 (2012). (https://arxiv.org/pdf/1205.6276)
-[6] van Straten, W., & Bailes, M. (2011). DSPSR: Digital Signal Processing Software for Pulsar Astronomy. Publications of the Astronomical Society of Australia, 28(1), 1–14. doi:10.1071/AS10021  
+[6] van Straten, W., & Bailes, M. (2011). DSPSR: Digital Signal Processing Software for Pulsar Astronomy. Publications of the Astronomical Society of Australia, 28(1), 1–14. doi:10.1071/AS10021 

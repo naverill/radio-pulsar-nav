@@ -19,13 +19,13 @@ class Observer(Observatory):
         timescale: str = "TCB",
         itoa_code: str = None,
     ):
+        super().__init__(name, aliases, timescale)
         self.update(
             location=location,
             origin=origin,
             time=time,
             itoa_code=itoa_code,
         )
-        super().__init__(name, aliases, timescale)
 
     def to_json(self):
         t = self._time if self._time is not None else Time.now()
@@ -61,3 +61,4 @@ class Observer(Observatory):
         except ValueError:
             load_observatories(io.StringIO(json.dumps(self.to_json())))
         return self
+

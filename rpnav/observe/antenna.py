@@ -191,7 +191,10 @@ class Antenna(Observer):
                 self._wavelength = frequency_to_wavelength(self._centre_frequency)
         return self._wavelength
 
+
+
     def _propagate_calculations(self) -> float:
         for _ in range(3):
             for var in type(self).__dict__:
                 getattr(self, var)
+

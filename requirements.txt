@@ -1,9 +1,10 @@
+astropy
+cython
+numpy
 pulsar_spectra
 plotly
 pandas
-numpy
 psrqpy
-psrchive
 poliastro
 pint-pulsar
 scipy

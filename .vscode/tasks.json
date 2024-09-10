@@ -1,0 +1,51 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "buildTEMPO2",
+            "type": "shell",
+            "command": "g++",
+            "args": ["g++ -I/usr/local/tempo2/include -fPIC -shared -o ${TEMPO2}/plugins/pulsar_positioning_Linux_plug.t2 plugin/pulsar_positioning_plug.C"],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "options": {
+                "cwd": "/home/naverill/external/tempo2"
+            }
+        },
+        {
+            "label": "renameT2File",
+            "type": "shell",
+            "command": "g++",
+            "args": ["mv pulsar_positioning_Linux_plug.t2 pulsar_positioning_linux_plug.t2"],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": "buildTEMPO2",
+            "options": {
+                "cwd": "/usr/local/tempo2/plugins/"
+            }
+        },
+        {
+            "label": "runTEMPO2",
+            "type": "shell",
+            "command": "/usr/local/tempo2/bin/tempo2 -gr pulsar_positioning -f inputs/navigate.par inputs/navigate.tim -observer NAVIGATE",
+            // "args": [""],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            // "dependsOn": ["buildTEMPO2"],
+            "options": {
+                "cwd": "${workspaceFolder}/rpnav/simulate"
+            }
+        }
+    ]
+}

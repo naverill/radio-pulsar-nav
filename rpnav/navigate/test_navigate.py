@@ -1,4 +1,5 @@
 from pathlib import Path
+import csv
 
 import astropy.units as u
 import numpy as np
@@ -11,6 +12,7 @@ from pint.models import get_model_and_toas
 
 from rpnav.constants import SPEED_OF_LIGHT
 from rpnav.navigate.gradient_descent import localise, rmse
+from rpnav.navigate.visualise import plot_heatmap
 from rpnav.observe.observer import Observer
 
 logging.setup(level="ERROR")
@@ -77,7 +79,6 @@ def msfd():
         err=None,
     )
 
-
 def test_gradient_descent(msfd):
     half_pulse_width = (0.08932838502359318 * u.s / 2) * SPEED_OF_LIGHT
     loc_true = process_estimate(msfd)
@@ -126,3 +127,22 @@ def test_gradient_descent(msfd):
         fitted_err[i][0] = (loc_est.lon - loc_true.lon).to_value(u.arcmin)
         fitted_err[i][1] = (loc_est.lat - loc_true.lat).to_value(u.arcmin)
     print("Fitted errors", np.mean(fitted_errors, axis=0))
+
+
+def test_rmse():
+    results = []
+    with open("inputs/rmse.csv") as f:
+        reader = csv.reader(f)
+        for line in reader: # each row is a list
+            row = []
+            for val in line[0].split("\t"):
+                if val:
+                    row.append(float(val))
+                else:
+                    row.append(np.nan)
+            results.append(row)
+    results[0][0] = np.nan
+    fig = plot_heatmap(results)
+    # fig = go.Figure(data=go.Heatmap(z=rmseMap),
+    #     color_scale='RdBu_r', origin='lower')
+    fig.write_image("outputs/heapmap3.png")
