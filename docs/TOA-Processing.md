@@ -108,7 +108,7 @@ parameters)
 ## TEMPO2 Plugin 
 To build, navigate to the plugins/ directory and run the following
 ```
-sudo g++ -I/usr/local/tempo2/include -fPIC -shared -o ${TEMPO2}/plugins/pulsar_positioning_Linux_plug.t2 plugin/pulsar_positioning_plug.C
+sudo g++ -I/usr/local/tempo2/include -fPIC -shared -o ${TEMPO2}/plugins/pulsar_positioning_Linux_plug.t2 plugin/pulsar_positioning_plug.C -ltiff -lgeotiff
 ```
 
 To execute the positioning script, run the following

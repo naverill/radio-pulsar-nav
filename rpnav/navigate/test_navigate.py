@@ -145,4 +145,4 @@ def test_rmse():
     fig = plot_heatmap(results)
     # fig = go.Figure(data=go.Heatmap(z=rmseMap),
     #     color_scale='RdBu_r', origin='lower')
-    fig.write_image("outputs/heapmap3.png")
+    fig.write_image("outputs/residErr2.png")
