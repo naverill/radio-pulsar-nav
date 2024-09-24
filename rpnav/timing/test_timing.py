@@ -236,7 +236,6 @@ def test_residuals_msfd_mse(msfd):
             print(rmse)
 
     print(residuals_rmse)
-    np.savetxt("residuals.csv", residuals_rmse, delimiter=",")
     fig = plot_residuals_mse(x_range, y_range, residuals_rmse)
     fig.update_layout(width=9000, height=9000)
     fig.write_image("msfd_rmse_surface.png")

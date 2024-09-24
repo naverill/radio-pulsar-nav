@@ -14,6 +14,8 @@ make
 
 //install package 
 make install
+
+gcc -o ptaSimulate *.c -lfftw3 /usr/lib/aarch64-linux-gnu/libfftw3f.so -lm -ldl
 ```
 
 To make the executable available throughout the system, add the following line to `~/.bashrc`.
@@ -73,8 +75,13 @@ ptaSimulate sim.input
 # Run simulation
 tcsh <script name>/scripts/runScripts_master
 
+If you have aliased the path to the tempo2 executable, you may need to add this line to the start of runScripts_master
+'''tcsh
+alias tempo2 "/usr/local/tempo2/bin/tempo2"
+setenv TEMPO2 /usr/local/tempo2
+'''
 # output to results file
-outpath=<script name>/output/real_<n>
+export outpath=<script name>/output/real_<n>
 tempo2 -output general2 -s "{sat} {pre} {err} rslt\n" -f ${outpath}/J0437-4715.par ${outpath}/J0437-4715.tim  | grep rslt | awk '{print $1,$2,$3}' > ${outpath}/results.txt
 
 # convert from TCB to TDB

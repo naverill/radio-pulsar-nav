@@ -7,6 +7,7 @@ nreal: 1
 
 <pulsars>
 psr: name=J0835-4510
+psr: name=J0835-4510
 </pulsars>
 
 <obsRun>

@@ -66,7 +66,7 @@ export TEMPO2=/usr/local/tempo2
 export PGPLOT_DIR=/usr/local/pgplot
 export PGPLOT_FONT=$PGPLOT_DIR/grfont.dat
 export PSRCAT_FILE=/usr/local/psrcat/psrcat.db
-export PSRCAT_RUNDIR=/usr/local/bin/psrcat
+export PSRCAT_RUNDIR=/usr/local/psrcat
 ```
 
 To make the tempo2 scripts and ptasimulate scripts readily accessible, further add the following to `.bashrc`

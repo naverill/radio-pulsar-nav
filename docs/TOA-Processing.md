@@ -106,12 +106,23 @@ parameters)
 `-residuals` outputs the residuals to a file called “residuals.dat”.
 
 ## TEMPO2 Plugin 
+"""
+sudo apt update
+sudo apt install libgsl-dev
+sudo apt install proj-bin
+sudo apt install libgdal-dev 
+"""
 To build, navigate to the plugins/ directory and run the following
 ```
-sudo g++ -I/usr/local/tempo2/include -fPIC -shared -o ${TEMPO2}/plugins/pulsar_positioning_Linux_plug.t2 plugin/pulsar_positioning_plug.C -ltiff -lgeotiff
+sudo g++ -I/usr/local/tempo2/include -fPIC -shared -o ${TEMPO2}/plugins/pulsar_positioning_Linux_plug.t2 plugin/pulsar_positioning_plug.C -ltiff -lgeotiff -lgdal -lgsl
 ```
 
 To execute the positioning script, run the following
 ```
 tempo2 -gr pulsar_positioning
+```
+
+```
+sudo valgrind --leak-check=full          --show-leak-kinds=all          --track-origins=yes          --verbose          --log-file=valgrind-out.txt               ./../../../../usr/local/
+tempo2/bin/tempo2 -gr pulsar_positioning -f rpnav/simulate/inputs/navigate.par rpnav/simulate/inputs/navigate.tim -observer NAVIGATE
 ```
