@@ -1,6 +1,7 @@
 from pathlib import Path
 import csv
 
+import pandas as pd
 import astropy.units as u
 import numpy as np
 import pytest
@@ -130,19 +131,24 @@ def test_gradient_descent(msfd):
 
 
 def test_rmse():
-    results = []
-    with open("inputs/rmse.csv") as f:
-        reader = csv.reader(f)
-        for line in reader: # each row is a list
-            row = []
-            for val in line[0].split("\t"):
-                if val:
-                    row.append(float(val))
-                else:
-                    row.append(np.nan)
-            results.append(row)
-    results[0][0] = np.nan
-    fig = plot_heatmap(results)
+    fpath = "../simulate/outputs/navigate_sim/output/real_0/"
+
+    df1 = pd.read_csv(fpath + "ALPSMLC30_S033E147_DSM_rmse.csv")
+    df1 = pd.read_csv(fpath + "ALPSMLC30_S033E148_DSM_rmse.csv")
+    df1 = pd.read_csv(fpath + "ALPSMLC30_S033E149_DSM_rmse.csv")  
+    df1.set_index(np.linspace(33, 34, 3599, endpoint=False), inplace=True)
+    df1.columns = np.linspace(148, 149, 3601, endpoint=False)
+
+
+    df2 = pd.read_csv(fpath + "ALPSMLC30_S034E147_DSM_rmse.csv")
+    df2 = pd.read_csv(fpath + "ALPSMLC30_S034E148_DSM_rmse.csv")
+    df2 = pd.read_csv(fpath + "ALPSMLC30_S034E149_DSM_rmse.csv")
+    df2.set_index(np.linspace(34, 35, 3599, endpoint=False), inplace=True)
+    df2.columns = np.linspace(148, 150, 3601*2, endpoint=False) 
+
+    df1 = pd.concat([df1, df2], axis=0, join="outer")
+    fig = plot_heatmap(df1)
+
     # fig = go.Figure(data=go.Heatmap(z=rmseMap),
     #     color_scale='RdBu_r', origin='lower')
-    fig.write_image("outputs/residErr2.png")
+    fig.write_image("outputs/residErr8.png")

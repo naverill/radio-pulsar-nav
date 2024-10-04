@@ -2,6 +2,7 @@ from math import log2
 
 import astropy.units as u
 import pandas as pd
+import numpy as np
 import plotly.graph_objects as go
 from astropy.coordinates import ICRS, AltAz, SkyCoord
 from astropy.table import Table
@@ -12,7 +13,7 @@ from rpnav.pulsar import Pulsar
 
 def plot_heatmap(rmseMap: list[list[float]]):
     fig = go.Figure(data=go.Heatmap(z=rmseMap),
-        #     color__scale='RdBu_r', origin='lower'
-            )
+        #     color__scale='RdBu_r', 
+    )
     return fig
 
