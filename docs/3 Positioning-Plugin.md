@@ -21,9 +21,8 @@ sudo apt install proj-bin         # PROJ for coordinate transformation
 sudo apt install libgdal-dev      # GDAL for TIFF processing 
 ```
 
-
 ###  Load DEM Files
-The JAXA ALOS Global Digital Surface Model dataset is a collection of GEOTiff files with a file resolution of one degree latitude/longitude and a pixel resolution of one arcsecond (approx 30m). Each pixel stores an average elevation in metres that indicates the height of that point above sea level. The files can be downloaded from [JAXA Earth Observation Research Center](https://www.eorc.jaxa.jp/ALOS/en/aw3d30/data/) website. The code will look for the files in the local install of tempo2 in the following folder:
+The JAXA ALOS Global Digital Surface Model dataset is a collection of GEOTiff files with a file resolution of one degree latitude/longitude and a pixel resolution of one arcsecond (approx 30m). Each pixel stores an average elevation in metres that indicates the height of that point above sea level. The files can be downloaded from [JAXA Earth Observation Research Center](https://www.eorc.jaxa.jp/ALOS/en/aw3d30/data/) website. The code will look for the DSM files in the local install of tempo2 in the following folder:
 
 ```sh
 mkdir ${TEMPO2}/map_data
@@ -32,7 +31,6 @@ where
 ```sh
 {$TEMPO} is the location of `TEMPO2` (usualy /usr/local/tempo2).
 ```
-
 
 ## Build
 To build the plugin, navigate to the plugins/ directory of the respository and run the following:
@@ -69,13 +67,13 @@ The script has the following configuration parameters
             rms: Root mean squared error
             chi: reduced chi-squared error  
         Default: rms
--o  Define the observer code
--l  Define the starting search coordinates
+-o   Define the observer code
+-l   Define the starting search coordinates
         Form:
             -l {long (deg)} {lat (deg)}
 -n  Fill NODATA errors with 0 elevation
 
-tempo2 -gr pulsar_positioning -f J0835-4510.tdb.par J0835-4510.tim -f J1939+2134.tdb.par J1939+2134.tim -g ALPSMLC30_S038E150_DSM.tif -a grde -e chi
+tempo2 -gr pulsar_positioning -f J0835-4510.tdb.par J0835-4510.tim -f J1939+2134.tdb.par J1939+2134.tim -l 150 -32 -a grde -e chi
 ```
 
 ```
