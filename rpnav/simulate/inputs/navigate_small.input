@@ -1,0 +1,26 @@
+# Simulate Navigate telescope observing Vela 
+<define>
+name: navigate_small_sim 
+nproc: 1
+nreal: 1
+</define>
+
+<pulsars>
+psr: name=J0835-4510
+psr: name=J1939+2134
+</pulsars>
+
+<obsRun>
+name: NAVIGATE 
+tel: navigate 
+start: 60002.3
+finish: 60003.3
+sampling: cadence=0.042
+sched: sched1
+</obsRun>
+
+<schedule>
+name: sched1
+observe: psr=J0835-4510,toaerr=2.6471e-4,freq=820,ha=8*(ran(linear)-0.5)
+observe: psr=J1939+2134,toaerr=2.6471e-4,freq=820,ha=8*(ran(linear)-0.5)
+</schedule>

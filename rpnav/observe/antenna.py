@@ -66,7 +66,8 @@ class Antenna(Observer):
         self._radio_gain = None
         self._propagate_calculations()
         self.elevation = elevation
-        super().__init__(name, location, aliases=aliases, timescale=timescale, time=time)
+        self.location = location
+        super().__init__(name, location, aliases=aliases, timescale=timescale, time=time, origin="test", itoa_code=name.upper())
 
     def min_observable_flux_density(
         self,
@@ -190,8 +191,6 @@ class Antenna(Observer):
             if self._is_set([self._centre_frequency]):
                 self._wavelength = frequency_to_wavelength(self._centre_frequency)
         return self._wavelength
-
-
 
     def _propagate_calculations(self) -> float:
         for _ in range(3):

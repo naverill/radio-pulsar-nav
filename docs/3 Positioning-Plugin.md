@@ -72,7 +72,10 @@ The script has the following configuration parameters
         Form:
             -l {long (deg)} {lat (deg)}
 -n  Fill NODATA errors with 0 elevation
+-n  Randomly generate initial starting position
+```
 
+```sh
 tempo2 -gr pulsar_positioning -f J0835-4510.tdb.par J0835-4510.tim -f J1939+2134.tdb.par J1939+2134.tim -l 150 -32 -a grde -e chi
 ```
 

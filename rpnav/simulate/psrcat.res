@@ -12,4 +12,5 @@ CLK             TT(BIPM2018)
 EPHEM           DE436                         
 RM              11.0                          3.000e-01 
 PX              0.35                          3.000e-02 
+EPHVER          5                             
 UNITS           TCB                           

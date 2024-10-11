@@ -1,11 +1,13 @@
 from pathlib import Path
 import csv
+import os
 
+import plotly.graph_objects as go
 import pandas as pd
 import astropy.units as u
 import numpy as np
 import pytest
-from astropy.coordinates import EarthLocation
+from astropy.coordinates import EarthLocation, Longitude, Latitude, Angle
 from astropy.time import Time
 from pint import logging
 from pint.fitter import DownhillWLSFitter
@@ -13,7 +15,7 @@ from pint.models import get_model_and_toas
 
 from rpnav.constants import SPEED_OF_LIGHT
 from rpnav.navigate.gradient_descent import localise, rmse
-from rpnav.navigate.visualise import plot_heatmap
+from rpnav.navigate.visualise import plot_heatmap, plot_scattermap
 from rpnav.observe.observer import Observer
 
 logging.setup(level="ERROR")
@@ -129,7 +131,6 @@ def test_gradient_descent(msfd):
         fitted_err[i][1] = (loc_est.lat - loc_true.lat).to_value(u.arcmin)
     print("Fitted errors", np.mean(fitted_errors, axis=0))
 
-
 def test_rmse():
     fpath = "../simulate/outputs/navigate_sim/output/real_0/"
 
@@ -152,3 +153,68 @@ def test_rmse():
     # fig = go.Figure(data=go.Heatmap(z=rmseMap),
     #     color_scale='RdBu_r', origin='lower')
     fig.write_image("outputs/residErr8.png")
+
+def test_grde():
+    sim = "navigate_small_sim"
+    simdir = f"S{i:02d}"
+    fpath = f"../simulate/outputs/{sim}/output/{simdir}/"
+
+    # fname = "ALPSMLC30_N033E148_DSM_GRDE_CHI"
+
+    fname = f"results_{simdir}"
+    resname = f"{sim}_results_{simdir}"
+
+    df = pd.read_csv(fpath + fname + ".csv")
+    long = df["Longitude(deg)"].values
+    lat = df["Latitude(deg)"].values
+
+    fig= plot_scattermap(
+            long, 
+            lat, 
+            df["Error"].values)
+    fig.add_trace(go.Scatter(x=[148.26356], y=[-32.99841], marker_symbol='x', marker_size=40))
+
+    fig.write_image(f"outputs/{resname}.png")
+
+def test_scattermap():
+    sim = "navigate_small_sim"
+
+    fig = go.Figure()
+    for i in range(100):
+        simdir = f"S{i:02d}"
+        fpath = f"../simulate/outputs/{sim}/output/{simdir}/"
+        if not os.path.exists(fpath):
+            continue
+
+        # fname = "ALPSMLC30_N033E148_DSM_GRDE_CHI"
+
+        fname = f"results_{simdir}"
+        resname = f"{sim}_results_{simdir}"
+
+        df = pd.read_csv(fpath + fname + ".csv")
+        long = df["Longitude(deg)"].values
+        lat = df["Latitude(deg)"].values
+
+        fig.add_trace(
+            go.Scattermap(
+                # mode = "markers+lines",
+                mode = "markers",
+                lon = long,
+                lat = lat,
+                # marker = {'size': 1},
+                line={'width':1},
+                opacity=1,
+            )
+        )
+
+    fig.add_trace(go.Scatter(x=[148.26356], y=[-32.99841], marker_symbol='x', marker_size=40))
+    fig.update_layout(
+        margin ={'l':0,'t':0,'b':0,'r':0},
+        width=1800,
+        height=1800,
+        map = {
+            # 'style': "white-bg",
+            'style': "open-street-map",
+            'center': {'lon': 148.26356, 'lat': -32.99841},
+            'zoom': 2})
+    fig.write_image(f"outputs/{resname}.png")

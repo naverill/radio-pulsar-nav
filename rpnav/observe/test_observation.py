@@ -20,6 +20,7 @@ def parkes():
         signal_to_noise=10,  #
         system_temp=25.0,  # K
         astronomy_gain=0.6,  # (K/Jy)
+        time=Time(60002.3, format="mjd"),
         bandwidth=340e6,  # (Hz)
         centre_frequency=1374,  # (MHz)
         location=EarthLocation.from_geodetic(
@@ -36,6 +37,7 @@ def fast():
         system_temp=25.0,  # (K)
         astronomy_gain=16.0,  # (K/Jy)
         bandwidth=512e6,  # (Hz)
+        time=Time(60002.3, format="mjd"),
         centre_frequency=1350,  # (MHz)
         location=EarthLocation.from_geodetic(
             lat=25.654006939684034 * u.deg, lon=106.85784898726897 * u.deg
@@ -46,10 +48,11 @@ def fast():
 @pytest.fixture(scope="module")
 def msfd():
     return Antenna(
-        name="msfd_actual",
+        name="navigate",
         signal_to_noise=1,
         system_temp=30.0,  # K
         bandwidth=40e6,  # (Hz)
+        time=Time(60002.3, format="mjd"),
         centre_frequency=1400,  # (MHz)
         location=EarthLocation.from_geodetic(
             lat=-33.77290643916046 * u.deg, lon=151.0976937264337 * u.deg
@@ -82,6 +85,8 @@ def test_plot_pulsar_position(antenna):
         plot_antenna_coverage(fig, antenna, t)
         plot_antenna(fig, antenna, t)
         fig.show()
+        fig.write_image(f"outputs/parkes_pos_{integ_time}.png")
+
 
 
 def test_plot_pulsar_horizon_integ_time(antenna):
@@ -114,6 +119,7 @@ def test_plot_pulsar_horizon_integ_time(antenna):
         fig.update_xaxes(showgrid=True, gridwidth=1, minor_ticks="inside")
         fig.update_yaxes(showgrid=True, gridwidth=1, minor_ticks="inside")
         fig.show()
+        fig.write_image(f"outputs/parkes_horiz_{integ_time}.png")
 
 
 def test_plot_pulsar_horizon_obs_time(antenna):
@@ -146,7 +152,9 @@ def test_plot_pulsar_horizon_obs_time(antenna):
         fig.update_layout({"paper_bgcolor": "rgba(0,0,0,0)"})
         fig.update_xaxes(showgrid=True, gridwidth=1, minor_ticks="inside")
         fig.update_yaxes(showgrid=True, gridwidth=1, minor_ticks="inside")
-        fig.show()
+        # fig.show()
+        fig.write_image(f"outputs/parkes_obs_{t_delta}.png")
+
 
 
 def test_plot_pulsar_observability(antenna):
@@ -172,7 +180,8 @@ def test_plot_pulsar_observability(antenna):
                 x=0.5,
             )
         )
-        fig.show()
+        # fig.show()
+        fig.write_image(f"outputs/parkes_int_{integ_time}.png")
 
 
 def test_return_az_el_visible(antenna):
