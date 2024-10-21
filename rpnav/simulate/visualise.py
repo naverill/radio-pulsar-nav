@@ -9,7 +9,7 @@ from astropy.table import Table
 from astropy.time import Time
 
 from rpnav.observe.antenna import Antenna
-from rpnav.pulsar import Pulsar
+from rpnav.observe.pulsar import Pulsar
 
 def plot_heatmap(rmseMap: list[list[float]]):
     fig = go.Figure(data=go.Heatmap(z=rmseMap),
@@ -25,7 +25,7 @@ def plot_scattermap(long: list[float], lat: list[float], err: list[float]):
             mode = "markers",
             lon = long,
             lat = lat,
-            # marker = {'size': 1},
+            marker = {'size': err.apply(lambda x: 1 / x)},
             line={'width':1},
             opacity=1,
         )
@@ -41,3 +41,19 @@ def plot_scattermap(long: list[float], lat: list[float], err: list[float]):
             'zoom': 2})
     return fig
 
+
+
+def plot_err_surface(x: list[float], y: list[float], residuals_rmse: list[float]):
+    fig = go.Figure(data=[go.Surface(x=x, y=y, z=residuals_rmse)])
+    fig.update_traces(
+        contours_z=dict(show=True, usecolormap=True, highlightcolor="limegreen", project_z=True)
+    )
+    fig.update_layout(
+        title="Timing Residuals RMSE Surface",
+        # autosize=False,
+        # scene_camera_eye=dict(x=1.87, y=0.88, z=-0.64),
+        width=1800,
+        height=1800,
+        # margin=dict(l=65, r=50, b=65, t=90),
+    )
+    return fig

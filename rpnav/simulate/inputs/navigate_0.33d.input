@@ -1,0 +1,26 @@
+# Simulate Parkes telescope observing Vela 
+<define>
+name: navigate_0.33d_sim
+nproc: 1
+nreal: 1
+</define>
+
+<pulsars>
+psr: name=J0835-4510
+psr: name=J1939+2134
+</pulsars>
+
+<obsRun>
+name: NAVIGATE 
+tel: navigate 
+start: 60002.3
+finish: 60002.63
+sampling: cadence=0.1
+sched: sched1
+</obsRun>
+
+<schedule>
+name: sched1
+observe: psr=J0835-4510,toaerr=1e-6,freq=1400,ha=8*(ran(linear)-0.5)
+observe: psr=J1939+2134,toaerr=1e-6,freq=1400,ha=8*(ran(linear)-0.5)
+</schedule>

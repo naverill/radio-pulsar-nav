@@ -1,0 +1,336 @@
+from pathlib import Path
+import csv
+import os
+
+import plotly.graph_objects as go
+import pandas as pd
+import astropy.units as u
+import numpy as np
+import pytest
+from astropy.coordinates import EarthLocation, Longitude, Latitude, Angle
+from astropy.time import Time
+
+from rpnav.simulate.visualise import plot_heatmap, plot_scattermap, plot_err_surface
+from rpnav.observe.observer import Observer
+from rpnav.observe.observatories import PARKES, MSFD, WOODCHESTER_STRONG, WOODCHESTER_WEAK
+from rpnav.observe.antenna import Antenna
+
+FILE_DIR = Path(__file__).parent
+
+
+class SimulationParams:
+    def __init__(
+        self, antenna: Antenna, timfile: str, parfile: str, name: str, 
+    ):
+        self.name :str = name
+        self.timfile :str = timfile
+        self.parfile :str = parfile
+        self.antenna :Antenna = antenna
+
+
+parkes_sim = "parkes_sim"
+parkes = SimulationParams(
+        name=parkes_sim,
+        timfile=f"{FILE_DIR}/outputs/{parkes_sim}/output/real_0/J0835-4510.tim",
+        parfile=f"{FILE_DIR}/outputs/{parkes_sim}/output/real_0/J0835-4510.tdb.par",
+        antenna = PARKES
+    )
+
+
+msfd_sim = "msfd_est_sim"
+msfd =  SimulationParams(
+        name=msfd_sim,
+        timfile=f"{FILE_DIR}/outputs/{msfd_sim}/output/real_0/J0835-4510.tim",
+        parfile=f"{FILE_DIR}/outputs/{msfd_sim}/output/real_0/J0835-4510.tdb.par",
+        antenna = MSFD
+    )
+
+# nav_sim = "navigate_small_0.33d_sim"
+wood_weak_sim = "navigate_small_sim"
+wood_weak = SimulationParams(
+        name=wood_weak_sim,
+        timfile=f"{FILE_DIR}/outputs/{wood_weak_sim}/output/real_0/J0835-4510.tim",
+        parfile=f"{FILE_DIR}/outputs/{wood_weak_sim}/output/real_0/J0835-4510.tdb.par",
+        antenna = WOODCHESTER_WEAK
+    )
+
+# nav_sim = "navigate_small_0.33d_sim"
+wood_strong_sim = "woodchester_strong"
+wood_strong = SimulationParams(
+        name=wood_strong_sim,
+        timfile=f"{FILE_DIR}/outputs/{wood_strong_sim}_sim/output/real_0/J0835-4510.tim",
+        parfile=f"{FILE_DIR}/outputs/{wood_strong_sim}_sim/output/real_0/J0835-4510.tdb.par",
+        antenna = WOODCHESTER_STRONG
+    )
+
+@pytest.fixture(scope="module")
+def sim() -> SimulationParams:
+    return wood_strong
+
+def test_rmse_surface(sim):
+    fpath = f"{FILE_DIR}/outputs/{sim.name}/output/"
+
+    df1 = pd.read_csv(fpath + "ALPSMLC30_S033E148_DSM_GRID_CHI.csv", index_col=0)
+    df1 = df1.iloc[[i for i in range(1, 3600, 3)], [i for i in range(1, 3600, 3)]]
+    
+    df2 = pd.read_csv(fpath + "ALPSMLC30_S034E148_DSM_GRID_CHI.csv", index_col=0)
+    df2 = df2.iloc[[i for i in range(1, 3600, 3)], [i for i in range(1, 3600, 3)]]
+
+    df = pd.concat([df1, df2])
+
+    long = df.columns.values.astype(float)
+    lat = df.index.values
+    err = df.values
+
+    fig = plot_err_surface(long, lat, err)
+    # fig.write_image("outputs/residErrSurface.png")
+    fig.show()
+
+def test_grde(sim):
+    for i in range(100):
+        simdir = f"S{i:02d}"
+        fpath = f"{FILE_DIR}/outputs/{sim.name}/output/{simdir}/"
+
+        # fname = "ALPSMLC30_N033E148_DSM_GRDE_CHI"
+
+        fname = f"results_{simdir}"
+        resname = f"{sim}_results_{simdir}"
+
+        df = pd.read_csv(fpath + fname + ".csv")
+        long = df["Longitude(deg)"].values
+        lat = df["Latitude(deg)"].values
+
+        fig= plot_scattermap(
+                long, 
+                lat, 
+                df["Error"].values)
+        fig.add_trace(go.Scatter(x=[148.26356], y=[-32.99841], marker_symbol='x', marker_size=40))
+
+        fig.write_image(f"outputs/{resname}.png")
+
+def test_scattermap(sim):
+    for t in [0.33,0.5,1,2,5,7,14,28]:
+        sim_name = sim.name + f"_{t}d" + "_sim"
+
+        fig = go.Figure()
+        fig.add_trace(
+            go.Scattermap(
+                lon=[float(sim.antenna.location.lon.to_value(u.deg))],
+                lat=[float(sim.antenna.location.lat.to_value(u.deg))],
+                marker_symbol='x', 
+                marker={"color": "black", "size": 40}
+            )
+        )
+
+        for i in range(100):
+            simdir = f"S{i:02d}"
+            fpath = f"{FILE_DIR}/outputs/{sim_name}/output/{simdir}/"
+            if not os.path.exists(fpath):
+                continue
+
+            fname = f"results_{simdir}"
+
+            df = pd.read_csv(fpath + fname + ".csv")
+            long = df["Longitude(deg)"].values
+            lat = df["Latitude(deg)"].values
+            err = df["Error"]
+
+            fig.add_trace(
+                go.Scattermap(
+                    mode = "markers",
+                    marker = {'size': [5 * (1 / x) if x > 0.01 else 0.01 for x in err]},
+                    lon = long,
+                    lat = lat,
+                    line={'width':1},
+                    opacity=1,
+                )
+            )
+
+        fig.update_layout(
+            margin ={'l':0,'t':0,'b':0,'r':0},
+            width=3600,
+            height=1800,
+            map = {
+                # 'style': "white-bg",
+                'style': "open-street-map",
+                'center': {'lon': 148.26356, 'lat': -32.99841},
+                'zoom': 10})
+
+        # fig.write_image(f"outputs/{resname}_zoom.png")
+        # fig.update_layout(map = {'zoom': 2.75, 'center': {'lon': 0, 'lat': 0}})
+        # fig.write_image(f"outputs/{resname}.png")
+        fig.show()
+
+def test_init_scattermap(sim):
+    sim_name = sim.name
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scattermap(
+            lon=[float(sim.antenna.location.lon.to_value(u.deg))],
+            lat=[float(sim.antenna.location.lat.to_value(u.deg))],
+            marker_symbol='x', 
+            marker={"color": "black", "size": 40}
+        )
+    )
+
+    for i in range(100):
+        simdir = f"S{i:02d}"
+        lat = []
+        long = []
+        err = []
+        for i in range(100):
+            simfile = f"{simdir}I{i:02d}"
+            fname = f"results_{simfile}"
+            fpath = f"{FILE_DIR}/outputs/{sim_name}/output/{simdir}/{fname}.csv"
+            if not os.path.exists(fpath):
+                print("ERROR")
+                continue
+
+            df = pd.read_csv(fpath)
+            long.append(df["Longitude(deg)"].values[0])
+            lat.append(df["Latitude(deg)"].values[0])
+            err.append(df["Error"][0])
+
+        fig.add_trace(
+            go.Scattermap(
+                mode = "markers",
+                marker = {'size': 10},
+                lon = long,
+                lat = lat,
+                opacity=1,
+            )
+        )
+
+    fig.update_layout(
+        margin ={'l':0,'t':0,'b':0,'r':0},
+        width=3600,
+        height=1800,
+        map = {
+            # 'style': "white-bg",
+            'style': "open-street-map",
+            'center': {'lon': 148.26356, 'lat': -32.99841},
+            'zoom': 10})
+
+    # fig.write_image(f"outputs/{resname}_zoom.png")
+    # fig.update_layout(map = {'zoom': 2.75, 'center': {'lon': 0, 'lat': 0}})
+    # fig.write_image(f"outputs/{resname}.png")
+    fig.show()
+
+def test_time_scattermap(sim):
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scattermap(
+            lon=[float(sim.antenna.location.lon.to_value(u.deg))],
+            lat=[float(sim.antenna.location.lat.to_value(u.deg))],
+            marker_symbol='x', 
+            marker={"color": "black", "size": 40}
+        )
+    )
+
+    for t in [0.33,0.5,1,2,5,7,14,28]:
+        lat = []
+        long = []
+        err = []
+        sim_name = f"navigate_small_{t}d_sim"
+
+        for i in range(100):
+            simdir = f"S{i:02d}"
+            fpath = f"{FILE_DIR}/outputs/{sim_name}_sim/output/{simdir}/"
+            if not os.path.exists(fpath):
+                continue
+
+            fname = f"results_{simdir}"
+            resname = f"{sim_name}_results_{simdir}"
+
+            df = pd.read_csv(fpath + fname + ".csv")
+            long.extend(list(df["Longitude(deg)"].values))
+            lat.extend(list(df["Latitude(deg)"].values))
+            err.extend(list(df["Error"]))
+
+        fig.add_trace(
+            go.Scattermap(
+                mode = "markers",
+                marker = {'size': [(1 / x) for x in err]},
+                lon = long,
+                lat = lat,
+                line={'width':1},
+                opacity=1,
+            )
+        )
+
+    fig.update_layout(
+        # margin ={'l':0,'t':0,'b':0,'r':0},
+        width=3600,
+        height=1800,
+        map = {
+            # 'style': "white-bg",
+            'style': "open-street-map",
+            'center': {'lon': 148.26356, 'lat': -32.99841},
+            'zoom': 10})
+
+    # fig.write_image(f"outputs/{resname}_zoom.png")
+    # fig.update_layout(map = {'zoom': 2.75, 'center': {'lon': 0, 'lat': 0}})
+    # fig.write_image(f"outputs/{resname}.png")
+    fig.show()
+
+def test_distance_err(sim):
+    for t in [0.33,0.5,1,2,5,7,14,28]:
+        sim_name = sim.name + f"_{t}d" + "_sim"
+        lat, lon, _ = loc = sim.antenna.location.to_geodetic()
+        lon = lon.to_value(u.deg)
+        lat = lat.to_value(u.deg)
+        fig = go.Figure()
+
+        true_x, true_y, true_z = sim.antenna.location.geocentric
+        DX = []
+        DY = []
+        DZ = []
+        for i in range(100):
+            resid = 0
+            simdir = f"S{i:02d}"
+            fpath = f"{FILE_DIR}/outputs/{sim_name}/output/{simdir}/"
+            if not os.path.exists(fpath):
+                continue
+
+            fname = f"results_{simdir}"
+            df = pd.read_csv(fpath + fname + ".csv")
+
+            if "X(m)" not in df.columns:
+                continue
+
+            X = df["X(m)"].values
+            Y = df["Y(m)"].values
+            Z = df["Z(m)"].values
+            lat = df["Latitude(deg)"].values
+            err = df["Error"].values
+
+            for i in range(len(err)):
+                x = X[i] * u.m
+                y = Y[i] * u.m
+                z = Z[i] * u.m
+                l = lat[i]
+                e = err[i]
+
+                if any(np.isnan([x.value, y.value, z.value])):
+                    continue
+                if l > 0:
+                    continue
+                if e > 2:
+                    continue
+                            
+                DX.append((x - true_x)**2) 
+                DY.append((y - true_y)**2)
+                DZ.append((z - true_z)**2) 
+
+        if len(DX) <= 0:
+            continue
+        
+        EX = np.sqrt(sum(DX) / len(DX))
+        EY = np.sqrt(sum(DY) / len(DY))
+        EZ = np.sqrt(sum(DZ) / len(DZ))
+        TD = (EX + EY + EX) / 3
+        print(sim_name)
+        print(f"X (RMSE): {EX}")
+        print(f"Y (RMSE): {EY}")
+        print(f"Z (RMSE): {EZ}")
+        print(f"Total Distance: {TD}")

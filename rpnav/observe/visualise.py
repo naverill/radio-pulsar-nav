@@ -8,7 +8,7 @@ from astropy.table import Table
 from astropy.time import Time
 
 from rpnav.observe.antenna import Antenna
-from rpnav.pulsar import Pulsar
+from rpnav.observe.pulsar import Pulsar
 
 
 def plot_flux_density(pulsars: list[Pulsar]) -> go.Figure:
@@ -20,7 +20,7 @@ def plot_flux_density(pulsars: list[Pulsar]) -> go.Figure:
     names: list[float] = []
     for p in pulsars:
         widths.append(p.pulse_width_10)
-        fluxs.append(p.flux_density)
+        fluxs.append(p.flux_density.to_value(u.mJy))
         names.append(p.name)
 
     fig = go.Figure(data=go.Scatter(x=widths, y=fluxs, mode="markers", text=names))
@@ -41,11 +41,13 @@ def plot_pulsar_position(pulsars: list[Pulsar]) -> go.Figure:
     size: list[float] = []
     flux_dens: list[float] = []
     for p in pulsars:
+        if p.flux_density == 0:
+            continue
         ras.append(p.ra.value)
         decs.append(p.dec.value)
         names.append(p.name)
-        flux_dens.append(p.flux_density)
-        size.append(log2(p.flux_density) * 2 if log2(p.flux_density) * 2 > 2 else 2)
+        flux_dens.append(p.flux_density.value)
+        size.append(log2(p.flux_density.value) * 2 if log2(p.flux_density.value) * 2 > 2 else 2)
 
     fig = go.Figure(data=go.Scatter(x=ras, y=decs, mode="markers", text=names, marker_size=size))
     fig.update_layout(
@@ -59,7 +61,7 @@ def plot_pulsar_position(pulsars: list[Pulsar]) -> go.Figure:
 
 
 def plot_antenna(fig: go.Figure, antenna: Antenna, t: Time):
-    zen = antenna.location.get_itrs(obstime=t).transform_to(ICRS)
+    zen = antenna.location.get_itrs(obstime=t).transform_to(ICRS())
     ra = zen.ra.value
     dec = zen.dec.value
     fig.add_trace(
@@ -86,7 +88,7 @@ def plot_antenna_coverage(fig: go.Figure, antenna: Antenna, t: Time):
     http://astro.wsu.edu/worthey/astro/html/lec-celestial-sph.html
     https://www.rpi.edu/dept/phys/observatory/obsastro6.pdf
     """
-    zen = antenna.location.get_itrs(t).transform_to(ICRS)
+    zen = antenna.location.get_itrs(t).transform_to(ICRS())
     ra = zen.ra.value
     dec = zen.dec.value
     n_horiz = (90 - dec + 180) % 360 - 180
