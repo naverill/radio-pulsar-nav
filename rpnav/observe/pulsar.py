@@ -19,37 +19,43 @@ class Pulsar(SkyCoord):
     def __init__(
         self,
         name: str,
-        centre_freq: u.MHz,
-        flux_density: u.mJy,
+        ref_frequency: u.MHz,
+        ref_flux_density: u.mJy,
         ra: Angle,
         dec: Angle,
         period: u.ms,
-        dispersion_measure: float,
+        distance: u.kpc,
+        dispersion_measure: u.cm**-3 * u.pc,
         pulse_width_50: u.ms,
         pulse_width_10: u.ms,
-        flux_density_err: u.mJy = None,
+        spectral_index: u.dimensionless_unscaled = None,
     ):
         """
         Initialise Pulsar object
 
         Parameters
         ----------
-            NAME:   Pulsar name
-            RAJD:   Right ascension (J2000) (degrees)
-            DecJD:  Declination (J2000) (degrees)
-            P0:     Barycentric period of the pulsar (s)
-            DM:     Dispersion measure (cm-3 pc)
-            W50:    Width of pulse at 50% of peak (ms)
-            W10:    Width of pulse at 10% (ms)
+            namw:                   Pulsar name
+            RAJD:                   Right ascension (J2000) (degrees)
+            DecJD:                  Declination (J2000) (degrees)
+            period:                 Barycentric period of the pulsar (s)
+            dispersion_measure:     Dispersion measure (cm-3 pc)
+            pulse_width_50:         Width of pulse at 50% of peak (ms)
+            pulse_width_10:         Width of pulse at 10% (ms)
+            ref_frequency:          reference frequence with extensive measurement (MHz)
+            ref_flux_density:       reference flux density - brightness at known measurement frequency (mJy)
         """
-        self.name = name
-        self.flux_density = flux_density
-        self.period = period
-        self.dispersion_measure = dispersion_measure
-        self.pulse_width_50 = pulse_width_50
-        self.pulse_width_10 = pulse_width_10
+        self._name = name
+        self._period = period
+        self._dispersion_measure = dispersion_measure
+        self._pulse_width_50 = pulse_width_50
+        self._pulse_width_10 = pulse_width_10
+        self._ref_frequency = ref_frequency
+        self._distance = distance
+        self._ref_flux_density = ref_flux_density
+        self._spectral_index = spectral_index
         super().__init__(frame=ICRS, ra=ra, dec=dec, unit="deg")
-
+    
     def _to_sky_coord(self) -> SkyCoord:
         """
         Convert Pulsar object to Astropy SkyCoord object
@@ -106,9 +112,8 @@ class Pulsar(SkyCoord):
         """
         return self._to_sky_coord().transform_to(AltAz(obstime=localtime, location=antenna.location))
 
-    @staticmethod
-    def _interpolate_flux_density(
-        centre_freq: u.MHz, row: Table, cat_dict: dict
+    def interpolate_flux_density(
+        self, centre_freq: u.MHz
     ) -> tuple[u.mJy, u.mJy]:
         """
         Estimate the flux density for a pulsar at a specific centre frequency. Pulsars have been observed 
@@ -131,34 +136,61 @@ class Pulsar(SkyCoord):
         """
         flux_dens = None
         flux_dens_err = None
+        cat_dict = collect_catalogue_fluxes()
 
-        # Pulsar 
-        if row["NAME"] not in cat_dict:
-            logger.warning("Pulsar config not found")
-        else:
-            model = None
-            freqs, bands, fluxs, flux_errs, refs = cat_dict[row["NAME"]]
+        params = [
+            "NAME",
+            "RAJD",             # Right ascension (J2000) (degrees)
+            "DECJD",            # Declination (J2000) (degrees)
+            "P0",               # Barycentric period of the pulsar (s)
+            "DM",               # Barycentric period of the pulsar (s)
+            "W50",              # Width of pulse at 50% of peak (ms).
+            "W10",              # Width of pulse at 10% (ms).
+            "DIST",             # est estimate of the pulsar distance using the YMW16 DM-based distance as default (kpc).
+            "SPINDX",           # Radio spectral index
+        ]
+        # Query PSRCAT to get complete list of pulsar profiles
+        try:
+            cat = psrqpy.QueryATNF(params=params, psrs=[self.name]).table
+        except ValueError:
+            raise Exception(
+                "Failed to read from psrcat. Check that centre frequency" " is a valid table option"
+            )
+        
+        for row in cat:
+            if row["NAME"] != self.name:
+                continue
+            flux_dens = None
+            flux_dens_err = None
 
-            if not freqs:
-                logger.warning("Frequency values not found")
+            # Pulsar 
+            if row["NAME"] not in cat_dict:
+                logger.warning("Pulsar config not found")
             else:
-                model, m, _, _, _ = find_best_spectral_fit(
-                    row["NAME"], freqs, bands, fluxs, flux_errs, refs
-                )
-            if model:
-                flux_dens, flux_dens_err = estimate_flux_density(centre_freq.to_value(u.MHz), model, m)
-            else:
-                logger.warning(f"Failed to find best fit spectral model for {row['NAME']}")
+                model = None
+                freqs, bands, fluxs, flux_errs, refs = cat_dict[row["NAME"]]
 
-        if flux_dens is not None:
-            flux_dens = flux_dens * u.mJy
+                if not freqs:
+                    logger.warning("Frequency values not found")
+                else:
+                    model, m, _, _, _ = find_best_spectral_fit(
+                        row["NAME"], freqs, bands, fluxs, flux_errs, refs
+                    )
+                if model:
+                    flux_dens, flux_dens_err = estimate_flux_density(centre_freq.to_value(u.MHz), model, m)
+                else:
+                    logger.warning(f"Failed to find best fit spectral model for {row['NAME']}")
 
-        if flux_dens_err is not None:
-            flux_dens = flux_dens_err * u.mJy
+            if flux_dens is not None:
+                flux_dens = flux_dens * u.mJy
+
+            if flux_dens_err is not None:
+                flux_dens = flux_dens_err * u.mJy
+
         return flux_dens, flux_dens_err
 
     @staticmethod
-    def load_catalogue(centre_freq: u.MHz = 1400, interpolate=False) -> list["Pulsar"]:
+    def load_catalogue(ref_freq: u.MHz = 1400 * u.MHz) -> list["Pulsar"]:
         """
         Load pulsar data from PSR Catalogue (PSRCAT).
         
@@ -173,20 +205,23 @@ class Pulsar(SkyCoord):
             List of Pulsar objects for every pulsar in ANTF catalogue
         """
         cat_dict = None
+        scode = f"S{int(ref_freq.to_value(u.MHz))}"
+        valid_freq = [400,1400,2000,30,40,50,60,80,100,150,200,300,350,600,700,800,900,1600,3000,4000,6000,8000]
         params = [
             "NAME",
-            "RAJD",
-            "DECJD",
-            "P0",
-            "DM",
-            "W50",
-            "W10",
+            "RAJD",             # Right ascension (J2000) (degrees)
+            "DECJD",            # Declination (J2000) (degrees)
+            "P0",               # Barycentric period of the pulsar (s)
+            "DM",               # Barycentric period of the pulsar (s)
+            "W50",              # Width of pulse at 50% of peak (ms).
+            "W10",              # Width of pulse at 10% (ms).
+            "DIST",             # est estimate of the pulsar distance using the YMW16 DM-based distance as default (kpc).
+            "SPINDX",           # Radio spectral index
+            scode,              # Mean flux density at reference frequency MHz (mJy)
         ]
-        if interpolate:
-            cat_dict = collect_catalogue_fluxes()
-        else:
-            freq = int(centre_freq.value)
-            params.append(f"S{freq}"),
+
+        if ref_freq not in valid_freq:
+            raise Exception(f"Invalid reference frequency. must be in [{valid_freq.join(', ')}]")
 
         # Query PSRCAT to get complete list of pulsar profiles
         try:
@@ -196,41 +231,26 @@ class Pulsar(SkyCoord):
                 "Failed to read from psrcat. Check that centre frequency" " is a valid table option"
             )
 
-
         # Extract pulsar profile for selected centre frequency 
         pulsars: list[Pulsar] = []
         for row in cat:
             flux_dens = None
             flux_dens_err = None
 
-            # Interpolatepytest centre frequency if requested
-            if interpolate:
-                flux_dens, flux_dens_err = Pulsar._interpolate_flux_density(
-                    centre_freq, row, cat_dict
-                )
-            # Check for specific centre frequency
-            else:
-                freq = int(centre_freq.value)
-                # Mean flux density at freq MHz (mJy)
-                flux_dens = row.get(f"S{freq}")
-                flux_dens_err = 0
-
-            if flux_dens is None:
-                continue
-
             # Create pulsar object from profile
             pulsars.append(
                 Pulsar(
-                    name=row["NAME"],
-                    ra=row["RAJD"],
-                    dec=row["DECJD"],
-                    period=row["P0"],
-                    dispersion_measure=row["DM"],
-                    pulse_width_50=row["W50"],
-                    pulse_width_10=row["W10"],
-                    flux_density=flux_dens * u.mJy,
+                    name=row.get("NAME"),
+                    ra=row.get("RAJD") * u.deg,
+                    dec=row.get("DECJD") * u.deg,
+                    period=row.get("P0") * u.s,
+                    dispersion_measure=row.get("DM") * u.cm**-3 * u.pc,
+                    pulse_width_50=row.get("W50") * u.ms,
+                    pulse_width_10=row.get("W10") * u.ms,
                     flux_density_err=flux_dens_err * u.mJy,
-                    centre_freq=centre_freq,
+                    ref_frequency=ref_freq,
+                    ref_flux_density=row.get(scode) * u.mJy,
+                    spectral_index=row.get("SPINDX"),
                 )
             )
 
@@ -249,3 +269,48 @@ class Pulsar(SkyCoord):
             Puldar timing uncertainty
         """
         return self.pulse_width_10 / 10
+
+    @property
+    def name(self) -> str:
+        return self._name 
+
+    def flux_density(self, centre_frequency: u.MHz) -> u.mJy:
+        """
+        Flux density of the pulsar at centre frequency
+
+        Reference:
+            https://www.researchgate.net/publication/280085456_Radio_Pulsar_Receiver_Systems_for_Space_Navigation
+        """
+        if self._is_set([self._ref_frequency, self._spectral_index, self._ref_flux_density]):
+            flux_density = (self._ref_flux_density 
+                * (centre_frequency.to(u.GHz) / self._ref_frequency.to(u.GHz))**(self._spectral_index)
+            )
+        return flux_density 
+
+    @property
+    def flux_density_err(self) -> u.mJy:
+        return self._flux_density_err
+
+    @property
+    def dispersion_measure(self) -> u.MHz:
+        return self._dispersion_measure
+
+    @property
+    def period(self) -> u.ms:
+        return self._period
+
+    @property
+    def pulse_width_50(self) -> u.ms:
+        return self._pulse_width_50
+
+    @property
+    def pulse_width_10(self) -> u.ms:
+        return self._pulse_width_10
+
+    @property
+    def distance(self) -> u.kpc:
+        return self._distance
+
+    @property
+    def spectral_index(self) -> u.dimensionless_unscaled:
+        return self._spectral_index

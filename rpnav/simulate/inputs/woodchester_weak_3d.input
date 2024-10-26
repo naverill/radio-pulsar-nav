@@ -1,0 +1,26 @@
+# Simulate Navigate telescope observing Vela 
+<define>
+name: woodchester_weak_3d_sim
+nproc: 1
+nreal: 1
+</define>
+
+<pulsars>
+psr: name=J0613-0200
+psr: name=J1045-4509
+</pulsars>
+
+<obsRun>
+name: WOODCHESTER 
+tel: woodchester 
+start: 53043.0
+finish: 53046.0
+sampling: cadence=0.042
+sched: sched1
+</obsRun>
+
+<schedule>
+name: sched1
+observe: psr=J0613-0200,toaerr=0.00025100604604410827,freq=820,ha=8*(ran(linear)-0.5)
+observe: psr=J1045-4509,toaerr=0.00025100604604410827,freq=820,ha=8*(ran(linear)-0.5)
+</schedule>

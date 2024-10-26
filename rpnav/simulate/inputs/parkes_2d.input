@@ -1,0 +1,26 @@
+# Simulate Parkes telescope observing Vela 
+<define>
+name: parkes_2d_sim
+nproc: 1
+nreal: 1
+</define>
+
+<pulsars>
+psr: name=J1545-4550
+psr: name=J0613-0200
+</pulsars>
+
+<obsRun>
+name: PARKES 
+tel: pks 
+start: 53043.0
+finish: 53045.0
+sampling: cadence=0.042
+sched: sched1
+</obsRun>
+
+<schedule>
+name: sched1
+observe: psr=J1545-4550,toaerr=1.45e-7,freq=1400,ha=8*(ran(linear)-0.5)
+observe: psr=J0613-0200,toaerr=1.45e-7,freq=1400,ha=8*(ran(linear)-0.5)
+</schedule>

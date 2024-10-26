@@ -13,8 +13,8 @@ psr: name=J1939+2134
 <obsRun>
 name: PARKES 
 tel: pks 
-start: 60002.3
-finish: 60003.3
+start: 53043.0
+finish: 53043.3
 sampling: cadence=0.042
 sched: sched1
 </obsRun>

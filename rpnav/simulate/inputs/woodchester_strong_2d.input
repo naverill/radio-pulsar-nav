@@ -6,21 +6,21 @@ nreal: 1
 </define>
 
 <pulsars>
-psr: name=J0835-4510
-psr: name=J1939+2134
+psr: name=J1446-4701
+psr: name=J1600-3053
 </pulsars>
 
 <obsRun>
 name: WOODCHESTER 
 tel: woodchester 
-start: 60002.3
-finish: 60004.3
+start: 53043.0
+finish: 53045.0
 sampling: cadence=0.042
 sched: sched1
 </obsRun>
 
 <schedule>
 name: sched1
-observe: psr=J0835-4510,toaerr=8.778649546286676e-06,freq=820,ha=8*(ran(linear)-0.5)
-observe: psr=J1939+2134,toaerr=8.778649546286676e-06,freq=820,ha=8*(ran(linear)-0.5)
+observe: psr=J1446-4701,toaerr=1.879189844933647e-06,freq=820,ha=8*(ran(linear)-0.5)
+observe: psr=J1600-3053,toaerr=1.879189844933647e-06,freq=820,ha=8*(ran(linear)-0.5)
 </schedule>

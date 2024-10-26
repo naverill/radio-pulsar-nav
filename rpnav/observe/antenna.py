@@ -11,8 +11,8 @@ import numpy as np
 from astropy.coordinates import EarthLocation, SkyCoord
 from astropy.time import Time
 
-from rpnav.constants import BOLTZMANN_CONSTANT
-from rpnav.conversions import frequency_to_wavelength, wavelength_to_frequency, joules_to_jansky
+from rpnav.constants import BACKGROUND_TEMP
+from rpnav.conversions import frequency_to_wavelength, wavelength_to_frequency, joule_to_jansky, jansky_to_watt
 from rpnav.observe.observer import Observer
 
 
@@ -29,19 +29,24 @@ class Antenna(Observer):
         location: EarthLocation,
         snr: u.dimensionless_unscaled = None,
         aliases: list[str] = [],
-        time: Time = None,
         timescale: str = "TCB",
+        n_polarisations: int = 1,
+        solar_distance: u.AU = 1,
+        time: Time = None,
         itoa_code: str = None,
         centre_frequency: u.MHz = None,
         wavelength: u.m = None,
         effective_area: u.m * u.m = None,
         diameter: u.m = None,
-        n_polarisations: int = 2,
         n_element_coherent: int = None,
         n_element_incoherent: int = None,
         gain_dpfu: u.K / u.Jy = None,
         astronomy_gain: u.m * u.m / u.Jy = None,
-        elevation: u = u.m,
+        elevation: u.m = None,
+        noise_power: u.W = None,
+        solar_noise_temp:  u.K = None,
+        galaxy_noise_temp:  u.K = None,
+        side_lobe_attenuation:  u.dB = None,
     ):
         """Instantiate antenna.
 
@@ -63,16 +68,24 @@ class Antenna(Observer):
         self._centre_frequency : u.MHz = centre_frequency
         self._wavelength : u.m = wavelength
         self._gain_dpfu = gain_dpfu
-        self._effective_area = effective_area
+        self._effective_area : u.m * u.m = effective_area
         self._n_element_coherent = n_element_coherent
         self._n_element_incoherent = n_element_incoherent
-        self._diameter  : u.m = diameter
-        self._radio_gain = None
+        self._diameter : u.m = diameter
+        self._noise: u.W = noise_power
         self._n_polarisations: int = n_polarisations
         self._elevation: u.m = elevation
         self._location : EarthLocation = location
+        self._solar_distance = solar_distance
+        self._solar_noise_temp = solar_noise_temp
+        self._galaxy_noise_temp = galaxy_noise_temp
+        self._noise_power = noise_power
+        self._side_lobe_attenuation = side_lobe_attenuation
         self._gain_dpfu_eqn = ""
         self._radio_gain_eqn = ""
+        self._radio_gain = None
+        self._polsarisation_param = None
+        self._pulse_peak_amplitude = None
         self._propagate_calculations()
         super().__init__(name, location, aliases=aliases, timescale=timescale, time=time, origin="test", itoa_code=name.upper())
 
@@ -123,7 +136,7 @@ class Antenna(Observer):
         if self._gain_dpfu is None:
             if self._is_set([self._effective_area]):
                 # (1)
-                self._gain_dpfu = (self._effective_area / (2 * joules_to_jansky(BOLTZMANN_CONSTANT)))
+                self._gain_dpfu = (self._effective_area / (2 * joule_to_jansky(const.k_B)))
                 self._gain_dpfu_eqn = """
 G_f = \frac{A_e}{2k}      (m^2 / Jy)
 
@@ -132,10 +145,7 @@ where
     $k$ is Boltzmann's constant($J/s^{-1}/m^{-2}$)
 """
         return self._gain_dpfu
-    
-    @property
-    def gain_dpfu_equation(self) -> str:
-        return self._gain_dpfu_eqn
+
 
     @property
     def radio_gain(self) -> float:
@@ -161,10 +171,6 @@ where
     $\lambda$ is the wavelength ($m$)
 """
         return self._radio_gain
-    
-    @property
-    def radio_gain_equation(self) -> str:
-        return self._radio_gain_eqn
     
     @property
     def effective_area(self) -> u.m * u.m:
@@ -195,10 +201,6 @@ where
                 self._effective_area = pi * pow(self.diameter / 2.0, 2)
         return self._effective_area
 
-    def pulsar_snr(self, pulsar: SkyCoord):
-        # snr = (Smean*jy) * Aeff * sqrt(np*deltaNu*tobs)/2.0/k/(tsys+tsky)*sqrt((psr[i].p0-w)/w);
-        raise NotImplementedError
-
     def is_observable(self, pulsar: SkyCoord):
         return self._signal_to_noise(pulsar) > self.signal_to_noise
 
@@ -215,6 +217,131 @@ where
             if self._is_set([self._centre_frequency]):
                 self._wavelength = frequency_to_wavelength(self._centre_frequency)
         return self._wavelength
+
+    @property
+    def noise_power(self) -> u.W:
+        """
+        Reference: 
+            https://www.researchgate.net/publication/280085456_Radio_Pulsar_Receiver_Systems_for_Space_Navigation
+        """
+        if self._noise_power is None:
+            if self._is_set([self._system_temp, self._galaxy_noise_temp, self._solar_noise_temp]):
+                self._noise_power = (
+                        jansky_to_watt(const.k_B) * (
+                        self._system_temp +
+                        BACKGROUND_TEMP +
+                        self._galaxy_noise_temp + 
+                        self._solar_noise_temp
+                    )
+                    * self._bandwidth
+                ).to(u.W)
+        return self._noise_power
+    
+    def snr(self, pulsar: SkyCoord, integration_time: u.s = None) -> u.W:
+        # snr = (Smean*jy) * Aeff * sqrt(np*deltaNu*tobs)/2.0/k/(tsys+tsky)*sqrt((psr[i].p0-w)/w);
+        receive_power = self.receive_power(pulsar)
+        if self._is_set([receive_power, self._noise_power]):
+            snr = receive_power / self._noise_power
+        elif self._is_set([integration_time, self._n_polsarisations,
+            self._integration_time, self._bandwidth, self._pulse_peak_amplitude, 
+            self._system_temp]):
+            """
+            Reference:
+            Buist, P.J., Engelen, S., Noroozi, A., Sundaramoorthy, P., Verhagen, S., Verhoeven, C., 
+            "Principles and Potential of Pulsar Navigation," Proceedings of the 24th International 
+            Technical Meeting of the Satellite Division of The Institute of Navigation (ION GNSS 2011), 
+            Portland, OR, September 2011, pp. 3503-3515. 
+            Equation  (15)
+            """
+            snr = (
+                sqrt(self._n_polsarisations * self._integration_time * self._bandwidth) 
+                * (pulsar.ref_flux_density * self.gain_dpfu / self._system_temp)
+                * sqrt(pulsar.pulse_width(pulsar.period - pulsar.pulse_width))
+                / pulsar.period
+            ) 
+        return snr
+
+    def receive_power(self, pulsar: SkyCoord) -> u.W:
+        if self._is_set([self._effective_area, self._polarisation_param, self._centre_frequency, self._bandwidth]):
+            receive_power = (
+                self._polarisation_param * self._effective_area 
+                * jansky_to_watt(pulsar.flux_density(self._centre_frequency))
+                * self._bandwidth
+            ).to(u.W)
+        return receive_power
+
+    # @property
+    # def timing_quality(self, pulsar: SkyCoord) -> u.dimensionless_unscaled:
+    #     q_timing = sum([const.k_B / (self.system_temp * )])
+        
+    
+    @property
+    def galaxy_noise_temp(self) -> u.K:
+        """
+        background noise temperature from the galaxy
+
+        Reference: 
+            https://www.researchgate.net/publication/280085456_Radio_Pulsar_Receiver_Systems_for_Space_Navigation
+        """
+        if self._galaxy_noise_temp is None:
+            self._galaxy_noise_temp = 6 * (self.centre_frequency.to_value(u.GHz))**(-2.2) * u.K
+        return self._galaxy_noise_temp
+
+    @property
+    def solar_noise_temp(self) -> u.K:
+        """
+        solar system noise temperature
+
+        Reference: 
+            https://www.researchgate.net/publication/280085456_Radio_Pulsar_Receiver_Systems_for_Space_Navigation
+
+        TODO fix units
+        """
+        if self._solar_noise_temp is None:
+            if self._is_set([self._centre_frequency, self._effective_area, self._side_lobe_attenuation, self._solar_distance]):
+                self._solar_noise_temp = (
+                    (72 * self._centre_frequency.to(u.GHz) + 0.058 * u.GHz) 
+                    * self._effective_area 
+                    * 10**(self._side_lobe_attenuation / 10)
+                    * self._solar_distance.to_value(u.AU)**(-2)
+                )
+        return self._solar_noise_temp 
+
+    @property
+    def polsarisation_param(self) -> int:
+        if self._polsarisation_param is None:
+            if self._is_set([self._n_polarisations,]) and 0 <= self._n_polarisations <= 2:
+                self._polarisation_param = self._n_polarisations / 2
+        return self._polsarisation_param
+    
+    @property
+    def n_element_coherent(self) -> int:
+        return self._n_element_coherent
+    
+    @property
+    def n_element_incoherent(self) -> int:
+        return self._n_element_incoherent
+    
+    @property
+    def n_polarisations(self) -> int:
+        return self._n_polarisations
+
+    @property
+    def system_temp(self) -> u.K:
+        return self._system_temp
+
+    @property
+    def system_temp(self) -> u.K:
+        return self._system_temp
+    
+    @property
+    def side_lobe_attenuation(self) -> float:
+        return self._side_lobe_attenuation
+
+    @property
+    def solar_distance(self) -> u.AU:
+        return self._solar_distance
+
     
     @property
     def bandwidth(self) -> u.MHz:
@@ -232,29 +359,18 @@ where
     def location(self) -> u.m:
         return self._location
     
+    
     @property
-    def centre_frequency(self) -> EarthLocation:
+    def radio_gain_equation(self) -> str:
+        return self._radio_gain_eqn
+    
+    @property
+    def gain_dpfu_equation(self) -> str:
+        return self._gain_dpfu_eqn
+    
+    @property
+    def centre_frequency(self) -> u.MHz:
         return self._centre_frequency
-    
-    @property
-    def system_temp(self) -> u.K:
-        return self._system_temp
-    
-    @property
-    def snr(self) -> u.W:
-        return self._snr
-    
-    @property
-    def n_element_coherent(self) -> int:
-        return self._n_element_coherent
-    
-    @property
-    def n_element_incoherent(self) -> int:
-        return self._n_element_incoherent
-    
-    @property
-    def n_polarisations(self) -> int:
-        return self._n_polarisations
 
     def _is_set(self, vals: list[Any]) -> bool:
         return None not in vals

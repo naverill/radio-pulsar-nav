@@ -13,14 +13,14 @@ psr: name=J1939+2134
 <obsRun>
 name: WOODCHESTER 
 tel: woodchester 
-start: 60002.3
-finish: 60003.3
+start: 53043.0
+finish: 53043.3
 sampling: cadence=0.042
 sched: sched1
 </obsRun>
 
 <schedule>
 name: sched1
-observe: psr=J0835-4510,toaerr=1.1463179280793407e-05,freq=820,ha=8*(ran(linear)-0.5)
-observe: psr=J1939+2134,toaerr=1.1463179280793407e-05,freq=820,ha=8*(ran(linear)-0.5)
+observe: psr=J0835-4510,toaerr=0.00025100604604410827,freq=820,ha=8*(ran(linear)-0.5)
+observe: psr=J1939+2134,toaerr=0.00025100604604410827,freq=820,ha=8*(ran(linear)-0.5)
 </schedule>

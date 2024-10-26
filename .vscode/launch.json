@@ -6,12 +6,15 @@
     "configurations": [
         {
             "name": "Pulsar Positioning Launch",
-            "type": "node-terminal",
+            "type": "cppdbg",
             "request": "launch",
             // "preLaunchTask": "renameT2File",
             // "program": "runTEMPO2",
             // "environment": [{ "name": "config", "value": "Debug" }],
-            "command": "/usr/local/tempo2/bin/tempo2 -gr pulsar_positioning -f rpnav/simulate/inputs/navigate.par rpnav/simulate/inputs/navigate.tim -observer NAVIGATE",
+            "program": "/usr/local/tempo2/bin/tempo2",
+            "args": ["-gr", "pulsar_positioning", "-f", "${workspaceFolder}/rpnav/simulate/demo/ppta_data/J1600-3053.par", "${workspaceFolder}/rpnav/simulate/demo/ppta_data/J1600-3053.tim", 
+            "-f","${workspaceFolder}/rpnav/simulate/demo/ppta_data/J1713+0747.par", "${workspaceFolder}/rpnav/simulate/demo/ppta_data/J1713+0747.tim", 
+            "-o","PARKES", "-n", "-r", "-a", "grde", "-e", "chi"],
             "linux": {
                 "MIMode": "gdb",
                 "miDebuggerPath": "/usr/bin/gdb"

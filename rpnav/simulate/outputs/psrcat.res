@@ -1,16 +1,26 @@
-PSRJ            J1939+2134                    
-ELONG           301.973244511                 3.000e-09 
-ELAT            42.296752229                  4.000e-09 
-DM              71.0                          
-PEPOCH          55656                         
-F0              641.928222127829              8.000e-12 
-F1              -4.330987E-14                 4.000e-20 
-# WARNING: mixed coordinates ignoring PMRA 0.074
-# WARNING: mixed coordinates ignoring PMDEC -0.410
-POSEPOCH        55656                         
+PSRJ            J1545-4550                    
+ELONG           244.821546010                 1.100e-08 
+ELAT            -25.29111651                  2.000e-08 
+DM              68.3884                       2.000e-04 
+PEPOCH          56958                         
+F0              279.6976986512927             8.000e-13 
+F1              -4.10355E-15                  2.000e-20 
+POSEPOCH        56958                         
+DMEPOCH         59126.36556                   
+BINARY          T2                            
+PB              6.20306492579                 1.700e-10 
+A1              3.84690472                    1.900e-07 
+TASC            55607.59239512                5.000e-08 
+EPS1            -8.67E-6                      4.000e-08 
+EPS2            -9.74E-6                      3.000e-08 
 CLK             TT(BIPM2018)                  
 EPHEM           DE436                         
-RM              11.0                          3.000e-01 
-PX              0.35                          3.000e-02 
+RM              2.99                          1.100e-01 
+PX              0.45                          1.400e-01 
+A1DOT           -2.0E-15                      2.000e-16 
+PMELONG         -1.04                         2.000e-02 
+PMELAT          2.18                          5.000e-02 
+STIG            0.3                           7.000e-01 
+H3              9.0E-8                        5.000e-08 
 EPHVER          5                             
 UNITS           TCB                           
