@@ -14,13 +14,14 @@ from rpnav.observe.observatories import PARKES, FAST, MSFD, WOODCHESTER_WEAK, WO
 
 @pytest.fixture(scope="module")
 def antenna():
-    return WOODCHESTER_STRONG
+    return WOODCHESTER_WEAK
 
 def test_plot_pulsar_position(antenna):
-    pulsars = Pulsar.load_catalogue(antenna.centre_frequency.to(u.MHz))
+    pulsars = Pulsar.load_catalogue()
+    # pulsars = Pulsar.load_catalogue(antenna.centre_frequency.to(u.MHz))
     t = Time.now()
     for integ_time in [60 * 60 * u.s, 6 * 60 * 60 * u.s, 24 * 60 * 60 * u.s]:
-        fig = plot_pulsar_position(pulsars)
+        fig = plot_pulsar_position(antenna, pulsars)
         vis = [pulsar.is_observable(antenna, t, integ_time) for pulsar in pulsars]
         col = ["rgba(238,118,0,0.7)" if psr else "rgba(104,131,139,0.4)" for psr in vis]
         fig.update_traces(marker=dict(color=col))
@@ -43,7 +44,7 @@ def test_plot_pulsar_horizon_integ_time(antenna):
     t = Time.now()
     below_horiz = [pulsar.is_observable(antenna, t, 1e10 * u.s) for pulsar in pulsars]
     for integ_time in [5 * 60 * u.s, 15 * 60 * u.s, 60 * 60 * u.s]:
-        fig = plot_pulsar_position(pulsars)
+        fig = plot_pulsar_position(antenna, pulsars)
         vis = [pulsar.is_observable(antenna, t, integ_time) for pulsar in pulsars]
         col = []
         for is_obs, is_vis in zip(below_horiz, vis):
@@ -76,7 +77,7 @@ def test_plot_pulsar_horizon_obs_time(antenna):
     integ_time = 15 * 60  * u.s
     for t_delta in [0  * u.s, 6 * 60 * 60  * u.s, 12 * 60 * 60  * u.s, 18 * 60 * 60  * u.s]:
         t = Time.now() - TimeDelta(t_delta)
-        fig = plot_pulsar_position(pulsars)
+        fig = plot_pulsar_position(antenna, pulsars)
         vis = [pulsar.is_observable(antenna, t, integ_time) for pulsar in pulsars]
         below_horiz = [pulsar.is_observable(antenna, t, 1e10  * u.s) for pulsar in pulsars]
         col = []
@@ -111,7 +112,7 @@ def test_plot_pulsar_observability(antenna):
     t = Time.now()
 
     for integ_time in [60 * 60 * u.s, 6 * 60 * 60 * u.s, 24 * 60 * 60 * u.s]:
-        fig = plot_flux_density(pulsars)
+        fig = plot_flux_density(antenna, pulsars)
         vis = [pulsar.is_observable(antenna, t, integ_time) for pulsar in pulsars]
         col = ["rgba(238,118,0,0.7)" if psr else "rgba(104,131,139,0.4)" for psr in vis]
 
@@ -129,7 +130,7 @@ def test_plot_pulsar_observability(antenna):
                 x=0.5,
             )
         )
-        fig.show()
+        # fig.show()
         # fig.write_image(f"outputs/{antenna.name}_int_{integ_time}_f{antenna.centre_frequency.to_value(u.MHz)}.png")
 
 
@@ -142,3 +143,8 @@ def test_return_az_el_visible(antenna):
         if pulsar.is_observable(antenna, t, integ_time):
             altaz = pulsar.get_alt_az(antenna, t)
             print(pulsar.name, pulsar.flux_density, altaz.alt, altaz.az)
+
+def test_get_toa(antenna):
+    print(PARKES.snr())
+    print(WOODCHESTER_WEAK.toa_err(PARKES, ref_integration_time = 1800 * u.s, integration_time=60 * 60 * u.s))
+    print(WOODCHESTER_STRONG.toa_err(PARKES, ref_integration_time = 1800 * u.s, integration_time=60 * 60 * u.s))

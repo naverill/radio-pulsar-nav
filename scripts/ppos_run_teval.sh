@@ -9,18 +9,19 @@ OUTPUT_SIM_DIR=~/workspace/rpnav/rpnav/simulate/outputs
 
 # Name of simulation script
 # Tells the script to look for base simulation configuration of the form ${SIM_SCRIPT}_sim.input
-SIM_SCRIPT=woodchester_strong
+SIM_SCRIPT=parkes
 
 # Set total observation time in days
 # obsTime=(0.168 0.33 0.5 1 2 3 5 8 13 21 25 28 31)
-obsTime=(3 5 8 13 21 25 28 31)
+# obsTime=(0.5 1 2 3 5 8 13 21 25 28 31)
+obsTime=(21 25 28 31)
 
-nSims=100
+nSims=50
 nIter=50
 
 psrList=("J0835-4510" "J1017-7156" "J1024-0719" "J1600-3053" "J1732-5049" "J1909-3744" "J2129-5721" "J2241-5236" "J0613-0200" "J0711-6830" "J1022+1001" "J1045-4509" "J1125-6014" "J1446-4701" "J1545-4550" "J1603-7202" "J1643-1224" "J1713+0747" "J1730-2304" "J1744-1134" "J1824-2452A" "J1832-0836" "J1857+0943" "J1939+2134" "J2124-3358" "J2145-0750") 
 psrNum=${#psrList[@]}
-
+err="chi"
 #***************************************************
 
 cd $OUTPUT_SIM_DIR
@@ -55,7 +56,7 @@ do
     observer=$(awk '// {if (lastLine == "<obsRun>"){print $NF}lastLine = $0}' ${simInput})
     
 
-    for ((i = 0; i < $nSims; i++));
+    for ((i =7; i < $nSims; i++));
     do
         rm -rf $simResDir
 
@@ -111,7 +112,7 @@ do
             /usr/local/tempo2/bin/tempo2 -gr pulsar_positioning \
                 -f ${simResDir}/${PSR1}.tdb.par ${simResDir}/${PSR1}.tim \
                 -f ${simResDir}/${PSR2}.tdb.par ${simResDir}/${PSR2}.tim \
-                -a grde -e chi -n -r -s ${outResDir}/${resFile} -o $observer
+                -a grde -e ${err} -n -r -s ${outResDir}/${resFile} -o $observer
                 
             # Add final position and error to results file
             tail -n 1 ${outResDir}/${resFile} >> ${outResDir}/${simFile}

@@ -1,5 +1,6 @@
 import pandas as pd
 import psrqpy
+from typing import Any
 
 import astropy.units as u
 from astropy.coordinates import ICRS, AltAz, SkyCoord
@@ -91,7 +92,7 @@ class Pulsar(SkyCoord):
         Returns:
             Boolean indicating if pulsar is visible 
         """
-        is_vis: bool = self.flux_density > antenna.min_observable_flux_density(integtime)
+        is_vis: bool = self.flux_density(antenna.centre_frequency) > antenna.min_observable_flux_density(integtime)
 
         observable = True
         if horizon is not None:
@@ -205,8 +206,14 @@ class Pulsar(SkyCoord):
             List of Pulsar objects for every pulsar in ANTF catalogue
         """
         cat_dict = None
-        scode = f"S{int(ref_freq.to_value(u.MHz))}"
         valid_freq = [400,1400,2000,30,40,50,60,80,100,150,200,300,350,600,700,800,900,1600,3000,4000,6000,8000]
+
+        if ref_freq is None or ref_freq.to_value(u.MHz) not in valid_freq:
+            print(f"Invalid reference frequency. must be in [{', '.join(str(i) for i in valid_freq)}]. Defaulting to 1400 MHz")
+            ref_freq = 1400 * u.MHz
+
+        scode = f"S{int(ref_freq.to_value(u.MHz))}"
+
         params = [
             "NAME",
             "RAJD",             # Right ascension (J2000) (degrees)
@@ -219,9 +226,6 @@ class Pulsar(SkyCoord):
             "SPINDX",           # Radio spectral index
             scode,              # Mean flux density at reference frequency MHz (mJy)
         ]
-
-        if ref_freq not in valid_freq:
-            raise Exception(f"Invalid reference frequency. must be in [{valid_freq.join(', ')}]")
 
         # Query PSRCAT to get complete list of pulsar profiles
         try:
@@ -247,10 +251,11 @@ class Pulsar(SkyCoord):
                     dispersion_measure=row.get("DM") * u.cm**-3 * u.pc,
                     pulse_width_50=row.get("W50") * u.ms,
                     pulse_width_10=row.get("W10") * u.ms,
-                    flux_density_err=flux_dens_err * u.mJy,
+                    # flux_density_err=flux_dens_err * u.mJy if flux_dens_err is not None else None,
                     ref_frequency=ref_freq,
                     ref_flux_density=row.get(scode) * u.mJy,
                     spectral_index=row.get("SPINDX"),
+                    distance=row.get("DIST"),
                 )
             )
 
@@ -314,3 +319,11 @@ class Pulsar(SkyCoord):
     @property
     def spectral_index(self) -> u.dimensionless_unscaled:
         return self._spectral_index
+    
+    def _is_set(self, vals: list[Any]) -> bool:
+        return None not in vals
+    
+    def _propagate_calculations(self) -> float:
+        for _ in range(3):
+            for var in type(self).__dict__:
+                getattr(self, var)

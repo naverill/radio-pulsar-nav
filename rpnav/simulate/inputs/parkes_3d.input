@@ -6,8 +6,8 @@ nreal: 1
 </define>
 
 <pulsars>
-psr: name=J0711-6830
-psr: name=J1545-4550
+psr: name=J1022+1001
+psr: name=J1713+0747
 </pulsars>
 
 <obsRun>
@@ -21,6 +21,6 @@ sched: sched1
 
 <schedule>
 name: sched1
-observe: psr=J0711-6830,toaerr=1.45e-7,freq=1400,ha=8*(ran(linear)-0.5)
-observe: psr=J1545-4550,toaerr=1.45e-7,freq=1400,ha=8*(ran(linear)-0.5)
+observe: psr=J1022+1001,toaerr=1.45e-7,freq=1400,ha=8*(ran(linear)-0.5)
+observe: psr=J1713+0747,toaerr=1.45e-7,freq=1400,ha=8*(ran(linear)-0.5)
 </schedule>

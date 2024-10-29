@@ -1,0 +1,26 @@
+# Simulate Parkes telescope observing Vela 
+<define>
+name: parkes_21d_sim
+nproc: 1
+nreal: 1
+</define>
+
+<pulsars>
+psr: name=J1125-6014
+psr: name=J1732-5049
+</pulsars>
+
+<obsRun>
+name: PARKES 
+tel: pks 
+start: 53043.0
+finish: 53064.0
+sampling: cadence=0.042
+sched: sched1
+</obsRun>
+
+<schedule>
+name: sched1
+observe: psr=J1125-6014,toaerr=1.45e-7,freq=1400,ha=8*(ran(linear)-0.5)
+observe: psr=J1732-5049,toaerr=1.45e-7,freq=1400,ha=8*(ran(linear)-0.5)
+</schedule>

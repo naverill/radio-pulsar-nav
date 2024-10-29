@@ -18,8 +18,9 @@ PARKES = Antenna(
         system_temp=21.0 * u.K,  # K
         gain_dpfu=(1.0 / 1.8) * u.K / u.Jy,  # (K/Jy)
         time=Time(60002.3, format="mjd"),
-        bandwidth=((4032 - 704) * u.MHz).to(u.Hz),  # (Hz)
+        bandwidth=(128 * u.MHz).to(u.Hz),  # (Hz)
         centre_frequency=(1400 * u.MHz).to(u.Hz),  # (MHz)
+        toa_err=145 * u.ns,  # (MHz)
         location=EarthLocation.from_geocentric(
             -4554231.5 * u.m,
             2816759.1 * u.m, 
@@ -58,14 +59,29 @@ MSFD = Antenna(
         diameter=2 * u.m
     )
 
-WOODCHESTER_WEAK = Antenna(
-        name="woodchester_weak",
-        snr= 10.2797461928934 * u.dimensionless_unscaled,  #
-        # gain_dpfu=(1.0 / 1.8) * u.K / u.Jy,  # (K/Jy)
+NAVIGATE = Antenna(
+        name="navigate",
+        snr=1 * u.dimensionless_unscaled,
         system_temp=30.0 * u.K,  # K
         bandwidth=40e6 * u.Hz,  # (Hz)
         time=Time(60002.3, format="mjd"),
-        centre_frequency=(840 * u.MHz).to(u.Hz),  # (MHz)
+        centre_frequency=(1400 * u.MHz).to(u.Hz),  # (MHz)
+        location=EarthLocation.from_geocentric(
+            x=-4646251.90 * u.m,
+            y=2565112.87 * u.m,
+            z=-3525535.83 * u.m,
+        ),
+        diameter=2 * u.m
+    )
+
+WOODCHESTER_WEAK = Antenna(
+        name="woodchester_weak",
+        snr= 5 * u.dimensionless_unscaled,  #
+        # gain_dpfu=(1.0 / 1.8) * u.K / u.Jy,  # (K/Jy)
+        system_temp=30.0 * u.K,  # K
+        bandwidth=(8 * u.MHz).to(u.Hz),  # (Hz)
+        time=Time(60002.3, format="mjd"),
+        centre_frequency=(820 * u.MHz).to(u.Hz),  # (MHz)
         location=EarthLocation.from_geocentric(
             -4554231.5 * u.m,
             2816759.1 * u.m, 
@@ -76,12 +92,12 @@ WOODCHESTER_WEAK = Antenna(
 
 WOODCHESTER_STRONG = Antenna(
         name="woodchester_strong",
-        snr=15.17340361445783 * u.dimensionless_unscaled,  #
+        snr=20 * u.dimensionless_unscaled,  #
         # gain_dpfu=(1.0 / 1.8) * u.K / u.Jy,  # (K/Jy)
         system_temp=30.0 * u.K,  # K
-        bandwidth=40e6 * u.Hz,  # (Hz)
+        bandwidth=(8 * u.MHz).to(u.Hz),  # (Hz)
         time=Time(60002.3, format="mjd"),
-        centre_frequency=(840 * u.MHz).to(u.Hz),  # (MHz)
+        centre_frequency=(820 * u.MHz).to(u.Hz),  # (MHz)
         location=EarthLocation.from_geocentric(
             -4554231.5 * u.m,
             2816759.1 * u.m, 

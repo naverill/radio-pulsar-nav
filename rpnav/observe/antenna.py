@@ -25,7 +25,7 @@ class Antenna(Observer):
         self,
         name: str,
         system_temp:  u.K,
-        bandwidth: u.Hz,
+        bandwidth: u.MHz,
         location: EarthLocation,
         snr: u.dimensionless_unscaled = None,
         aliases: list[str] = [],
@@ -47,6 +47,7 @@ class Antenna(Observer):
         solar_noise_temp:  u.K = None,
         galaxy_noise_temp:  u.K = None,
         side_lobe_attenuation:  u.dB = None,
+        toa_err:  u.ns = None,
     ):
         """Instantiate antenna.
 
@@ -86,6 +87,7 @@ class Antenna(Observer):
         self._radio_gain = None
         self._polsarisation_param = None
         self._pulse_peak_amplitude = None
+        self._toa_err : u.ns = toa_err
         self._propagate_calculations()
         super().__init__(name, location, aliases=aliases, timescale=timescale, time=time, origin="test", itoa_code=name.upper())
 
@@ -114,10 +116,9 @@ class Antenna(Observer):
         https://link.springer.com/content/pdf/bbm:978-3-642-19627-0/1.pdf
         """
         return (
-            (correction * self.system_temp)
+            self.snr() * (correction * self.system_temp)
             / (np.sqrt(self.n_polarisations * self.bandwidth * integration_time) * self.gain_dpfu)
-            * np.sqrt(pulse_width_to_period / (1 - pulse_width_to_period))
-            * self.snr
+            * np.sqrt(pulse_width_to_period / (1 - pulse_width_to_period)) 
         ).to(u.mJy)
     
     @property
@@ -145,7 +146,6 @@ where
     $k$ is Boltzmann's constant($J/s^{-1}/m^{-2}$)
 """
         return self._gain_dpfu
-
 
     @property
     def radio_gain(self) -> float:
@@ -237,28 +237,31 @@ where
                 ).to(u.W)
         return self._noise_power
     
-    def snr(self, pulsar: SkyCoord, integration_time: u.s = None) -> u.W:
-        # snr = (Smean*jy) * Aeff * sqrt(np*deltaNu*tobs)/2.0/k/(tsys+tsky)*sqrt((psr[i].p0-w)/w);
-        receive_power = self.receive_power(pulsar)
-        if self._is_set([receive_power, self._noise_power]):
-            snr = receive_power / self._noise_power
-        elif self._is_set([integration_time, self._n_polsarisations,
-            self._integration_time, self._bandwidth, self._pulse_peak_amplitude, 
-            self._system_temp]):
-            """
-            Reference:
-            Buist, P.J., Engelen, S., Noroozi, A., Sundaramoorthy, P., Verhagen, S., Verhoeven, C., 
-            "Principles and Potential of Pulsar Navigation," Proceedings of the 24th International 
-            Technical Meeting of the Satellite Division of The Institute of Navigation (ION GNSS 2011), 
-            Portland, OR, September 2011, pp. 3503-3515. 
-            Equation  (15)
-            """
-            snr = (
-                sqrt(self._n_polsarisations * self._integration_time * self._bandwidth) 
-                * (pulsar.ref_flux_density * self.gain_dpfu / self._system_temp)
-                * sqrt(pulsar.pulse_width(pulsar.period - pulsar.pulse_width))
-                / pulsar.period
-            ) 
+    def snr(self, pulsar: SkyCoord = None, integration_time: u.s = None) -> u.W:
+        snr = None
+        if self._snr is None:
+            # snr = (Smean*jy) * Aeff * sqrt(np*deltaNu*tobs)/2.0/k/(tsys+tsky)*sqrt((psr[i].p0-w)/w);
+            if self._is_set([pulsar, self._noise_power]):
+                receive_power = self.receive_power(pulsar)
+                snr = receive_power / self._noise_power
+            elif self._is_set([pulsar, integration_time, self._n_polarisations, self._bandwidth, self._pulse_peak_amplitude, 
+                self._system_temp]):
+                """
+                Reference:
+                Buist, P.J., Engelen, S., Noroozi, A., Sundaramoorthy, P., Verhagen, S., Verhoeven, C., 
+                "Principles and Potential of Pulsar Navigation," Proceedings of the 24th International 
+                Technical Meeting of the Satellite Division of The Institute of Navigation (ION GNSS 2011), 
+                Portland, OR, September 2011, pp. 3503-3515. 
+                Equation  (15)
+                """
+                snr = (
+                    sqrt(self._n_polarisations * integration_time * self._bandwidth) 
+                    * (pulsar.ref_flux_density * self.gain_dpfu / self._system_temp)
+                    * sqrt(pulsar.pulse_width(pulsar.period - pulsar.pulse_width))
+                    / pulsar.period
+                ) 
+        else:
+            snr = self._snr
         return snr
 
     def receive_power(self, pulsar: SkyCoord) -> u.W:
@@ -269,6 +272,23 @@ where
                 * self._bandwidth
             ).to(u.W)
         return receive_power
+
+    def toa_err(self, ref_antenna: "Antenna" = None, ref_integration_time: u.s = None, integration_time: u.s = None) -> u.ms:
+        if self._toa_err is None:
+            if self._is_set([self._bandwidth, self._snr, ref_antenna, ref_integration_time, integration_time, ref_antenna.bandwidth, ref_antenna.snr, ref_antenna.toa_err()]):
+                toa_err = np.sqrt(
+                    ref_antenna.toa_err()**2 * (ref_antenna.snr()**2 * ref_antenna.bandwidth * ref_integration_time) 
+                    / (self.snr()**2 * self.bandwidth * integration_time) 
+                )
+            # Assume same integration time
+            if self._is_set([self._bandwidth, self._snr, ref_antenna, ref_antenna.bandwidth, ref_antenna.snr(), ref_antenna.toa_err()]):
+                toa_err = np.sqrt((
+                    (ref_antenna.toa_err()**2 * ref_antenna.snr()**2 * ref_antenna.bandwidth)
+                    / (self._snr**2 * self._bandwidth) 
+                ))
+        else:
+            toa_err = self._toa_err
+        return toa_err
 
     # @property
     # def timing_quality(self, pulsar: SkyCoord) -> u.dimensionless_unscaled:
@@ -329,10 +349,6 @@ where
     @property
     def system_temp(self) -> u.K:
         return self._system_temp
-
-    @property
-    def system_temp(self) -> u.K:
-        return self._system_temp
     
     @property
     def side_lobe_attenuation(self) -> float:
@@ -342,7 +358,6 @@ where
     def solar_distance(self) -> u.AU:
         return self._solar_distance
 
-    
     @property
     def bandwidth(self) -> u.MHz:
         return self._bandwidth

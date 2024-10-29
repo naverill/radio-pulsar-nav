@@ -11,7 +11,7 @@ from rpnav.observe.antenna import Antenna
 from rpnav.observe.pulsar import Pulsar
 
 
-def plot_flux_density(pulsars: list[Pulsar]) -> go.Figure:
+def plot_flux_density(antenna: Antenna, pulsars: list[Pulsar]) -> go.Figure:
     """
     Plot the pulsar luminosity
     """
@@ -19,10 +19,11 @@ def plot_flux_density(pulsars: list[Pulsar]) -> go.Figure:
     fluxs: list[float] = []
     names: list[float] = []
     for p in pulsars:
-        widths.append(p.pulse_width_10)
-        fluxs.append(p.flux_density.to_value(u.mJy))
+        widths.append(p.pulse_width_10.to_value(u.s))
+        fluxs.append(p.flux_density(antenna.centre_frequency).to_value(u.mJy))
         names.append(p.name)
 
+    print(widths, fluxs)
     fig = go.Figure(data=go.Scatter(x=widths, y=fluxs, mode="markers", text=names))
     fig.update_layout(
         title="Pulsar observability",
@@ -34,20 +35,21 @@ def plot_flux_density(pulsars: list[Pulsar]) -> go.Figure:
     return fig
 
 
-def plot_pulsar_position(pulsars: list[Pulsar]) -> go.Figure:
+def plot_pulsar_position(antenna: Antenna, pulsars: list[Pulsar]) -> go.Figure:
     ras: list[float] = []
     decs: list[float] = []
     names: list[float] = []
     size: list[float] = []
     flux_dens: list[float] = []
     for p in pulsars:
-        if p.flux_density == 0:
+        if p.flux_density(antenna.centre_frequency) == 0:
             continue
         ras.append(p.ra.value)
         decs.append(p.dec.value)
         names.append(p.name)
-        flux_dens.append(p.flux_density.value)
-        size.append(log2(p.flux_density.value) * 2 if log2(p.flux_density.value) * 2 > 2 else 2)
+        flux_dens.append(p.flux_density(antenna.centre_frequency).value)
+
+        size.append(log2(p.flux_density(antenna.centre_frequency).value) * 2 if log2(p.flux_density(antenna.centre_frequency).value) * 2 > 2 else 2)
 
     fig = go.Figure(data=go.Scatter(x=ras, y=decs, mode="markers", text=names, marker_size=size))
     fig.update_layout(

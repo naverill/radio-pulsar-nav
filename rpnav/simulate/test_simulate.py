@@ -16,7 +16,7 @@ from sklearn.cluster import KMeans
 
 from rpnav.simulate.visualise import plot_heatmap, plot_scattermap, plot_err_surface
 from rpnav.observe.observer import Observer
-from rpnav.observe.observatories import PARKES, MSFD, WOODCHESTER_STRONG, WOODCHESTER_WEAK
+from rpnav.observe.observatories import PARKES, MSFD, WOODCHESTER_STRONG, WOODCHESTER_WEAK, NAVIGATE
 from rpnav.observe.antenna import Antenna
 
 FILE_DIR = Path(__file__).parent
@@ -58,7 +58,6 @@ wood_weak = SimulationParams(
         antenna = WOODCHESTER_WEAK
     )
 
-# nav_sim = "navigate_small_0.33d_sim"
 # wood_strong_sim = "woodchester_weak"
 wood_strong_sim = "woodchester_strong"
 wood_strong = SimulationParams(
@@ -68,9 +67,17 @@ wood_strong = SimulationParams(
         antenna = WOODCHESTER_STRONG
     )
 
+nav_sim = "navigate_small"
+navigate = SimulationParams(
+        name=nav_sim,
+        timfile=f"{FILE_DIR}/outputs/{nav_sim}_sim/output/real_0/J0835-4510.tim",
+        parfile=f"{FILE_DIR}/outputs/{nav_sim}_sim/output/real_0/J0835-4510.tdb.par",
+        antenna = NAVIGATE
+    )
+
 @pytest.fixture(scope="module")
 def sim() -> SimulationParams:
-    return wood_weak
+    return navigate
 
 
 def fit_results(latlong, k: int = 2) -> KMeans:
@@ -80,21 +87,37 @@ def fit_results(latlong, k: int = 2) -> KMeans:
 
 
 def test_rmse_surface(sim):
-    fpath = f"{FILE_DIR}/outputs/{sim.name}/output/"
+    fpath = f"{FILE_DIR}/outputs/parkes_1d_sim/output/"
 
     df1 = pd.read_csv(fpath + "ALPSMLC30_S033E148_DSM_GRID_CHI.csv", index_col=0)
-    df1 = df1.iloc[[i for i in range(1, 3600, 3)], [i for i in range(1, 3600, 3)]]
+    print(df1.shape)
+    df1 = df1.iloc[:, [i for i in range(3600) if (i % 3 == 0)]]
     
     df2 = pd.read_csv(fpath + "ALPSMLC30_S034E148_DSM_GRID_CHI.csv", index_col=0)
-    df2 = df2.iloc[[i for i in range(1, 3600, 3)], [i for i in range(1, 3600, 3)]]
+    df2 = df2.iloc[:, [i for i in range(3600) if (i % 3 == 0)]]
 
     df = pd.concat([df1, df2])
 
+    print(df.columns.values)
+    df.columns.values.astype(float)
     long = df.columns.values.astype(float)
     lat = df.index.values
     err = df.values
 
     fig = plot_err_surface(long, lat, err)
+    fig.update_layout(
+        title=dict(
+            text=f"Reduced χ² Error Surface",
+            xanchor="center",
+            yanchor="top",
+            x=0.5,
+        ),
+    )
+    
+    
+    fig.update_scenes(xaxis_title_text="Longitude (deg)",  
+                      yaxis_title_text="Latitude (deg)",  
+                      zaxis_title_text="χ²")
     # fig.write_image("outputs/residErrSurface.png")
     fig.show()
 
@@ -136,13 +159,16 @@ def test_scattermap(sim):
         )
 
         simpath = f"{FILE_DIR}/outputs/{sim_name}/"
+        simpath = f"/media/shared/outputs/{sim_name}"
         if not os.path.exists(simpath):
+            print("ERR 1")
             continue
 
         for i in range(100):
             simdir = f"S{i:02d}"
             fpath = f"{simpath}/output/{simdir}/"
             if not os.path.exists(fpath):
+                print("ERR 2")
                 continue
 
             fname = f"results_{simdir}"
@@ -193,7 +219,7 @@ def test_centroid_scattermap(sim):
             )
         )
 
-        simpath = f"{FILE_DIR}/demo/{sim_name}"
+        simpath = f"/media/shared/outputs/sim_data/{sim_name}"
         # fpath = f"{FILE_DIR}/outputs/{sim_name}/"
         if not os.path.exists(simpath):
             continue
@@ -208,6 +234,7 @@ def test_centroid_scattermap(sim):
             fname = f"results_{simdir}"
 
             df = pd.read_csv(fpath + fname + ".csv")
+            print(i)
             kmodel = fit_results(df[["Longitude(deg)", "Latitude(deg)"]], k=k)
 
             for i in range(k):
@@ -246,7 +273,7 @@ def test_centroid_scattermap(sim):
 
 
         fig.update_layout(
-            margin ={'l':0,'t':0,'b':0,'r':0},
+            # margin ={'l':0,'t':0,'b':0,'r':0},
             width=3600,
             height=1800,
             map = {
@@ -255,10 +282,25 @@ def test_centroid_scattermap(sim):
                 'center': {'lon': 148.26356, 'lat': -32.99841},
                 'zoom': 10})
 
+        # Create and add slider
+        steps = []
+        for i in range(len(fig.data)):
+            step = dict(
+                method="update",
+                args=[{"visible": [False] * len(fig.data)},
+                    {"title": "Slider switched to step: " + str(i)}],  # layout attribute
+            )
+            step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"
+            steps.append(step)
+
+
         # fig.write_image(f"outputs/{resname}_zoom.png")
         # fig.update_layout(map = {'zoom': 2.75, 'center': {'lon': 0, 'lat': 0}})
         # fig.write_image(f"outputs/{resname}.png")
         fig.show()
+        # return
+
+
 
 def test_init_scattermap(sim):
     sim_name = sim.name
@@ -438,7 +480,7 @@ def test_distance_err():
             print(f"Z (RMSE): {EZ}")
             print(f"Total Distance: {TD}")
             errList.append(TD.to_value(u.m))
-        fig.add_trace(go.Scatter(x=tlist, y=errList, name=sim.name), label=sim.name)
+        fig.add_trace(go.Scatter(x=tlist, y=errList, name=sim.name))
     fig.update_yaxes(type="log")
     fig.show()
 

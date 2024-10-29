@@ -39,6 +39,10 @@ def plot_scattermap(long: list[float], lat: list[float], err: list[float]):
             'style': "open-street-map",
             'center': {'lon': 148.26356, 'lat': -32.99841},
             'zoom': 2})
+    fig.update_layout(
+        xaxis_title="Longitude (deg)",
+        yaxis_title="Longitude (deg)",
+    )
     return fig
 
 
