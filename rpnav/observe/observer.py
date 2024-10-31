@@ -7,7 +7,6 @@ from astropy.time import Time
 from pint.observatory import Observatory
 from pint.observatory.topo_obs import load_observatories
 
-
 class Observer(Observatory):
     def __init__(
         self,
@@ -61,4 +60,3 @@ class Observer(Observatory):
         except ValueError:
             load_observatories(io.StringIO(json.dumps(self.to_json())))
         return self
-

@@ -16,7 +16,7 @@ from sklearn.cluster import KMeans
 
 from rpnav.simulate.visualise import plot_heatmap, plot_scattermap, plot_err_surface
 from rpnav.observe.observer import Observer
-from rpnav.observe.observatories import PARKES, MSFD, WOODCHESTER_STRONG, WOODCHESTER_WEAK, NAVIGATE
+from rpnav.observe.observatories import PARKES, MSFD, WOODCHESTER, NAVIGATE
 from rpnav.observe.antenna import Antenna
 
 FILE_DIR = Path(__file__).parent
@@ -55,7 +55,7 @@ wood_weak = SimulationParams(
         name=wood_weak_sim,
         timfile=f"{FILE_DIR}/outputs/{wood_weak_sim}/output/real_0/J0835-4510.tim",
         parfile=f"{FILE_DIR}/outputs/{wood_weak_sim}/output/real_0/J0835-4510.tdb.par",
-        antenna = WOODCHESTER_WEAK
+        antenna = WOODCHESTER
     )
 
 # wood_strong_sim = "woodchester_weak"
@@ -64,7 +64,7 @@ wood_strong = SimulationParams(
         name=wood_strong_sim,
         timfile=f"{FILE_DIR}/outputs/{wood_strong_sim}_sim/output/real_0/J0835-4510.tim",
         parfile=f"{FILE_DIR}/outputs/{wood_strong_sim}_sim/output/real_0/J0835-4510.tdb.par",
-        antenna = WOODCHESTER_STRONG
+        antenna = WOODCHESTER
     )
 
 nav_sim = "navigate_small"
@@ -75,9 +75,21 @@ navigate = SimulationParams(
         antenna = NAVIGATE
     )
 
+parkes_real_sim = "parkes_real"
+parkes_real = SimulationParams(
+        name=parkes_real_sim,
+        timfile=f"{FILE_DIR}/outputs/{parkes_real_sim}_sim/output/real_0/J0835-4510.tim",
+        parfile=f"{FILE_DIR}/outputs/{parkes_real_sim}_sim/output/real_0/J0835-4510.tdb.par",
+        antenna = PARKES
+    )
+
 @pytest.fixture(scope="module")
 def sim() -> SimulationParams:
-    return navigate
+    return wood_strong
+
+@pytest.fixture(scope="module")
+def parkes_data() -> SimulationParams:
+    return parkes_real
 
 
 def fit_results(latlong, k: int = 2) -> KMeans:
@@ -89,21 +101,18 @@ def fit_results(latlong, k: int = 2) -> KMeans:
 def test_rmse_surface(sim):
     fpath = f"{FILE_DIR}/outputs/parkes_1d_sim/output/"
 
-    df1 = pd.read_csv(fpath + "ALPSMLC30_S033E148_DSM_GRID_CHI.csv", index_col=0)
-    print(df1.shape)
+    df1 = pd.read_csv(fpath + "ALPSMLC30_S033E148_DSM_GRID_RMSE.csv", index_col=0)
     df1 = df1.iloc[:, [i for i in range(3600) if (i % 3 == 0)]]
     
-    df2 = pd.read_csv(fpath + "ALPSMLC30_S034E148_DSM_GRID_CHI.csv", index_col=0)
+    df2 = pd.read_csv(fpath + "ALPSMLC30_S034E148_DSM_GRID_RMSE.csv", index_col=0)
     df2 = df2.iloc[:, [i for i in range(3600) if (i % 3 == 0)]]
 
     df = pd.concat([df1, df2])
 
-    print(df.columns.values)
-    df.columns.values.astype(float)
     long = df.columns.values.astype(float)
     lat = df.index.values
     err = df.values
-
+    
     fig = plot_err_surface(long, lat, err)
     fig.update_layout(
         title=dict(
@@ -121,27 +130,51 @@ def test_rmse_surface(sim):
     # fig.write_image("outputs/residErrSurface.png")
     fig.show()
 
-def test_grde(sim):
+def test_grde(parkes_data):
+    psr_name = "J0711-6830_J1909-3744"
+    t = "6000h"
+    simdir = f"S0"
     for i in range(100):
-        simdir = f"S{i:02d}"
-        fpath = f"{FILE_DIR}/outputs/{sim.name}/output/{simdir}/"
+        fig = go.Figure()
+        fig.add_trace(
+            go.Scattermap(
+                lon=[float(parkes_data.antenna.location.lon.to_value(u.deg))],
+                lat=[float(parkes_data.antenna.location.lat.to_value(u.deg))],
+                marker={"color": "black", "size": 10, "symbol":"circle-x"},
+                opacity=0.5,
+            )
+        )
 
-        # fname = "ALPSMLC30_N033E148_DSM_GRDE_CHI"
+        fpath = f"{FILE_DIR}/outputs/{parkes_data.name}/{psr_name}/{t}/{simdir}/results_{psr_name}_{t}_I{i}d_chi.csv"
+        if not os.path.exists(fpath):
+            continue
 
-        fname = f"results_{simdir}"
-        resname = f"{sim}_results_{simdir}"
-
-        df = pd.read_csv(fpath + fname + ".csv")
+        df = pd.read_csv(fpath)
         long = df["Longitude(deg)"].values
         lat = df["Latitude(deg)"].values
+        err = df["Error"]
+        print(long)
+        print(lat)
+        fig.add_trace(
+            go.Scattermap(
+                mode="lines",
+                # marker = {'size': [5 * (1 / x) if x > 0.01 else 0.01 for x in err]},
+                lon = long,
+                lat = lat,
+                # line={'width':1},
+                # opacity=1,
+                # text=err
+            )
+        )
 
-        fig= plot_scattermap(
-                long, 
-                lat, 
-                df["Error"].values)
-        fig.add_trace(go.Scatter(x=[148.26356], y=[-32.99841], marker_symbol='x', marker_size=40))
-
-        fig.write_image(f"outputs/{resname}.png")
+        fig.update_layout(
+            margin ={'l':0,'t':0,'b':0,'r':0},
+            width=3600,
+            height=1800,
+            map = {
+                'style': "open-street-map",
+            })
+        fig.show()
 
 def test_scattermap(sim):
     for t in [0.168,0.33,0.5,1,2,3,5,8,13,21,25,28,31]:
@@ -161,14 +194,12 @@ def test_scattermap(sim):
         simpath = f"{FILE_DIR}/outputs/{sim_name}/"
         simpath = f"/media/shared/outputs/{sim_name}"
         if not os.path.exists(simpath):
-            print("ERR 1")
             continue
 
         for i in range(100):
             simdir = f"S{i:02d}"
             fpath = f"{simpath}/output/{simdir}/"
             if not os.path.exists(fpath):
-                print("ERR 2")
                 continue
 
             fname = f"results_{simdir}"
@@ -219,8 +250,8 @@ def test_centroid_scattermap(sim):
             )
         )
 
-        simpath = f"/media/shared/outputs/sim_data/{sim_name}"
-        # fpath = f"{FILE_DIR}/outputs/{sim_name}/"
+        # simpath = f"/media/shared/outputs/sim_data/{sim_name}"
+        simpath = f"{FILE_DIR}/outputs/{sim_name}/"
         if not os.path.exists(simpath):
             continue
 
@@ -234,8 +265,10 @@ def test_centroid_scattermap(sim):
             fname = f"results_{simdir}"
 
             df = pd.read_csv(fpath + fname + ".csv")
-            print(i)
-            kmodel = fit_results(df[["Longitude(deg)", "Latitude(deg)"]], k=k)
+            try:
+                kmodel = fit_results(df[["Longitude(deg)", "Latitude(deg)"]], k=k)
+            except ValueError:
+                continue
 
             for i in range(k):
                 cent = kmodel.cluster_centers_
@@ -282,137 +315,99 @@ def test_centroid_scattermap(sim):
                 'center': {'lon': 148.26356, 'lat': -32.99841},
                 'zoom': 10})
 
-        # Create and add slider
-        steps = []
-        for i in range(len(fig.data)):
-            step = dict(
-                method="update",
-                args=[{"visible": [False] * len(fig.data)},
-                    {"title": "Slider switched to step: " + str(i)}],  # layout attribute
-            )
-            step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"
-            steps.append(step)
+        # fig.write_image(f"outputs/{resname}_zoom.png")
+        # fig.update_layout(map = {'zoom': 2.75, 'center': {'lon': 0, 'lat': 0}})
+        # fig.write_image(f"outputs/{resname}.png")
+        fig.show()
 
+def test_centroid_real_scattermap(parkes_real):
+    test = ["J0613-0200_J0711-6830", "J0613-0200_J1022+1001"]
+    t = "744h"
+
+    for p in test:
+        print(t)
+    
+        fig = go.Figure()
+        fig.add_trace(
+            go.Scattermap(
+                lon=[float(parkes_real.antenna.location.lon.to_value(u.deg))],
+                lat=[float(parkes_real.antenna.location.lat.to_value(u.deg))],
+                marker={"color": "black", "size": 10, "symbol":"circle-x"},
+                opacity=0.5,
+            )
+        )
+
+        # simpath = f"/media/shared/outputs/sim_data/{sim_name}"
+        simpath = f"{FILE_DIR}/outputs/parkes_real/{p}/{t}"
+        if not os.path.exists(simpath):
+            continue
+
+        k = 2
+        for i in range(100):
+            simdir = f"S{i:02d}"
+            fpath = f"{simpath}/{simdir}/results_{p}_{t}_rms.csv"
+            print(fpath)
+            if not os.path.exists(fpath):
+                continue
+
+            
+            df = pd.read_csv(fpath)
+            df = df[df["Error"] < 500]
+            try:
+                kmodel = fit_results(df[["Longitude(deg)", "Latitude(deg)"]], k=k)
+            except ValueError:
+                continue
+
+            for i in range(k):
+                cent = kmodel.cluster_centers_
+                cLong = df["Longitude(deg)"][kmodel.labels_ == i]
+                cLat = df["Latitude(deg)"][kmodel.labels_ == i]
+                lon = cent[i][0]
+                lat = cent[i][1]
+
+                fig.add_trace(
+                    go.Scattermap(
+                        lon=[lon],
+                        lat=[lat],
+                        marker={"color": 'red', "size":10},
+                        opacity=0.5,
+                    )
+                )
+
+                err = df["Error"][kmodel.labels_ == i]
+
+                errScaled = [5 * (1 / x) if x > 0.01 else 0.01 for x in err]
+                fig.add_trace(
+                    go.Scattermap(
+                        mode = "markers",
+                        marker = {
+                            'size': errScaled,
+                            # 'color' : errScaled,
+                            # 'colorbar_title':"Reduced Chi-squared error",
+                            # 'colorscale': 'Blues',
+                        },
+                        lon = cLong,
+                        lat = cLat,
+                        opacity=0.2,
+                    )
+                )
+
+
+        fig.update_layout(
+            # margin ={'l':0,'t':0,'b':0,'r':0},
+            width=3600,
+            height=1800,
+            map = {
+                # 'style': "white-bg",
+                'style': "open-street-map",
+                'center': {'lon': 148.26356, 'lat': -32.99841},
+                'zoom': 10})
 
         # fig.write_image(f"outputs/{resname}_zoom.png")
         # fig.update_layout(map = {'zoom': 2.75, 'center': {'lon': 0, 'lat': 0}})
         # fig.write_image(f"outputs/{resname}.png")
         fig.show()
         # return
-
-
-
-def test_init_scattermap(sim):
-    sim_name = sim.name
-    fig = go.Figure()
-    fig.add_trace(
-        go.Scattermap(
-            lon=[float(sim.antenna.location.lon.to_value(u.deg))],
-            lat=[float(sim.antenna.location.lat.to_value(u.deg))],
-            marker_symbol='x', 
-            marker={"color": "black", "size": 40}
-        )
-    )
-
-    for i in range(100):
-        simdir = f"S{i:02d}"
-        lat = []
-        long = []
-        err = []
-        for i in range(100):
-            simfile = f"{simdir}I{i:02d}"
-            fname = f"results_{simfile}"
-            fpath = f"{FILE_DIR}/outputs/{sim_name}/output/{simdir}/{fname}.csv"
-            if not os.path.exists(fpath):
-                print("ERROR")
-                continue
-
-            df = pd.read_csv(fpath)
-            long.append(df["Longitude(deg)"].values[0])
-            lat.append(df["Latitude(deg)"].values[0])
-            err.append(df["Error"][0])
-
-        fig.add_trace(
-            go.Scattermap(
-                mode = "markers",
-                marker = {'size': 10},
-                lon = long,
-                lat = lat,
-                opacity=1,
-            )
-        )
-
-    fig.update_layout(
-        margin ={'l':0,'t':0,'b':0,'r':0},
-        width=3600,
-        height=1800,
-        map = {
-            # 'style': "white-bg",
-            'style': "open-street-map",
-            'center': {'lon': 148.26356, 'lat': -32.99841},
-            'zoom': 10})
-
-    # fig.write_image(f"outputs/{resname}_zoom.png")
-    # fig.update_layout(map = {'zoom': 2.75, 'center': {'lon': 0, 'lat': 0}})
-    # fig.write_image(f"outputs/{resname}.png")
-    fig.show()
-
-def test_time_scattermap(sim):
-    fig = go.Figure()
-    fig.add_trace(
-        go.Scattermap(
-            lon=[float(sim.antenna.location.lon.to_value(u.deg))],
-            lat=[float(sim.antenna.location.lat.to_value(u.deg))],
-            marker_symbol='x', 
-            marker={"color": "black", "size": 40}
-        )
-    )
-
-    for t in [0.168,0.33,0.5,1,2,3,5,8,13,21,25,28,31]:
-        lat = []
-        long = []
-        err = []
-        sim_name = sim.name + f"_{t}d_sim"
-
-        for i in range(100):
-            simdir = f"S{i:02d}"
-            fpath = f"{FILE_DIR}/outputs/{sim_name}_sim/output/{simdir}/"
-            if not os.path.exists(fpath):
-                continue
-
-            fname = f"results_{simdir}"
-            resname = f"{sim_name}_results_{simdir}"
-
-            df = pd.read_csv(fpath + fname + ".csv")
-            long.extend(list(df["Longitude(deg)"].values))
-            lat.extend(list(df["Latitude(deg)"].values))
-            err.extend(list(df["Error"]))
-
-        fig.add_trace(
-            go.Scattermap(
-                mode = "markers",
-                marker = {'size': [(1 / x) for x in err]},
-                lon = long,
-                lat = lat,
-                line={'width':1},
-                opacity=1,
-            )
-        )
-
-    fig.update_layout(
-        # margin ={'l':0,'t':0,'b':0,'r':0},
-        width=3600,
-        height=1800,
-        map = {
-            # 'style': "white-bg",
-            'style': "open-street-map",
-            'center': {'lon': 148.26356, 'lat': -32.99841},
-            'zoom': 10})
-
-    # fig.write_image(f"outputs/{resname}_zoom.png")
-    # fig.update_layout(map = {'zoom': 2.75, 'center': {'lon': 0, 'lat': 0}})
-    # fig.write_image(f"outputs/{resname}.png")
-    fig.show()
 
 def test_distance_err():
     fig = go.Figure()
@@ -485,16 +480,24 @@ def test_distance_err():
     fig.show()
 
 def test_centroid_distance_err():
-    fig = make_subplots(rows=2, cols=2)
-    for sim in [parkes, wood_weak, wood_strong]:
-        XList = []
-        YList = []
-        ZList = []
-        XStdList = []
-        YStdList = []
-        ZStdList = []
+    fig = make_subplots(rows=3, cols=1)
+    for sim, lcol, fcol in [(wood_strong, 'rgba(0,0,0,0.5)','rgba(68, 68, 68, 0.3)'), (wood_weak, 'rgb(0,100,80)', 'rgba(0,100,80,0.2)')]:
+    # for sim, lcol, fcol in [(parkes, 'rgb(0,100,80)', 'rgba(0,100,80,0.2)')]:
+        PXList = []
+        PYList = []
+        PZList = []
+        NXList = []
+        NYList = []
+        NZList = []
+        PXStdList = []
+        PYStdList = []
+        PZStdList = []
+        NXStdList = []
+        NYStdList = []
+        NZStdList = []
         TDList = []
-        tlist = [0.168,0.33,0.5,1,2,3,5,8,13,21,25,28,31]
+        # tlist = [0.168,0.33,0.5,1,2,3,5,8,13,21,25,28,31]
+        tlist = [0.168,0.33,0.5,1,2,3,8,]
         for t in tlist:
             sim_name = sim.name + f"_{t}d_sim"
 
@@ -504,21 +507,25 @@ def test_centroid_distance_err():
                 continue
 
             true_x, true_y, true_z = sim.antenna.location.geocentric
+
             DX = []
             DY = []
             DZ = []
-
+            TDX = []
+            TDY = []
+            TDZ = []
             k = 2
             for i in range(100):
                 resid = 0
                 simdir = f"S{i:02d}"
-                fpath = f"{simpath}/output/{simdir}/"
+                fname = f"results_{simdir}"
+                fpath = f"{simpath}/output/{simdir}/{fname}.csv"
                 if not os.path.exists(fpath):
                     continue
 
-                fname = f"results_{simdir}"
+                df = pd.read_csv(fpath)
 
-                df = pd.read_csv(fpath + fname + ".csv")
+                df = df[df["Error"] < 5] 
 
                 if "X(m)" not in df.columns:
                     continue
@@ -529,86 +536,275 @@ def test_centroid_distance_err():
                     continue
 
                 
-                for i in range(k):
+                for c in range(k):
                     cent = kmodel.cluster_centers_
-                    cX = df["X(m)"][kmodel.labels_ == i]
-                    cY = df["Y(m)"][kmodel.labels_ == i]
-                    cZ = df["Z(m)"][kmodel.labels_ == i]
-                    x = cent[i][0]
-                    y = cent[i][1]
-                    z = cent[i][2]
-                    # X_stdev = cX.nanstd()
-                    # Y_stdev = cY.nanstd()
-                    # Z_stdev = cZ.nanstd()
+                    cX = df["X(m)"][kmodel.labels_ == c]
+                    cY = df["Y(m)"][kmodel.labels_ == c]
+                    cZ = df["Z(m)"][kmodel.labels_ == c]
+                    x = cent[c][0]
+                    y = cent[c][1]
+                    z = cent[c][2]
 
                     if any(np.isnan([x, y, z])):
                         continue
                     if z > 0:
                         continue
                                 
-                    DX.append((x - true_x.to_value(u.m))**2) 
-                    DY.append((y - true_y.to_value(u.m))**2)
-                    DZ.append((z - true_z.to_value(u.m))**2)
+                    DX.append((x - true_x.to_value(u.m))) 
+                    TDX.append(abs(x - true_x.to_value(u.m))) 
+                    DY.append((y - true_y.to_value(u.m)))
+                    TDY.append(abs(y - true_y.to_value(u.m)))
+                    DZ.append((z - true_z.to_value(u.m)))
+                    TDZ.append(abs(z - true_z.to_value(u.m)))
 
             if len(DX) <= 0:
                 continue
             
-            EX = np.sqrt(sum(DX) / len(DX))
-            EY = np.sqrt(sum(DY) / len(DY))
-            EZ = np.sqrt(sum(DZ) / len(DZ))
+            errX = np.nanmean(TDX)
+            errY = np.nanmean(TDY)
+            errZ = np.nanmean(TDZ)
+            print()
+            print(sim.name)
+            print(t)
+            print(f"Total X Error: {errX}")
+            print(f"Total Y Error: {errY}")
+            print(f"Total Z Error: {errZ}")
 
-            XList.append(EX)
-            YList.append(EX)
-            ZList.append(EX)
-            XStdList.append(np.nanstd(DX)) 
-            YStdList.append(np.nanstd(DY))
-            ZStdList.append(np.nanstd(DZ))
-            TD = (EX + EY + EX) / 3
-            print(sim_name)
-            print(f"X (RMSE): {EX * u.m}")
-            print(f"Y (RMSE): {EY * u.m}")
-            print(f"Z (RMSE): {EZ * u.m}")
-            print(f"Total Distance: {TD * u.m}")
-            TDList.append(TD)
+            PXList.append(np.nanmean([x for x in DX if x >= 0]))
+            NXList.append(np.nanmean([x for x in DX if x < 0]))
+            PYList.append(np.nanmean([x for x in DY if x >= 0]))
+            NYList.append(np.nanmean([x for x in DY if x < 0]))
+            PZList.append(np.nanmean([x for x in DZ if x >= 0]))
+            NZList.append(np.nanmean([x for x in DZ if x < 0]))
 
+            PXStdList.append(np.nanstd([x for x in DX if x >= 0])) 
+            NXStdList.append(np.nanstd([x for x in DX if x < 0]))
+            PYStdList.append(np.nanstd([x for x in DY if x >= 0]))
+            NYStdList.append(np.nanstd([x for x in DY if x < 0])) 
+            PZStdList.append(np.nanstd([x for x in DZ if x >= 0]))
+            NZStdList.append(np.nanstd([x for x in DZ if x > 0]))
 
+        print(PXStdList)
+        print(NXStdList)
+        print(PYStdList)
+        print(NYStdList)
+        print(PZStdList)
+        print(NZStdList)
+        ############### X
         fig.add_trace(go.Scatter(
-            x=tlist,
-            y=TDList,
-            name=sim.name,
+                x=tlist,
+                y=PXList,
+                name=f"{sim.name.replace('_', ' ')} +X Error",
+                mode='lines',
+                marker=dict(color=lcol),
             ),
             row=1, col=1
         )
         fig.add_trace(go.Scatter(
-            x=tlist,
-            y=XList,
-            name=sim.name,
-            error_y=dict(
-                type='data', # value of error bar given in data coordinates
-                array=XStdList,
-                visible=True)
+                x=tlist,
+                y=NXList,
+                mode='lines',
+                marker=dict(color=lcol),
+                name=f"{sim.name.replace('_', ' ')} -X Error"
             ),
-            row=1, col=2
+            row=1, col=1
         )
         fig.add_trace(go.Scatter(
-            x=tlist,
-            y=YList,name=sim.name,
-            error_y=dict(
-                type='data', # value of error bar given in data coordinates
-                array=YStdList,
-                visible=True)
+                x=tlist,
+                y=[m + std for m, std in zip(PXList, PXStdList)],
+                name=f"{sim.name.replace('_', ' ')} Upper Bound",
+                mode='lines',
+                marker=dict(color=lcol),
+                line=dict(width=0),
+                showlegend=False
+            ),
+            row=1, col=1
+        )
+
+        fig.add_trace(go.Scatter(
+                name='Lower Bound',
+                x=tlist,
+                y=[m - std for m, std in zip(NXList, NXStdList)],
+                marker=dict(color=lcol),
+                line=dict(width=0),
+                mode='lines',
+                fillcolor=fcol,
+                fill='tonexty',
+                showlegend=False
+            ),
+            row=1, col=1
+        )
+        ############### Y
+        fig.add_trace(go.Scatter(
+                x=tlist,
+                y=PYList,
+                mode='lines',
+                marker=dict(color=lcol),
+                name=f"{sim.name.replace('_', ' ')} +Y Error"
             ),
             row=2, col=1
         )
         fig.add_trace(go.Scatter(
-            x=tlist,
-            y=YList,name=sim.name,
-            error_y=dict(
-                type='data', # value of error bar given in data coordinates
-                array=ZStdList,
-                visible=True)
+                x=tlist,
+                y=NYList,
+                mode='lines',
+                marker=dict(color=lcol),
+                name=f"{sim.name.replace('_', ' ')} -Y Error"
             ),
-            row=2, col=2
+            row=2, col=1
         )
-    fig.update_yaxes(type="log")
-    fig.show()
+        fig.add_trace(go.Scatter(
+                x=tlist,
+                y=[m + std for m, std in zip(PYList, PYStdList)],
+                name=f"{sim.name.replace('_', ' ')} Upper Bound",
+                mode='lines',
+                marker=dict(color=lcol),
+                line=dict(width=0),
+                showlegend=False
+            ),
+            row=2, col=1
+        )
+        fig.add_trace(go.Scatter(
+                name='Lower Bound',
+                x=tlist,
+                y=[m - std for m,std in zip(NYList, NYStdList)],
+                marker=dict(color=lcol),
+                line=dict(width=0),
+                mode='lines',
+                fillcolor=fcol,
+                fill='tonexty',
+                showlegend=False
+            ),
+            row=2, col=1
+        )
+        ############### Z
+        fig.add_trace(go.Scatter(
+                x=tlist,
+                y=PZList,
+                mode='lines',
+                marker=dict(color=lcol),
+                name=f"{sim.name.replace('_', ' ')} +Z Error"
+            ),
+            row=3, col=1
+        )
+        fig.add_trace(go.Scatter(
+                x=tlist,
+                y=NZList,
+                mode='lines',
+                marker=dict(color=lcol),
+                name=f"{sim.name.replace('_', ' ')} -Z Error"
+            ),
+            row=3, col=1
+        )
+        fig.add_trace(go.Scatter(
+                x=tlist,
+                y=[m + std for m, std in zip(PZList, PZStdList)],
+                name=f"{sim.name} Upper Bound",
+                mode='lines',
+                marker=dict(color=lcol),
+                line=dict(width=0),
+                showlegend=False
+            ),
+            row=3, col=1
+        )
+        fig.add_trace(go.Scatter(
+                name='Lower Bound',
+                x=tlist,
+                y=[m - std for m , std in zip(NZList, NZStdList)],
+                marker=dict(color=lcol),
+                line=dict(width=0),
+                mode='lines',
+                fillcolor=fcol,
+                fill='tonexty',
+                showlegend=False
+            ),
+            row=3, col=1
+        )
+
+        # Update xaxis properties
+        fig.update_yaxes(title_text="X (m)", row=1, col=1)
+        fig.update_yaxes(title_text="Y (m)", row=2, col=1)
+        fig.update_yaxes(title_text="Z (m)", row=3, col=1)
+
+        # Update xaxis properties
+        fig.update_xaxes(title_text="Observation time (days)", row=1, col=1)
+        fig.update_xaxes(title_text="Observation time (days)", row=2, col=1)
+        fig.update_xaxes(title_text="Observation time (days)", row=3, col=1)
+
+
+        fig.update_layout(
+            title=dict(
+                text=f"Observatory Estimation Error",
+                xanchor="center",
+                yanchor="top",
+                x=0.5,
+            )
+        )
+    fig.show()  
+
+
+def test_centroid_real_distance_err(parkes_data):
+    test = ["J0613-0200_J0711-6830", "J0613-0200_J1022+1001", "J0613-0200_J1024-0719"]
+    t = "744h"
+
+    lat, lon, _ = loc = parkes_data.antenna.location.to_geodetic()
+    lon = lon.to_value(u.deg)
+    lat = lat.to_value(u.deg)
+
+    true_x, true_y, true_z = parkes_data.antenna.location.geocentric
+    for p in test:
+
+        DX = []
+        DY = []
+        DZ = []
+        print(t)
+
+        # simpath = f"/media/shared/outputs/sim_data/{sim_name}"
+        simpath = f"{FILE_DIR}/outputs/parkes_real/{p}/{t}"
+        if not os.path.exists(simpath):
+            continue
+
+        k = 2
+        for i in range(100):
+            simdir = f"S{i:02d}"
+            fpath = f"{simpath}/{simdir}/results_{p}_{t}_rms.csv"
+            if not os.path.exists(fpath):
+                continue
+
+            
+            df = pd.read_csv(fpath)
+            df = df[df["Error"] < 500]
+
+            if "X(m)" not in df.columns:
+                continue
+
+            try:
+                kmodel = fit_results(df[["X(m)", "Y(m)", "Z(m)"]], k=k)
+            except ValueError:
+                continue
+
+                
+            for i in range(k):
+                cent = kmodel.cluster_centers_
+                cX = df["X(m)"][kmodel.labels_ == i]
+                cY = df["Y(m)"][kmodel.labels_ == i]
+                cZ = df["Z(m)"][kmodel.labels_ == i]
+                x = cent[i][0]
+                y = cent[i][1]
+                z = cent[i][2]
+
+                if any(np.isnan([x, y, z])):
+                    continue
+                if z > 0:
+                    continue
+                DX.append(abs(x - true_x.to_value(u.m))) 
+                DY.append(abs(y - true_y.to_value(u.m)))
+                DZ.append(abs(z - true_z.to_value(u.m)))
+        errX = np.nanmean(DX)
+        errY = np.nanmean(DY)
+        errZ = np.nanmean(DZ)
+        print()
+        print(parkes_data.name)
+        print(f"Total X Error: {errX}")
+        print(f"Total Y Error: {errY}")
+        print(f"Total Z Error: {errZ}")

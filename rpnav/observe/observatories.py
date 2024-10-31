@@ -14,13 +14,11 @@ from rpnav.observe.antenna import Antenna
 """
 PARKES = Antenna(
         name="Parkes telescope",
-        snr=10 * u.dimensionless_unscaled,  #
         system_temp=21.0 * u.K,  # K
         gain_dpfu=(1.0 / 1.8) * u.K / u.Jy,  # (K/Jy)
         time=Time(60002.3, format="mjd"),
         bandwidth=(128 * u.MHz).to(u.Hz),  # (Hz)
         centre_frequency=(1400 * u.MHz).to(u.Hz),  # (MHz)
-        toa_err=145 * u.ns,  # (MHz)
         location=EarthLocation.from_geocentric(
             -4554231.5 * u.m,
             2816759.1 * u.m, 
@@ -31,7 +29,6 @@ PARKES = Antenna(
 
 FAST = Antenna(
         name="FAST Telescope",
-        snr=9.0 * u.dimensionless_unscaled,  #
         system_temp=25.0 * u.K,  # (K)
         gain_dpfu=16.0 * u.K / u.Jy,  # (K/Jy)
         bandwidth=(3300 - 500) * u.MHz,  # (Hz)
@@ -46,7 +43,6 @@ FAST = Antenna(
 
 MSFD = Antenna(
         name="msfd",
-        snr=1 * u.dimensionless_unscaled,
         system_temp=30.0 * u.K,  # K
         bandwidth=40e6 * u.Hz,  # (Hz)
         time=Time(60002.3, format="mjd"),
@@ -61,7 +57,6 @@ MSFD = Antenna(
 
 NAVIGATE = Antenna(
         name="navigate",
-        snr=1 * u.dimensionless_unscaled,
         system_temp=30.0 * u.K,  # K
         bandwidth=40e6 * u.Hz,  # (Hz)
         time=Time(60002.3, format="mjd"),
@@ -74,28 +69,12 @@ NAVIGATE = Antenna(
         diameter=2 * u.m
     )
 
-WOODCHESTER_WEAK = Antenna(
-        name="woodchester_weak",
-        snr= 5 * u.dimensionless_unscaled,  #
+WOODCHESTER = Antenna(
+        name="woodchester",
         # gain_dpfu=(1.0 / 1.8) * u.K / u.Jy,  # (K/Jy)
         system_temp=30.0 * u.K,  # K
-        bandwidth=(8 * u.MHz).to(u.Hz),  # (Hz)
-        time=Time(60002.3, format="mjd"),
-        centre_frequency=(820 * u.MHz).to(u.Hz),  # (MHz)
-        location=EarthLocation.from_geocentric(
-            -4554231.5 * u.m,
-            2816759.1 * u.m, 
-            -3454036.3 * u.m
-        ),
-        diameter=2.4 * u.m
-)
-
-WOODCHESTER_STRONG = Antenna(
-        name="woodchester_strong",
-        snr=20 * u.dimensionless_unscaled,  #
-        # gain_dpfu=(1.0 / 1.8) * u.K / u.Jy,  # (K/Jy)
-        system_temp=30.0 * u.K,  # K
-        bandwidth=(8 * u.MHz).to(u.Hz),  # (Hz)
+        # bandwidth=(8 * u.MHz).to(u.Hz),  # (Hz)
+        bandwidth=(40 * u.MHz).to(u.Hz),  # (Hz)
         time=Time(60002.3, format="mjd"),
         centre_frequency=(820 * u.MHz).to(u.Hz),  # (MHz)
         location=EarthLocation.from_geocentric(

@@ -9,7 +9,7 @@ OUTPUT_SIM_DIR=~/workspace/rpnav/rpnav/simulate/outputs
 
 # Name of simulation script
 # Tells the script to look for base simulation configuration of the form ${SIM_SCRIPT}_sim.input
-SIM_SCRIPT=parkes
+SIM_SCRIPT=woodchester_strong
 
 # Set total observation time in days
 # obsTime=(0.168 0.33 0.5 1 2 3 5 8 13 21 25 28 31)
@@ -56,7 +56,7 @@ do
     observer=$(awk '// {if (lastLine == "<obsRun>"){print $NF}lastLine = $0}' ${simInput})
     
 
-    for ((i =7; i < $nSims; i++));
+    for ((i =0; i < $nSims; i++));
     do
         rm -rf $simResDir
 

@@ -2,18 +2,16 @@ import pandas as pd
 import psrqpy
 from typing import Any
 
+from math import pi, sqrt
+import numpy as np
+
 import astropy.units as u
-from astropy.coordinates import ICRS, AltAz, SkyCoord
+from astropy.coordinates import ICRS, SkyCoord
 from astropy.table import Table
 from astropy.time import Time
 from astropy.coordinates.angles import Angle
 from pulsar_spectra.catalogue import collect_catalogue_fluxes
 from pulsar_spectra.spectral_fit import estimate_flux_density, find_best_spectral_fit
-
-from rpnav import logger
-from rpnav.observe.antenna import Antenna
-
-logger.disabled = True
 
 
 class Pulsar(SkyCoord):
@@ -68,50 +66,6 @@ class Pulsar(SkyCoord):
             SkyCoord object in the ICRS frame 
         """
         return SkyCoord(frame=ICRS, ra=self.ra, dec=self.dec, unit="deg")
-
-    def is_observable(
-        self,
-        antenna: Antenna,
-        localtime: Time,
-        integtime: u.s,
-        horizon: Angle = None,
-    ) -> bool:
-        """
-        Calculate whether pulsar is observable by an observer at a specific time. To be 
-        observable the pulsar must have a flux density above a certain threshold for the 
-        antenna configuration. If a horizon value is submitted, the function will 
-        additinally return if the observer has line-of-sight to the pulsar. 
-        
-        Args:
-            antenna:                Observer object
-            t:                      Time of observation
-            integ_time:             Length of observation time
-            horizon (optional):     Minumum altitude angle to be considered visible
-
-
-        Returns:
-            Boolean indicating if pulsar is visible 
-        """
-        is_vis: bool = self.flux_density(antenna.centre_frequency) > antenna.min_observable_flux_density(integtime)
-
-        observable = True
-        if horizon is not None:
-            altaz = self.get_alt_az(antenna, localtime)
-            observable = altaz.alt > horizon
-        return is_vis and observable
-
-    def get_alt_az(self, antenna: Antenna, localtime: Time) -> AltAz:
-        """
-        Get altitude and Azimuth coordinates for a pulsar given an observer location and a local time  
-        
-        Args:
-            antenna:                Observer object
-            localtime:              Time of observation
-
-        Returns:
-            Astropy AltAz object 
-        """
-        return self._to_sky_coord().transform_to(AltAz(obstime=localtime, location=antenna.location))
 
     def interpolate_flux_density(
         self, centre_freq: u.MHz

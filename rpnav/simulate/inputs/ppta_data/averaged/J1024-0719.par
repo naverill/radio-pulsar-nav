@@ -18,8 +18,8 @@ FINISH         58187.422098368724331
 TZRMJD         54148.555893470653448       
 TZRFRQ         1327                     
 TZRSITE        pks   
-#FD1            -5.1680725297168841251e-05 1  0.00000590896628246093   
-#FD2            2.1872875234318302455e-05 1  0.00000364898253817425   
+FD1            -5.1680725297168841251e-05 1  0.00000590896628246093   
+FD2            2.1872875234318302455e-05 1  0.00000364898253817425   
 TRES           3.706        
 EPHVER         5                           
 NE_SW          4                           
@@ -115,14 +115,15 @@ CHI2R          1.0024 2695
 #TNEQ -group PDFB_10CM -7.63415
 #TNEQ -group PDFB_20CM -7.27269
 #TNEQ -group PDFB_40CM -7.24481
-#TNEQ -group WBCORR_10CM -6.61005
-#TNDMAmp -12.4171
-#TNDMGam 3.9623
-#TNDMC 132
+xzTNEQ -group WBCORR_10CM -6.61005
+TNDMAmp -12.4171
+TNDMGam 3.9623
+TNRedGam 20
+TNRedC 0
+TNGroupSetSpan 0
+TNsubtractRed 1
+TNsubtractDM 1
+DM_SERIES TAYLOR
+
 #TNRedAmp -99
-#TNRedGam 20
-#TNRedC 0
-#TNGroupSetSpan 0
-#TNsubtractRed 1
-#TNsubtractDM 1
-#DM_SERIES TAYLOR
+#TNDMC 132

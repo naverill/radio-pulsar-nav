@@ -48,7 +48,13 @@ def plot_scattermap(long: list[float], lat: list[float], err: list[float]):
 
 
 def plot_err_surface(x: list[float], y: list[float], residuals_rmse: list[float]):
-    fig = go.Figure(data=[go.Surface(x=x, y=y, z=residuals_rmse)])
+    fig = go.Figure(data=[go.Surface(
+        x=x,
+        y=y,
+        z=residuals_rmse,
+        colorscale=[[0, 'rgb(0,100,80)'], 
+              [1, 'rgba(68, 68, 68, 0.3)']]    
+    )])
     fig.update_traces(
         contours_z=dict(show=True, usecolormap=True, highlightcolor="limegreen", project_z=True)
     )

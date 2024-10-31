@@ -4,16 +4,17 @@ Antenna observer object
 from math import pi, sqrt
 from typing import Any
 
+import numpy as np
+
 import astropy.units as u
 from astropy import constants as const
-
-import numpy as np
 from astropy.coordinates import EarthLocation, SkyCoord
 from astropy.time import Time
 
 from rpnav.constants import BACKGROUND_TEMP
 from rpnav.conversions import frequency_to_wavelength, wavelength_to_frequency, joule_to_jansky, jansky_to_watt
 from rpnav.observe.observer import Observer
+from rpnav.observe.pulsar import Pulsar
 
 
 class Antenna(Observer):
@@ -47,7 +48,6 @@ class Antenna(Observer):
         solar_noise_temp:  u.K = None,
         galaxy_noise_temp:  u.K = None,
         side_lobe_attenuation:  u.dB = None,
-        toa_err:  u.ns = None,
     ):
         """Instantiate antenna.
 
@@ -83,43 +83,13 @@ class Antenna(Observer):
         self._noise_power = noise_power
         self._side_lobe_attenuation = side_lobe_attenuation
         self._gain_dpfu_eqn = ""
+        self._sensitivity = None
         self._radio_gain_eqn = ""
         self._radio_gain = None
         self._polsarisation_param = None
         self._pulse_peak_amplitude = None
-        self._toa_err : u.ns = toa_err
         self._propagate_calculations()
         super().__init__(name, location, aliases=aliases, timescale=timescale, time=time, origin="test", itoa_code=name.upper())
-
-    def min_observable_flux_density(
-        self,
-        integration_time: u.s,
-        pulse_width_to_period: u.dimensionless_unscaled = 0.1,
-        correction: u.dimensionless_unscaled = 1,
-    ) -> u.mJy:
-        """Calculate minimum  narrowband spectral line sensitivity  that can be measured by the antenna
-        given a fixed integration time.
-
-        Parameters
-        ----------
-            integration_time (float, s):
-            pulse_width_to_period (float):
-            correction (float):
-
-        Returns
-        -------
-            (mJ)
-
-        Reference
-        ---------
-        (A. 12)
-        https://link.springer.com/content/pdf/bbm:978-3-642-19627-0/1.pdf
-        """
-        return (
-            self.snr() * (correction * self.system_temp)
-            / (np.sqrt(self.n_polarisations * self.bandwidth * integration_time) * self.gain_dpfu)
-            * np.sqrt(pulse_width_to_period / (1 - pulse_width_to_period)) 
-        ).to(u.mJy)
     
     @property
     def gain_dpfu(self) -> u.K / u.Jy:
@@ -171,6 +141,23 @@ where
     $\lambda$ is the wavelength ($m$)
 """
         return self._radio_gain
+
+    @property
+    def sensitivity(self) -> u.m * u.m / u.K:
+        """Calculate the sensitivity of the antenna.
+
+        Returns
+        -------
+            (W)
+        Reference
+        ---------
+            (1) https://casper.astro.berkeley.edu/astrobaki/index.php/Radiometer_Equation_Applied_to_Telescopes
+        """
+        if not self._is_set([self._sensitivity]):
+            if self._is_set([self._effective_area, self._system_temp]):
+                # (3)
+                self._sensitivity = (self._effective_area / self._system_temp)
+        return self._sensitivity
     
     @property
     def effective_area(self) -> u.m * u.m:
@@ -236,59 +223,6 @@ where
                     * self._bandwidth
                 ).to(u.W)
         return self._noise_power
-    
-    def snr(self, pulsar: SkyCoord = None, integration_time: u.s = None) -> u.W:
-        snr = None
-        if self._snr is None:
-            # snr = (Smean*jy) * Aeff * sqrt(np*deltaNu*tobs)/2.0/k/(tsys+tsky)*sqrt((psr[i].p0-w)/w);
-            if self._is_set([pulsar, self._noise_power]):
-                receive_power = self.receive_power(pulsar)
-                snr = receive_power / self._noise_power
-            elif self._is_set([pulsar, integration_time, self._n_polarisations, self._bandwidth, self._pulse_peak_amplitude, 
-                self._system_temp]):
-                """
-                Reference:
-                Buist, P.J., Engelen, S., Noroozi, A., Sundaramoorthy, P., Verhagen, S., Verhoeven, C., 
-                "Principles and Potential of Pulsar Navigation," Proceedings of the 24th International 
-                Technical Meeting of the Satellite Division of The Institute of Navigation (ION GNSS 2011), 
-                Portland, OR, September 2011, pp. 3503-3515. 
-                Equation  (15)
-                """
-                snr = (
-                    sqrt(self._n_polarisations * integration_time * self._bandwidth) 
-                    * (pulsar.ref_flux_density * self.gain_dpfu / self._system_temp)
-                    * sqrt(pulsar.pulse_width(pulsar.period - pulsar.pulse_width))
-                    / pulsar.period
-                ) 
-        else:
-            snr = self._snr
-        return snr
-
-    def receive_power(self, pulsar: SkyCoord) -> u.W:
-        if self._is_set([self._effective_area, self._polarisation_param, self._centre_frequency, self._bandwidth]):
-            receive_power = (
-                self._polarisation_param * self._effective_area 
-                * jansky_to_watt(pulsar.flux_density(self._centre_frequency))
-                * self._bandwidth
-            ).to(u.W)
-        return receive_power
-
-    def toa_err(self, ref_antenna: "Antenna" = None, ref_integration_time: u.s = None, integration_time: u.s = None) -> u.ms:
-        if self._toa_err is None:
-            if self._is_set([self._bandwidth, self._snr, ref_antenna, ref_integration_time, integration_time, ref_antenna.bandwidth, ref_antenna.snr, ref_antenna.toa_err()]):
-                toa_err = np.sqrt(
-                    ref_antenna.toa_err()**2 * (ref_antenna.snr()**2 * ref_antenna.bandwidth * ref_integration_time) 
-                    / (self.snr()**2 * self.bandwidth * integration_time) 
-                )
-            # Assume same integration time
-            if self._is_set([self._bandwidth, self._snr, ref_antenna, ref_antenna.bandwidth, ref_antenna.snr(), ref_antenna.toa_err()]):
-                toa_err = np.sqrt((
-                    (ref_antenna.toa_err()**2 * ref_antenna.snr()**2 * ref_antenna.bandwidth)
-                    / (self._snr**2 * self._bandwidth) 
-                ))
-        else:
-            toa_err = self._toa_err
-        return toa_err
 
     # @property
     # def timing_quality(self, pulsar: SkyCoord) -> u.dimensionless_unscaled:
@@ -373,7 +307,6 @@ where
     @property
     def location(self) -> u.m:
         return self._location
-    
     
     @property
     def radio_gain_equation(self) -> str:
