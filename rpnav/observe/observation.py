@@ -151,7 +151,7 @@ class Observation:
                             / ( self.bandwidth * integtime.to(u.s))
                         ).to(u.dimensionless_unscaled)
                     )
-                )
+                ).value * u.s
             if self._is_set([psr.pulse_width_10, psr.period, observer.bandwidth, observer.radio_gain, self.snr(integtime), integtime]):
                 """
                 Reference:

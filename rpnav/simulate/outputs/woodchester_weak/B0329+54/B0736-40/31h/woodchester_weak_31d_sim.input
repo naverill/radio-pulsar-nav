@@ -1,5 +1,5 @@
 <define>
-name: woodchester_weak_0.5d_sim
+name: woodchester_weak_31d_sim
 nproc: 1
 nreal: 1
 </define>
@@ -13,7 +13,7 @@ psr: name=B0329+54
 name: WOODCHESTER
 tel: woodchester
 start: 53043.0
-finish: 53043.5
+finish: 53074.0
 sampling: cadence=0.042
 sched: sched1
 </obsRun>

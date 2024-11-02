@@ -103,8 +103,8 @@ def saveConfig(f: io.TextIOWrapper, config: dict[str, str]) -> dict:
     for configName, config in config.items():
         if type(config) == dict:
             line = f"{configName}: "
-            for k2, v2 in config.items():
-                line += f"{k2}={v2},"
+            for key, param in config.items():
+                line += f"{key}={param},"
             # Remove trailing comma
             line = line[:-1]
             f.write(line)
@@ -117,12 +117,10 @@ def saveInput(outputFile: str, inputDict):
     """
     with open(outputFile, "w+") as f:
         for sectName, sectVal in inputDict.items():
-            print(sectVal)
             f.write(f"<{sectName}>\n")
-            if type(sectVal) == list:
-                for config in sectVal:
-                    saveConfig(f, config)
-                    f.write(f"\n")
+            for config in sectVal:
+                saveConfig(f, config)
+                f.write(f"\n")
             f.write(f"</{sectName}>\n\n")
         
 def formatInput(sim: SimParams, inputFile: str, outFile: str, simName: str):
@@ -186,7 +184,7 @@ cat - {runscript} >> temp \
 && mv temp {runscript}
 """
     ], shell=True)
-    
+
     # Run simulate script
     subprocess.run([
         f"tcsh {runscript}"
@@ -227,14 +225,16 @@ def run(sim: RunParams) -> dict:
         sim.parFiles[sim.psr2] = f"{simResDir}/{sim.psr2}.par"
         sim.timFiles[sim.psr2] = f"{simResDir}/{sim.psr2}.tim"
         runSimulate(sim, iterDir) 
-        shutil.rmtree(f"{sim.resultsDir}/{simName}")
+        if os.path.exists(f"{sim.resultsDir}/{simName}"):
+            shutil.rmtree(f"{sim.resultsDir}/{simName}")
 
 # if __name__ == "__main__":
 def test_main():
     observations = []
 
     # psrList=["J0835-4510", "J1017-7156", "J1024-0719", "J1600-3053", "J1732-5049", "J1909-3744", "J2129-5721", "J2241-5236", "J0613-0200", "J0711-6830", "J1022+1001", "J1045-4509", "J1125-6014", "J1446-4701", "J1545-4550", "J1603-7202", "J1643-1224", "J1713+0747", "J1730-2304", "J1744-1134", "J1824-2452A", "J1832-0836", "J1857+0943", "J1939+2134", "J2124-3358", "J2145-0750"]
-    obsTime=[0.5, 1, 2, 3, 5, 8, 13, 21, 25, 28, 31]
+    # obsTime=[0.5, 1, 2, 3, 5, 8, 13, 21, 25, 28, 31]
+    obsTime=[31]
 
     # wood_strong = Observation(
     #     observer=WOODCHESTER,
@@ -269,7 +269,7 @@ def test_main():
                     integration_time= 1800 * u.s
                 )
             )
-        if p.name in ["J0835-4510", "B0833-45"]:
+        if p.name in ["J0835-4510", "J1017-7156", "J1024-0719", "J1600-3053", "J1732-5049", "J2129-5721", "J2241-5236", "J0613-0200", "J0711-6830", "J1022+1001", "J1045-4509", "J1125-6014", "J1446-4701", "J1545-4550", "J1603-7202", "J1643-1224", "J1713+0747", "J1730-2304", "J1744-1134", "J1824-2452A", "J1832-0836", "J1857+0943", "J1939+2134", "J2124-3358", "J2145-0750"]:
             observations.append(
                 Observation(
                     PARKES,
@@ -279,61 +279,60 @@ def test_main():
                     integration_time= 1800 * u.s
                 )
             )
-        elif p.name == "B1937+21": 
-            observations.append(
-                Observation(
-                    SALA,
-                    p,
-                    snr= (-55.6 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
-                    toa_err=(3162 * u.m / const.c).to(u.s),
-                    integration_time=(36.36 * u.min).to(u.s)
-                )
-            )
-        elif p.name in ["B0736-40", "J0738-4042"]: 
-            observations.append(
-                Observation(
-                    SALA,
-                    p,
-                    snr= (-50.2 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
-                    toa_err=(9246467 * u.m / const.c).to(u.s),
-                    integration_time=(3.07 * u.min).to(u.s)
-                )
-            )
-        elif p.name == "B1451-68":
-            observations.append(
-                Observation(
-                    SALA,
-                    p,
-                    snr= (-50.0 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
-                    toa_err=(452529 * u.m / const.c).to(u.s),
-                    integration_time=(2.35 * u.min).to(u.s)
-                )
-            )
-        elif p.name == "B0950-08": 
-            observations.append(
-                Observation(
-                    SALA,
-                    p,
-                    snr= (-49.8 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
-                    toa_err=(316174 * u.m / const.c).to(u.s),
-                    integration_time=(1.04 * u.min).to(u.s)
-                )
-            )
-        elif p.name in ["B0329+54", "J0332+5434"]: 
-            observations.append(
-                Observation(
-                    observer=SALA,
-                    pulsar=p,
-                    snr= (-45.2 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
-                    toa_err=(290556 * u.m / const.c).to(u.s),
-                    integration_time=(0.12 * u.min).to(u.s)
-                )
-            )
+        # elif p.name == "B1937+21": 
+        #     observations.append(
+        #         Observation(
+        #             SALA,
+        #             p,
+        #             snr= (-55.6 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
+        #             toa_err=(3162 * u.m / const.c).to(u.s),
+        #             integration_time=(36.36 * u.min).to(u.s)
+        #         )
+        #     )
+        # elif p.name in ["B0736-40", "J0738-4042"]: 
+        #     observations.append(
+        #         Observation(
+        #             SALA,
+        #             p,
+        #             snr= (-50.2 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
+        #             toa_err=(9246467 * u.m / const.c).to(u.s),
+        #             integration_time=(3.07 * u.min).to(u.s)
+        #         )
+        #     )
+        # elif p.name == "B1451-68":
+        #     observations.append(
+        #         Observation(
+        #             SALA,
+        #             p,
+        #             snr= (-50.0 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
+        #             toa_err=(452529 * u.m / const.c).to(u.s),
+        #             integration_time=(2.35 * u.min).to(u.s)
+        #         )
+        #     )
+        # elif p.name == "B0950-08": 
+        #     observations.append(
+        #         Observation(
+        #             SALA,
+        #             p,
+        #             snr= (-49.8 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
+        #             toa_err=(316174 * u.m / const.c).to(u.s),
+        #             integration_time=(1.04 * u.min).to(u.s)
+        #         )
+        #     )
+        # elif p.name in ["B0329+54", "J0332+5434"]: 
+        #     observations.append(
+        #         Observation(
+        #             observer=SALA,
+        #             pulsar=p,
+        #             snr= (-45.2 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
+        #             toa_err=(290556 * u.m / const.c).to(u.s),
+        #             integration_time=(0.12 * u.min).to(u.s)
+        #         )
+        #     )
 
     psrNum = len(observations)
 
     observer: Antenna = WOODCHESTER
-    print(observations)
     for t in obsTime:
         for pi in range(psrNum):
             psr1 = observations[pi].pulsar

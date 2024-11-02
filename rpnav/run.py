@@ -72,7 +72,7 @@ def truncateFile(sim: RunParams, inFile: str, outFile: str, psr: str):
 def runIteration(sim: RunParams, simfile: int, resfile: str):
     tempo2Path = os.environ.get("TEMPO2")
     subprocess.run([
-        f"{tempo2Path}/bin/tempo2 -gr pulsar_positioning -o PARKES "
+        f"{tempo2Path}/bin/tempo2 -gr pulsar_positioning -o {sim.antenna.name} "
         f"-f {sim.parFiles[sim.psr1]} {sim.timFiles[sim.psr1]} "
         f"-f {sim.parFiles[sim.psr2]} {sim.timFiles[sim.psr2]} " 
         f"-a grde -e {str(sim.err)} -n -r -s {simfile}"
