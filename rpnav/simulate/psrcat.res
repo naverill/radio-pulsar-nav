@@ -1,16 +1,17 @@
-PSRJ            J1939+2134                    
-ELONG           301.973244511                 3.000e-09 
-ELAT            42.296752229                  4.000e-09 
-DM              71.0                          
-PEPOCH          55656                         
-F0              641.928222127829              8.000e-12 
-F1              -4.330987E-14                 4.000e-20 
-# WARNING: mixed coordinates ignoring PMRA 0.074
-# WARNING: mixed coordinates ignoring PMDEC -0.410
-POSEPOCH        55656                         
-CLK             TT(BIPM2018)                  
-EPHEM           DE436                         
-RM              11.0                          3.000e-01 
-PX              0.35                          3.000e-02 
-EPHVER          5                             
-UNITS           TCB                           
+PSRJ            J0835-4510                    
+RAJ             08:35:20.61149                2.000e-05 
+DECJ            -45:10:34.8751                3.000e-04 
+DM              67.771                        9.000e-03 
+PEPOCH          51559.319                     
+F0              11.1946499395                 5.000e-10 
+F1              -1.5666E-11                   2.000e-15 
+PMRA            -49.68                        6.000e-02 
+PMDEC           29.90                         1.000e-01 
+POSEPOCH        51544                         
+DMEPOCH         58645.5                       
+F2              1.0280E-21                    1.000e-24 
+RM              31.380                        1.000e-02 
+PX              3.5                           2.000e-01 
+DM1             0.0050                        1.000e-03 
+EPHVER          2                             
+UNITS           TDB                           

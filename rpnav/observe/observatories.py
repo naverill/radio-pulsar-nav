@@ -13,32 +13,32 @@ from rpnav.observe.antenna import Antenna
         https://www.cambridge.org/core/journals/publications-of-the-astronomical-society-of-australia/article/an-ultrawide-bandwidth-704-to-4-032-mhz-receiver-for-the-parkes-radio-telescope/54E3119D8DFAC9C8D70635CE3C7E8099
 """
 PARKES = Antenna(
-        name="Parkes telescope",
-        system_temp=21.0 * u.K,  # K
-        gain_dpfu=(1.0 / 1.8) * u.K / u.Jy,  # (K/Jy)
-        time=Time(60002.3, format="mjd"),
-        bandwidth=(128 * u.MHz).to(u.Hz),  # (Hz)
-        centre_frequency=(1400 * u.MHz).to(u.Hz),  # (MHz)
-        location=EarthLocation.from_geocentric(
-            -4554231.5 * u.m,
-            2816759.1 * u.m, 
-            -3454036.3 * u.m
-        ),
-        diameter=64 * u.m
+    name="Parkes",
+    system_temp=21.0 * u.K,  # K
+    gain_dpfu=(1.0 / 1.8) * u.K / u.Jy,  # (K/Jy)
+    time=Time(60002.3, format="mjd"),
+    bandwidth=(128 * u.MHz).to(u.Hz),  # (Hz)
+    centre_frequency=(1400 * u.MHz).to(u.Hz),  # (MHz)
+    location=EarthLocation.from_geocentric(
+        -4554231.5 * u.m,
+        2816759.1 * u.m, 
+        -3454036.3 * u.m
+    ),
+    diameter=64 * u.m
 )
 
 FAST = Antenna(
-        name="FAST Telescope",
-        system_temp=25.0 * u.K,  # (K)
-        gain_dpfu=16.0 * u.K / u.Jy,  # (K/Jy)
-        bandwidth=(3300 - 500) * u.MHz,  # (Hz)
-        time=Time(60002.3, format="mjd"),
-        centre_frequency=1350 * u.MHz,  # (MHz)
-        location=EarthLocation.from_geodetic(
-            lat=25.654006939684034 * u.deg, lon=106.85784898726897 * u.deg
-        ),
-        diameter=500 * u.m
-    )
+    name="FAST Telescope",
+    system_temp=25.0 * u.K,  # (K)
+    gain_dpfu=16.0 * u.K / u.Jy,  # (K/Jy)
+    bandwidth=(3300 - 500) * u.MHz,  # (Hz)
+    time=Time(60002.3, format="mjd"),
+    centre_frequency=1350 * u.MHz,  # (MHz)
+    location=EarthLocation.from_geodetic(
+        lat=25.654006939684034 * u.deg, lon=106.85784898726897 * u.deg
+    ),
+    diameter=500 * u.m
+)
 
 
 MSFD = Antenna(

@@ -25,17 +25,17 @@ class Antenna(Observer):
     def __init__(
         self,
         name: str,
-        system_temp:  u.K,
         bandwidth: u.MHz,
         location: EarthLocation,
+        time: Time,
+        centre_frequency: u.MHz,
+        system_temp:  u.K = None,
         snr: u.dimensionless_unscaled = None,
         aliases: list[str] = [],
         timescale: str = "TCB",
         n_polarisations: int = 1,
         solar_distance: u.AU = 1,
-        time: Time = None,
         itoa_code: str = None,
-        centre_frequency: u.MHz = None,
         wavelength: u.m = None,
         effective_area: u.m * u.m = None,
         diameter: u.m = None,
@@ -86,6 +86,7 @@ class Antenna(Observer):
         self._sensitivity = None
         self._radio_gain_eqn = ""
         self._radio_gain = None
+        self._time = time  
         self._polsarisation_param = None
         self._pulse_peak_amplitude = None
         self._propagate_calculations()
@@ -307,6 +308,10 @@ where
     @property
     def location(self) -> u.m:
         return self._location
+    
+    @property
+    def time(self) -> u.m:
+        return self._time
     
     @property
     def radio_gain_equation(self) -> str:

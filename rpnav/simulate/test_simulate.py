@@ -100,11 +100,11 @@ def fit_results(latlong, k: int = 2) -> KMeans:
 
 def test_rmse_surface(sim):
     fpath = f"{FILE_DIR}/outputs/parkes_1d_sim/output/"
-
-    df1 = pd.read_csv(fpath + "ALPSMLC30_S033E148_DSM_GRID_RMSE.csv", index_col=0)
+    fpath = f"{FILE_DIR}/inputs/ppta_data/averaged/"
+    df1 = pd.read_csv(fpath + "ALPSMLC30_S033E148_DSM_GRID_CHI.csv", index_col=0)
     df1 = df1.iloc[:, [i for i in range(3600) if (i % 3 == 0)]]
     
-    df2 = pd.read_csv(fpath + "ALPSMLC30_S034E148_DSM_GRID_RMSE.csv", index_col=0)
+    df2 = pd.read_csv(fpath + "ALPSMLC30_S034E148_DSM_GRID_CHI.csv", index_col=0)
     df2 = df2.iloc[:, [i for i in range(3600) if (i % 3 == 0)]]
 
     df = pd.concat([df1, df2])
@@ -112,7 +112,7 @@ def test_rmse_surface(sim):
     long = df.columns.values.astype(float)
     lat = df.index.values
     err = df.values
-    
+    print(lat)
     fig = plot_err_surface(long, lat, err)
     fig.update_layout(
         title=dict(
@@ -123,7 +123,6 @@ def test_rmse_surface(sim):
         ),
     )
     
-    
     fig.update_scenes(xaxis_title_text="Longitude (deg)",  
                       yaxis_title_text="Latitude (deg)",  
                       zaxis_title_text="χ²")
@@ -131,8 +130,8 @@ def test_rmse_surface(sim):
     fig.show()
 
 def test_grde(parkes_data):
-    psr_name = "J0711-6830_J1909-3744"
-    t = "6000h"
+    psr_name = "J0613-0200_J1022+1001"
+    t = "744h"
     simdir = f"S0"
     for i in range(100):
         fig = go.Figure()
@@ -145,7 +144,7 @@ def test_grde(parkes_data):
             )
         )
 
-        fpath = f"{FILE_DIR}/outputs/{parkes_data.name}/{psr_name}/{t}/{simdir}/results_{psr_name}_{t}_I{i}d_chi.csv"
+        fpath = f"{FILE_DIR}/outputs/{parkes_data.name}/{psr_name}/{t}/{simdir}/results_{psr_name}_{t}_I{i}d_rms.csv"
         if not os.path.exists(fpath):
             continue
 
@@ -153,8 +152,7 @@ def test_grde(parkes_data):
         long = df["Longitude(deg)"].values
         lat = df["Latitude(deg)"].values
         err = df["Error"]
-        print(long)
-        print(lat)
+        print(err)
         fig.add_trace(
             go.Scattermap(
                 mode="lines",
@@ -163,7 +161,7 @@ def test_grde(parkes_data):
                 lat = lat,
                 # line={'width':1},
                 # opacity=1,
-                # text=err
+                text=[str(e) for e in err] 
             )
         )
 

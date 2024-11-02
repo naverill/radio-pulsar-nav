@@ -7,7 +7,7 @@ from astropy.time import Time
 from astropy.coordinates import AltAz
 from astropy.coordinates.angles import Angle
 
-from rpnav.observe import Antenna
+from rpnav.observe.antenna import Antenna
 from rpnav.observe.pulsar import Pulsar
 from rpnav.conversions import jansky_to_watt
 from astropy import constants as const
@@ -24,7 +24,7 @@ class Observation:
         toa_err:  u.ns = None,
     ):
         self._pulsar = pulsar
-        self._antenna = Antenna
+        self._antenna = observer
         self._localtime = localtime
         self._integration_time = integration_time
         self._toa_err : u.ns = toa_err
@@ -131,32 +131,28 @@ class Observation:
         integtime = integration_time if integration_time is not None else self._integration_time
         observer = self._antenna
         psr = self._pulsar
-
-        if reference.pulsar.name != psr.name:
-            raise Exception("Reference pulsar must be the same as observation pulsar")
         
         if self._toa_err is None:
-            if self._is_set([observer, observer.bandwidth, self.snr(integtime), reference, reference.antenna.bandwidth, reference.snr(integtime)]):
+            if self._is_set([self.snr(integtime), reference]):
                 """
+                Derived from:
                 Reference:
-                    Radio-Frequency Pulsar Observation using Small-Aperture Antennas (Eqn 8)
+                    A STUDY ON THE ACCURACY OF RADIO PULSAR NAVIGATION  SYSTEMS 
+                    Gon¸calo Tavares, Diogo Brito, and Jorge Fernandes
+                    (Eqn 7)
                 """
-                toa_err = np.sqrt(
-                    reference.toa_err()**2 * (reference.snr()**2 * reference.bandwidth * reference.integration_time) 
-                    / (self.snr(integtime)**2 * observer.bandwidth * integtime) 
+                if reference.pulsar.name != psr.name:
+                    raise Exception(f"Reference pulsar must be the same as observation pulsar {reference.pulsar.name} {psr.name}")
+                toa_err = (
+                    reference.toa_err().to(u.s) * np.sqrt(
+                        (reference.snr() / self.snr(integtime)).to(u.dimensionless_unscaled)**2
+                        * (
+                            (reference.bandwidth * reference.integration_time.to(u.s))
+                            / ( self.bandwidth * integtime.to(u.s))
+                        ).to(u.dimensionless_unscaled)
+                    )
                 )
-            if self._is_set([observer.bandwidth, observer.snr, reference, reference.bandwidth, reference.snr(), reference.toa_err]):
-                """
-                Assume observers have same integration time
-
-                Reference:
-                    Radio-Frequency Pulsar Observation using Small-Aperture Antennas (Eqn 8)
-                """
-                toa_err = np.sqrt((
-                    (reference.toa_err**2 * reference.snr(integtime)**2 * reference.bandwidth)
-                    / (self.snr(integtime)**2 * observer.bandwidth) 
-                ))
-            if self._is_set([self._pulse_width_10, self._period, observer.bandwidth, observer.radio_gain, observer.snr(self, integtime), integtime]):
+            if self._is_set([psr.pulse_width_10, psr.period, observer.bandwidth, observer.radio_gain, self.snr(integtime), integtime]):
                 """
                 Reference:
                     Radio-Frequency Pulsar Observation using Small-Aperture Antennas (Eqn 9)
@@ -220,12 +216,12 @@ class Observation:
         return self._integration_time
 
     @property
-    def toa_err(self) -> u.ms:
-        return self._toa_err
-
-    @property
     def localtime(self) -> Time:
         return self._localtime
+
+    @property
+    def bandwidth(self) -> u.MHz:
+        return self._antenna.bandwidth
 
     def _is_set(self, vals: list[Any]) -> bool:
         return None not in vals

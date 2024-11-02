@@ -1,14 +1,21 @@
+2024-11-02 09:53:40.858 | WARNING  | pint.observatory:__init__:213 - Observatory 'parkes' already present; overwriting...
+2024-11-02 09:53:40.859 | WARNING  | pint.observatory:__init__:213 - Observatory 'parkes' already present; overwriting...
+2024-11-02 09:53:40.860 | WARNING  | pint.observatory:__init__:213 - Observatory 'fast telescope' already present; overwriting...
+2024-11-02 09:53:40.861 | WARNING  | pint.observatory:__init__:213 - Observatory 'msfd' already present; overwriting...
+2024-11-02 09:53:40.862 | WARNING  | pint.observatory:__init__:213 - Observatory 'navigate' already present; overwriting...
+2024-11-02 09:53:40.863 | WARNING  | pint.observatory:__init__:213 - Observatory 'woodchester' already present; overwriting...
+============================= test session starts ==============================
+platform linux -- Python 3.11.0, pytest-8.3.2, pluggy-1.5.0
+rootdir: /home/naverill/workspace/rpnav
+configfile: pyproject.toml
+collected 1 item
+
+simulate.py::test_main 2024-11-02 09:53:41.134 | WARNING  | pint.observatory:__init__:213 - Observatory 'sala' already present; overwriting...
 At the start
 init control
 Load inputs
 Reading script
-Reading line # Simulate Navigate telescope observing Vela 
-
-# Simulate Navigate telescope observing Vela
 Reading line <define>
-
-Reading line 
-
 
 Reading line <pulsars>
 
@@ -16,89 +23,83 @@ processing: psr:
 ... name
 processing: psr:
 ... name
-Reading catalogue for J0835-4510
-HEre with Name 13
+Reading catalogue for B0736-40
+HEre with Name 11
 Done loading ephemeris
-Looking for parameter set 13
-str = RAJ 08:35:20.61149
-Evaluating expression: v = 08:35:20.61149
-Evaluated to: v = 08:35:20.61149
-str = DECJ -45:10:34.8751
-Evaluating expression: v = -45:10:34.8751
-Evaluated to: v = -45:10:34.8751
-str = DM 67.771
-Evaluating expression: v = 67.771
-Evaluated to: v = 67.771
-str = PEPOCH 51559.319
-Evaluating expression: v = 51559.319
-Evaluated to: v = 51559.319
-str = F0 11.1946499395
-Evaluating expression: v = 11.1946499395
-Evaluated to: v = 11.1946499395
-str = F1 -1.5666E-11
-Evaluating expression: v = -1.5666E-11
-Evaluated to: v = -1.5666E-11
-str = PMRA -49.68
-Evaluating expression: v = -49.68
-Evaluated to: v = -49.68
-str = PMDEC 29.90
-Evaluating expression: v = 29.90
-Evaluated to: v = 29.90
-str = POSEPOCH 51544
-Evaluating expression: v = 51544
-Evaluated to: v = 51544
-str = DMEPOCH 58645.5
-Evaluating expression: v = 58645.5
-Evaluated to: v = 58645.5
-str = F2 1.0280E-21
-Evaluating expression: v = 1.0280E-21
-Evaluated to: v = 1.0280E-21
-str = PX 3.5
-Evaluating expression: v = 3.5
-Evaluated to: v = 3.5
-str = DM1 0.0050
-Evaluating expression: v = 0.0050
-Evaluated to: v = 0.0050
-Dist = 6.97065e+22 6.97065e+22
-Reading catalogue for J1939+2134
-HEre with Name 9
+Looking for parameter set 11
+str = RAJ 07:38:32.317
+Evaluating expression: v = 07:38:32.317
+Evaluated to: v = 07:38:32.317
+str = DECJ -40:42:40.19
+Evaluating expression: v = -40:42:40.19
+Evaluated to: v = -40:42:40.19
+str = DM 160.49
+Evaluating expression: v = 160.49
+Evaluated to: v = 160.49
+str = PEPOCH 51700
+Evaluating expression: v = 51700
+Evaluated to: v = 51700
+str = F0 2.667235748
+Evaluating expression: v = 2.667235748
+Evaluated to: v = 2.667235748
+str = F1 -1.150E-14
+Evaluating expression: v = -1.150E-14
+Evaluated to: v = -1.150E-14
+str = PMRA -37.0
+Evaluating expression: v = -37.0
+Evaluated to: v = -37.0
+str = PMDEC 30.0
+Evaluating expression: v = 30.0
+Evaluated to: v = 30.0
+str = POSEPOCH 51360
+Evaluating expression: v = 51360
+Evaluated to: v = 51360
+str = DMEPOCH 51700
+Evaluating expression: v = 51700
+Evaluated to: v = 51700
+str = F2 -4.0E-26
+Evaluating expression: v = -4.0E-26
+Evaluated to: v = -4.0E-26
+Dist = 1.65073e+23 1.65073e+23
+Reading catalogue for B0329+54
+HEre with Name 11
 Done loading ephemeris
-Looking for parameter set 9
-str = ELONG 301.973244511
-Evaluating expression: v = 301.973244511
-Evaluated to: v = 301.973244511
-str = ELAT 42.296752229
-Evaluating expression: v = 42.296752229
-Evaluated to: v = 42.296752229
-str = DM 71.0
-Evaluating expression: v = 71.0
-Evaluated to: v = 71.0
-str = PEPOCH 55656
-Evaluating expression: v = 55656
-Evaluated to: v = 55656
-str = F0 641.928222127829
-Evaluating expression: v = 641.928222127829
-Evaluated to: v = 641.928222127829
-str = F1 -4.330987E-14
-Evaluating expression: v = -4.330987E-14
-Evaluated to: v = -4.330987E-14
-str = # WARNING:
-Evaluating expression: v = WARNING:
-Evaluated to: v = WARNING:
-str = POSEPOCH 55656
-Evaluating expression: v = 55656
-Evaluated to: v = 55656
-str = PX 0.35
-Evaluating expression: v = 0.35
-Evaluated to: v = 0.35
-Dist = 7.30277e+22 7.30277e+22
-Reading line 
-
-
+Looking for parameter set 11
+str = RAJ 03:32:59.4096
+Evaluating expression: v = 03:32:59.4096
+Evaluated to: v = 03:32:59.4096
+str = DECJ +54:34:43.329
+Evaluating expression: v = +54:34:43.329
+Evaluated to: v = +54:34:43.329
+str = DM 26.76410
+Evaluating expression: v = 26.76410
+Evaluated to: v = 26.76410
+str = PEPOCH 46473.0
+Evaluating expression: v = 46473.0
+Evaluated to: v = 46473.0
+str = F0 1.399541538720
+Evaluating expression: v = 1.399541538720
+Evaluated to: v = 1.399541538720
+str = F1 -4.011970E-15
+Evaluating expression: v = -4.011970E-15
+Evaluated to: v = -4.011970E-15
+str = PMRA 16.97
+Evaluating expression: v = 16.97
+Evaluated to: v = 16.97
+str = PMDEC -10.37
+Evaluating expression: v = -10.37
+Evaluated to: v = -10.37
+str = POSEPOCH 56000.0
+Evaluating expression: v = 56000.0
+Evaluated to: v = 56000.0
+str = F2 5.3E-28
+Evaluating expression: v = 5.3E-28
+Evaluated to: v = 5.3E-28
+str = PX 0.59
+Evaluating expression: v = 0.59
+Evaluated to: v = 0.59
+Dist = 2.75285e+22 2.75285e+22
 Reading line <obsRun>
-
-Reading line 
-
 
 Reading line <schedule>
 
@@ -115,84 +116,84 @@ Complete directory structure
 Reading observatory positions from /usr/local/tempo2/observatory/observatories.dat
 Completed reading observatory positions
 Creating realisation 0
-Looking for parameter set 13
-str = RAJ 08:35:20.61149
-Evaluating expression: v = 08:35:20.61149
-Evaluated to: v = 08:35:20.61149
-str = DECJ -45:10:34.8751
-Evaluating expression: v = -45:10:34.8751
-Evaluated to: v = -45:10:34.8751
-str = DM 67.771
-Evaluating expression: v = 67.771
-Evaluated to: v = 67.771
-str = PEPOCH 51559.319
-Evaluating expression: v = 51559.319
-Evaluated to: v = 51559.319
-str = F0 11.1946499395
-Evaluating expression: v = 11.1946499395
-Evaluated to: v = 11.1946499395
-str = F1 -1.5666E-11
-Evaluating expression: v = -1.5666E-11
-Evaluated to: v = -1.5666E-11
-str = PMRA -49.68
-Evaluating expression: v = -49.68
-Evaluated to: v = -49.68
-str = PMDEC 29.90
-Evaluating expression: v = 29.90
-Evaluated to: v = 29.90
-str = POSEPOCH 51544
-Evaluating expression: v = 51544
-Evaluated to: v = 51544
-str = DMEPOCH 58645.5
-Evaluating expression: v = 58645.5
-Evaluated to: v = 58645.5
-str = F2 1.0280E-21
-Evaluating expression: v = 1.0280E-21
-Evaluated to: v = 1.0280E-21
-str = PX 3.5
-Evaluating expression: v = 3.5
-Evaluated to: v = 3.5
-str = DM1 0.0050
-Evaluating expression: v = 0.0050
-Evaluated to: v = 0.0050
-Dist = 6.97065e+22 6.97065e+22
-Looking for parameter set 9
-str = ELONG 301.973244511
-Evaluating expression: v = 301.973244511
-Evaluated to: v = 301.973244511
-str = ELAT 42.296752229
-Evaluating expression: v = 42.296752229
-Evaluated to: v = 42.296752229
-str = DM 71.0
-Evaluating expression: v = 71.0
-Evaluated to: v = 71.0
-str = PEPOCH 55656
-Evaluating expression: v = 55656
-Evaluated to: v = 55656
-str = F0 641.928222127829
-Evaluating expression: v = 641.928222127829
-Evaluated to: v = 641.928222127829
-str = F1 -4.330987E-14
-Evaluating expression: v = -4.330987E-14
-Evaluated to: v = -4.330987E-14
-str = # WARNING:
-Evaluating expression: v = WARNING:
-Evaluated to: v = WARNING:
-str = POSEPOCH 55656
-Evaluating expression: v = 55656
-Evaluated to: v = 55656
-str = PX 0.35
-Evaluating expression: v = 0.35
-Evaluated to: v = 0.35
-Dist = 7.30277e+22 7.30277e+22
+Looking for parameter set 11
+str = RAJ 07:38:32.317
+Evaluating expression: v = 07:38:32.317
+Evaluated to: v = 07:38:32.317
+str = DECJ -40:42:40.19
+Evaluating expression: v = -40:42:40.19
+Evaluated to: v = -40:42:40.19
+str = DM 160.49
+Evaluating expression: v = 160.49
+Evaluated to: v = 160.49
+str = PEPOCH 51700
+Evaluating expression: v = 51700
+Evaluated to: v = 51700
+str = F0 2.667235748
+Evaluating expression: v = 2.667235748
+Evaluated to: v = 2.667235748
+str = F1 -1.150E-14
+Evaluating expression: v = -1.150E-14
+Evaluated to: v = -1.150E-14
+str = PMRA -37.0
+Evaluating expression: v = -37.0
+Evaluated to: v = -37.0
+str = PMDEC 30.0
+Evaluating expression: v = 30.0
+Evaluated to: v = 30.0
+str = POSEPOCH 51360
+Evaluating expression: v = 51360
+Evaluated to: v = 51360
+str = DMEPOCH 51700
+Evaluating expression: v = 51700
+Evaluated to: v = 51700
+str = F2 -4.0E-26
+Evaluating expression: v = -4.0E-26
+Evaluated to: v = -4.0E-26
+Dist = 1.65073e+23 1.65073e+23
+Looking for parameter set 11
+str = RAJ 03:32:59.4096
+Evaluating expression: v = 03:32:59.4096
+Evaluated to: v = 03:32:59.4096
+str = DECJ +54:34:43.329
+Evaluating expression: v = +54:34:43.329
+Evaluated to: v = +54:34:43.329
+str = DM 26.76410
+Evaluating expression: v = 26.76410
+Evaluated to: v = 26.76410
+str = PEPOCH 46473.0
+Evaluating expression: v = 46473.0
+Evaluated to: v = 46473.0
+str = F0 1.399541538720
+Evaluating expression: v = 1.399541538720
+Evaluated to: v = 1.399541538720
+str = F1 -4.011970E-15
+Evaluating expression: v = -4.011970E-15
+Evaluated to: v = -4.011970E-15
+str = PMRA 16.97
+Evaluating expression: v = 16.97
+Evaluated to: v = 16.97
+str = PMDEC -10.37
+Evaluating expression: v = -10.37
+Evaluated to: v = -10.37
+str = POSEPOCH 56000.0
+Evaluating expression: v = 56000.0
+Evaluated to: v = 56000.0
+str = F2 5.3E-28
+Evaluating expression: v = 5.3E-28
+Evaluated to: v = 5.3E-28
+str = PX 0.59
+Evaluating expression: v = 0.59
+Evaluated to: v = 0.59
+Dist = 2.75285e+22 2.75285e+22
 process ObsRun
-Evaluating expression: v = 60002.3
-Evaluated to: v = 60002.3
-Evaluating expression: v = 60002.6
-Evaluated to: v = 60002.6
+Evaluating expression: v = 53043.0
+Evaluated to: v = 53043.0
+Evaluating expression: v = 53043.5
+Evaluated to: v = 53043.5
 process Sched
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
+Evaluating expression: v = 2.4126898871454585e-07
+Evaluated to: v = 2.4126898871454585e-07
 Evaluating expression: v = 1
 Evaluated to: v = 1
 Evaluating expression: v = 0
@@ -205,8 +206,8 @@ Evaluating expression: v =
 Evaluated to: v = 
 Evaluating expression: v = 
 Evaluated to: v = 
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
+Evaluating expression: v = 1.262586845681024e-07
+Evaluated to: v = 1.262586845681024e-07
 Evaluating expression: v = 1
 Evaluated to: v = 1
 Evaluating expression: v = 0
@@ -227,8 +228,8 @@ Found sched 0
 Evaluating expression: v = 
 Evaluated to: v = 
 Setting Result = 820 0 0
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
+Evaluating expression: v = 2.4126898871454585e-07
+Evaluated to: v = 2.4126898871454585e-07
 Evaluating expression: v = 1
 Evaluated to: v = 1
 Evaluating expression: v = 0
@@ -237,16 +238,16 @@ Evaluating expression: v = 820
 Evaluated to: v = 820
 Using ha for telescope 131
 Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.29085691512815115001-0.5)
+Evaluated to: v = 8*(0.66942584553487272103-0.5)
 Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 128.836
-almst = 0.144848, ha0 = 0.78697, ha = -1.67314
+RA = 114.635
+almst = 0.790918, ha0 = 0.472488, ha = 1.35541
 Outlier here:  
 Evaluating expression: v = 
 Evaluated to: v = 
-Setting Result = -1.67314 1 0
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
+Setting Result = 1.35541 0 1
+Evaluating expression: v = 1.262586845681024e-07
+Evaluated to: v = 1.262586845681024e-07
 Evaluating expression: v = 1
 Evaluated to: v = 1
 Evaluating expression: v = 0
@@ -255,56 +256,18 @@ Evaluating expression: v = 820
 Evaluated to: v = 820
 Using ha for telescope 131
 Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.78698548529925416162-0.5)
+Evaluated to: v = 8*(0.43741331748604150853-0.5)
 Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 0
-almst = 0.144848, ha0 = 0.144848, ha = 2.29588
-Outlier here:  
-Evaluating expression: v = 0.042
-Evaluated to: v = 0.042
-Evaluating expression: v = 
-Evaluated to: v = 
-Setting Result = 0.042 0 1
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
-Evaluating expression: v = 1
-Evaluated to: v = 1
-Evaluating expression: v = 0
-Evaluated to: v = 0
-Evaluating expression: v = 820
-Evaluated to: v = 820
-Using ha for telescope 131
-Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.25012047385101215946-0.5)
-Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 128.836
-almst = 0.186963, ha0 = 0.829085, ha = -1.99904
-Outlier here:  
-Evaluating expression: v = 
-Evaluated to: v = 
-Setting Result = -1.99904 1 1
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
-Evaluating expression: v = 1
-Evaluated to: v = 1
-Evaluating expression: v = 0
-Evaluated to: v = 0
-Evaluating expression: v = 820
-Evaluated to: v = 820
-Using ha for telescope 131
-Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.14099142401036607319-0.5)
-Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 0
-almst = 0.186963, ha0 = 0.186963, ha = -2.87207
+RA = 114.635
+almst = 0.790918, ha0 = 0.472488, ha = -0.500693
 Outlier here:  
 Evaluating expression: v = 0.042
 Evaluated to: v = 0.042
 Evaluating expression: v = 
 Evaluated to: v = 
 Setting Result = 0.042 0 2
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
+Evaluating expression: v = 2.4126898871454585e-07
+Evaluated to: v = 2.4126898871454585e-07
 Evaluating expression: v = 1
 Evaluated to: v = 1
 Evaluating expression: v = 0
@@ -313,16 +276,16 @@ Evaluating expression: v = 820
 Evaluated to: v = 820
 Using ha for telescope 131
 Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.91762385492157749756-0.5)
+Evaluated to: v = 8*(0.7305408235943272599-0.5)
 Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 128.836
-almst = 0.229078, ha0 = 0.8712, ha = 3.34099
+RA = 114.635
+almst = 0.833033, ha0 = 0.514603, ha = 1.84433
 Outlier here:  
 Evaluating expression: v = 
 Evaluated to: v = 
-Setting Result = 3.34099 1 2
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
+Setting Result = 1.84433 0 3
+Evaluating expression: v = 1.262586845681024e-07
+Evaluated to: v = 1.262586845681024e-07
 Evaluating expression: v = 1
 Evaluated to: v = 1
 Evaluating expression: v = 0
@@ -331,56 +294,18 @@ Evaluating expression: v = 820
 Evaluated to: v = 820
 Using ha for telescope 131
 Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.86581171556976899151-0.5)
+Evaluated to: v = 8*(0.31891989319560115623-0.5)
 Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 0
-almst = 0.229078, ha0 = 0.229078, ha = 2.92649
-Outlier here:  
-Evaluating expression: v = 0.042
-Evaluated to: v = 0.042
-Evaluating expression: v = 
-Evaluated to: v = 
-Setting Result = 0.042 0 3
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
-Evaluating expression: v = 1
-Evaluated to: v = 1
-Evaluating expression: v = 0
-Evaluated to: v = 0
-Evaluating expression: v = 820
-Evaluated to: v = 820
-Using ha for telescope 131
-Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.15216418778341361806-0.5)
-Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 128.836
-almst = 0.271193, ha0 = 0.913315, ha = -2.78269
-Outlier here:  
-Evaluating expression: v = 
-Evaluated to: v = 
-Setting Result = -2.78269 1 3
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
-Evaluating expression: v = 1
-Evaluated to: v = 1
-Evaluating expression: v = 0
-Evaluated to: v = 0
-Evaluating expression: v = 820
-Evaluated to: v = 820
-Using ha for telescope 131
-Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.29447385908441475744-0.5)
-Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 0
-almst = 0.271193, ha0 = 0.271193, ha = -1.64421
+RA = 114.635
+almst = 0.833033, ha0 = 0.514603, ha = -1.44864
 Outlier here:  
 Evaluating expression: v = 0.042
 Evaluated to: v = 0.042
 Evaluating expression: v = 
 Evaluated to: v = 
 Setting Result = 0.042 0 4
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
+Evaluating expression: v = 2.4126898871454585e-07
+Evaluated to: v = 2.4126898871454585e-07
 Evaluating expression: v = 1
 Evaluated to: v = 1
 Evaluating expression: v = 0
@@ -389,16 +314,16 @@ Evaluating expression: v = 820
 Evaluated to: v = 820
 Using ha for telescope 131
 Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.47009950351670837243-0.5)
+Evaluated to: v = 8*(0.41270617195700903812-0.5)
 Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 128.836
-almst = 0.313308, ha0 = 0.95543, ha = -0.239204
+RA = 114.635
+almst = 0.875148, ha0 = 0.556718, ha = -0.698351
 Outlier here:  
 Evaluating expression: v = 
 Evaluated to: v = 
-Setting Result = -0.239204 1 4
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
+Setting Result = -0.698351 0 5
+Evaluating expression: v = 1.262586845681024e-07
+Evaluated to: v = 1.262586845681024e-07
 Evaluating expression: v = 1
 Evaluated to: v = 1
 Evaluating expression: v = 0
@@ -407,56 +332,18 @@ Evaluating expression: v = 820
 Evaluated to: v = 820
 Using ha for telescope 131
 Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.93245771874963723214-0.5)
+Evaluated to: v = 8*(0.81728432346537804865-0.5)
 Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 0
-almst = 0.313308, ha0 = 0.313308, ha = 3.45966
-Outlier here:  
-Evaluating expression: v = 0.042
-Evaluated to: v = 0.042
-Evaluating expression: v = 
-Evaluated to: v = 
-Setting Result = 0.042 0 5
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
-Evaluating expression: v = 1
-Evaluated to: v = 1
-Evaluating expression: v = 0
-Evaluated to: v = 0
-Evaluating expression: v = 820
-Evaluated to: v = 820
-Using ha for telescope 131
-Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.59653626349673982698-0.5)
-Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 128.836
-almst = 0.355423, ha0 = 0.997545, ha = 0.77229
-Outlier here:  
-Evaluating expression: v = 
-Evaluated to: v = 
-Setting Result = 0.77229 1 5
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
-Evaluating expression: v = 1
-Evaluated to: v = 1
-Evaluating expression: v = 0
-Evaluated to: v = 0
-Evaluating expression: v = 820
-Evaluated to: v = 820
-Using ha for telescope 131
-Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.19967748788177908104-0.5)
-Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 0
-almst = 0.355423, ha0 = 0.355423, ha = -2.40258
+RA = 114.635
+almst = 0.875148, ha0 = 0.556718, ha = 2.53827
 Outlier here:  
 Evaluating expression: v = 0.042
 Evaluated to: v = 0.042
 Evaluating expression: v = 
 Evaluated to: v = 
 Setting Result = 0.042 0 6
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
+Evaluating expression: v = 2.4126898871454585e-07
+Evaluated to: v = 2.4126898871454585e-07
 Evaluating expression: v = 1
 Evaluated to: v = 1
 Evaluating expression: v = 0
@@ -465,16 +352,16 @@ Evaluating expression: v = 820
 Evaluated to: v = 820
 Using ha for telescope 131
 Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.44552053777629524456-0.5)
+Evaluated to: v = 8*(0.78926943703304730526-0.5)
 Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 128.836
-almst = 0.397538, ha0 = 0.0396603, ha = -0.435836
+RA = 114.635
+almst = 0.917263, ha0 = 0.598833, ha = 2.31416
 Outlier here:  
 Evaluating expression: v = 
 Evaluated to: v = 
-Setting Result = -0.435836 1 6
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
+Setting Result = 2.31416 0 7
+Evaluating expression: v = 1.262586845681024e-07
+Evaluated to: v = 1.262586845681024e-07
 Evaluating expression: v = 1
 Evaluated to: v = 1
 Evaluating expression: v = 0
@@ -483,18 +370,18 @@ Evaluating expression: v = 820
 Evaluated to: v = 820
 Using ha for telescope 131
 Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.98503284505219967926-0.5)
+Evaluated to: v = 8*(0.48153630119784185393-0.5)
 Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 0
-almst = 0.397538, ha0 = 0.397538, ha = 3.88026
+RA = 114.635
+almst = 0.917263, ha0 = 0.598833, ha = -0.14771
 Outlier here:  
 Evaluating expression: v = 0.042
 Evaluated to: v = 0.042
 Evaluating expression: v = 
 Evaluated to: v = 
-Setting Result = 0.042 0 7
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
+Setting Result = 0.042 0 8
+Evaluating expression: v = 2.4126898871454585e-07
+Evaluated to: v = 2.4126898871454585e-07
 Evaluating expression: v = 1
 Evaluated to: v = 1
 Evaluating expression: v = 0
@@ -503,16 +390,16 @@ Evaluating expression: v = 820
 Evaluated to: v = 820
 Using ha for telescope 131
 Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.044254450137786206787-0.5)
+Evaluated to: v = 8*(0.91007657021053056656-0.5)
 Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 128.836
-almst = 0.439653, ha0 = 0.0817753, ha = -3.64596
+RA = 114.635
+almst = 0.959378, ha0 = 0.640948, ha = 3.28061
 Outlier here:  
 Evaluating expression: v = 
 Evaluated to: v = 
-Setting Result = -3.64596 1 7
-Evaluating expression: v = 2.6471e-4
-Evaluated to: v = 2.6471e-4
+Setting Result = 3.28061 0 9
+Evaluating expression: v = 1.262586845681024e-07
+Evaluated to: v = 1.262586845681024e-07
 Evaluating expression: v = 1
 Evaluated to: v = 1
 Evaluating expression: v = 0
@@ -521,47 +408,321 @@ Evaluating expression: v = 820
 Evaluated to: v = 820
 Using ha for telescope 131
 Evaluating expression: v = 8*(ran(linear)-0.5)
-Evaluated to: v = 8*(0.060860629207655003725-0.5)
+Evaluated to: v = 8*( 0.54647076957544094-0.5)
 Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
-RA = 0
-almst = 0.439653, ha0 = 0.439653, ha = -3.51311
+RA = 114.635
+almst = 0.959378, ha0 = 0.640948, ha = 0.371766
+Outlier here:  
+Evaluating expression: v = 0.042
+Evaluated to: v = 0.042
+Evaluating expression: v = 
+Evaluated to: v = 
+Setting Result = 0.042 0 10
+Evaluating expression: v = 2.4126898871454585e-07
+Evaluated to: v = 2.4126898871454585e-07
+Evaluating expression: v = 1
+Evaluated to: v = 1
+Evaluating expression: v = 0
+Evaluated to: v = 0
+Evaluating expression: v = 820
+Evaluated to: v = 820
+Using ha for telescope 131
+Evaluating expression: v = 8*(ran(linear)-0.5)
+Evaluated to: v = 8*(0.74892135470847631673-0.5)
+Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
+RA = 114.635
+almst = 0.00149263, ha0 = 0.683063, ha = 1.99137
+Outlier here:  
+Evaluating expression: v = 
+Evaluated to: v = 
+Setting Result = 1.99137 0 11
+Evaluating expression: v = 1.262586845681024e-07
+Evaluated to: v = 1.262586845681024e-07
+Evaluating expression: v = 1
+Evaluated to: v = 1
+Evaluating expression: v = 0
+Evaluated to: v = 0
+Evaluating expression: v = 820
+Evaluated to: v = 820
+Using ha for telescope 131
+Evaluating expression: v = 8*(ran(linear)-0.5)
+Evaluated to: v = 8*(0.3835787208246949076-0.5)
+Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
+RA = 114.635
+almst = 0.00149263, ha0 = 0.683063, ha = -0.93137
+Outlier here:  
+Evaluating expression: v = 0.042
+Evaluated to: v = 0.042
+Evaluating expression: v = 
+Evaluated to: v = 
+Setting Result = 0.042 0 12
+Evaluating expression: v = 2.4126898871454585e-07
+Evaluated to: v = 2.4126898871454585e-07
+Evaluating expression: v = 1
+Evaluated to: v = 1
+Evaluating expression: v = 0
+Evaluated to: v = 0
+Evaluating expression: v = 820
+Evaluated to: v = 820
+Using ha for telescope 131
+Evaluating expression: v = 8*(ran(linear)-0.5)
+Evaluated to: v = 8*(0.8372844471217329998-0.5)
+Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
+RA = 114.635
+almst = 0.0436076, ha0 = 0.725178, ha = 2.69828
+Outlier here:  
+Evaluating expression: v = 
+Evaluated to: v = 
+Setting Result = 2.69828 0 13
+Evaluating expression: v = 1.262586845681024e-07
+Evaluated to: v = 1.262586845681024e-07
+Evaluating expression: v = 1
+Evaluated to: v = 1
+Evaluating expression: v = 0
+Evaluated to: v = 0
+Evaluating expression: v = 820
+Evaluated to: v = 820
+Using ha for telescope 131
+Evaluating expression: v = 8*(ran(linear)-0.5)
+Evaluated to: v = 8*(0.48972898127737662932-0.5)
+Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
+RA = 114.635
+almst = 0.0436076, ha0 = 0.725178, ha = -0.0821681
+Outlier here:  
+Evaluating expression: v = 0.042
+Evaluated to: v = 0.042
+Evaluating expression: v = 
+Evaluated to: v = 
+Setting Result = 0.042 0 14
+Evaluating expression: v = 2.4126898871454585e-07
+Evaluated to: v = 2.4126898871454585e-07
+Evaluating expression: v = 1
+Evaluated to: v = 1
+Evaluating expression: v = 0
+Evaluated to: v = 0
+Evaluating expression: v = 820
+Evaluated to: v = 820
+Using ha for telescope 131
+Evaluating expression: v = 8*(ran(linear)-0.5)
+Evaluated to: v = 8*(0.92448393905639736357-0.5)
+Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
+RA = 114.635
+almst = 0.0857226, ha0 = 0.767293, ha = 3.39587
+Outlier here:  
+Evaluating expression: v = 
+Evaluated to: v = 
+Setting Result = 3.39587 0 15
+Evaluating expression: v = 1.262586845681024e-07
+Evaluated to: v = 1.262586845681024e-07
+Evaluating expression: v = 1
+Evaluated to: v = 1
+Evaluating expression: v = 0
+Evaluated to: v = 0
+Evaluating expression: v = 820
+Evaluated to: v = 820
+Using ha for telescope 131
+Evaluating expression: v = 8*(ran(linear)-0.5)
+Evaluated to: v = 8*(0.90435649056554689995-0.5)
+Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
+RA = 114.635
+almst = 0.0857226, ha0 = 0.767293, ha = 3.23485
+Outlier here:  
+Evaluating expression: v = 0.042
+Evaluated to: v = 0.042
+Evaluating expression: v = 
+Evaluated to: v = 
+Setting Result = 0.042 0 16
+Evaluating expression: v = 2.4126898871454585e-07
+Evaluated to: v = 2.4126898871454585e-07
+Evaluating expression: v = 1
+Evaluated to: v = 1
+Evaluating expression: v = 0
+Evaluated to: v = 0
+Evaluating expression: v = 820
+Evaluated to: v = 820
+Using ha for telescope 131
+Evaluating expression: v = 8*(ran(linear)-0.5)
+Evaluated to: v = 8*(0.56998345013008999693-0.5)
+Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
+RA = 114.635
+almst = 0.127838, ha0 = 0.809408, ha = 0.559868
+Outlier here:  
+Evaluating expression: v = 
+Evaluated to: v = 
+Setting Result = 0.559868 0 17
+Evaluating expression: v = 1.262586845681024e-07
+Evaluated to: v = 1.262586845681024e-07
+Evaluating expression: v = 1
+Evaluated to: v = 1
+Evaluating expression: v = 0
+Evaluated to: v = 0
+Evaluating expression: v = 820
+Evaluated to: v = 820
+Using ha for telescope 131
+Evaluating expression: v = 8*(ran(linear)-0.5)
+Evaluated to: v = 8*(0.069772875884029292304-0.5)
+Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
+RA = 114.635
+almst = 0.127838, ha0 = 0.809408, ha = -3.44182
+Outlier here:  
+Evaluating expression: v = 0.042
+Evaluated to: v = 0.042
+Evaluating expression: v = 
+Evaluated to: v = 
+Setting Result = 0.042 0 18
+Evaluating expression: v = 2.4126898871454585e-07
+Evaluated to: v = 2.4126898871454585e-07
+Evaluating expression: v = 1
+Evaluated to: v = 1
+Evaluating expression: v = 0
+Evaluated to: v = 0
+Evaluating expression: v = 820
+Evaluated to: v = 820
+Using ha for telescope 131
+Evaluating expression: v = 8*(ran(linear)-0.5)
+Evaluated to: v = 8*(0.11497745875152234896-0.5)
+Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
+RA = 114.635
+almst = 0.169953, ha0 = 0.851523, ha = -3.08018
+Outlier here:  
+Evaluating expression: v = 
+Evaluated to: v = 
+Setting Result = -3.08018 0 19
+Evaluating expression: v = 1.262586845681024e-07
+Evaluated to: v = 1.262586845681024e-07
+Evaluating expression: v = 1
+Evaluated to: v = 1
+Evaluating expression: v = 0
+Evaluated to: v = 0
+Evaluating expression: v = 820
+Evaluated to: v = 820
+Using ha for telescope 131
+Evaluating expression: v = 8*(ran(linear)-0.5)
+Evaluated to: v = 8*(0.087211690397749577763-0.5)
+Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
+RA = 114.635
+almst = 0.169953, ha0 = 0.851523, ha = -3.30231
+Outlier here:  
+Evaluating expression: v = 0.042
+Evaluated to: v = 0.042
+Evaluating expression: v = 
+Evaluated to: v = 
+Setting Result = 0.042 0 20
+Evaluating expression: v = 2.4126898871454585e-07
+Evaluated to: v = 2.4126898871454585e-07
+Evaluating expression: v = 1
+Evaluated to: v = 1
+Evaluating expression: v = 0
+Evaluated to: v = 0
+Evaluating expression: v = 820
+Evaluated to: v = 820
+Using ha for telescope 131
+Evaluating expression: v = 8*(ran(linear)-0.5)
+Evaluated to: v = 8*(0.46037037052688428718-0.5)
+Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
+RA = 114.635
+almst = 0.212068, ha0 = 0.893638, ha = -0.317037
+Outlier here:  
+Evaluating expression: v = 
+Evaluated to: v = 
+Setting Result = -0.317037 0 21
+Evaluating expression: v = 1.262586845681024e-07
+Evaluated to: v = 1.262586845681024e-07
+Evaluating expression: v = 1
+Evaluated to: v = 1
+Evaluating expression: v = 0
+Evaluated to: v = 0
+Evaluating expression: v = 820
+Evaluated to: v = 820
+Using ha for telescope 131
+Evaluating expression: v = 8*(ran(linear)-0.5)
+Evaluated to: v = 8*(0.3613764511797056822-0.5)
+Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
+RA = 114.635
+almst = 0.212068, ha0 = 0.893638, ha = -1.10899
+Outlier here:  
+Evaluating expression: v = 0.042
+Evaluated to: v = 0.042
+Evaluating expression: v = 
+Evaluated to: v = 
+Setting Result = 0.042 0 22
+Evaluating expression: v = 2.4126898871454585e-07
+Evaluated to: v = 2.4126898871454585e-07
+Evaluating expression: v = 1
+Evaluated to: v = 1
+Evaluating expression: v = 0
+Evaluated to: v = 0
+Evaluating expression: v = 820
+Evaluated to: v = 820
+Using ha for telescope 131
+Evaluating expression: v = 8*(ran(linear)-0.5)
+Evaluated to: v = 8*(0.39629601230758615404-0.5)
+Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
+RA = 114.635
+almst = 0.254183, ha0 = 0.935753, ha = -0.829632
+Outlier here:  
+Evaluating expression: v = 
+Evaluated to: v = 
+Setting Result = -0.829632 0 23
+Evaluating expression: v = 1.262586845681024e-07
+Evaluated to: v = 1.262586845681024e-07
+Evaluating expression: v = 1
+Evaluated to: v = 1
+Evaluating expression: v = 0
+Evaluated to: v = 0
+Evaluating expression: v = 820
+Evaluated to: v = 820
+Using ha for telescope 131
+Evaluating expression: v = 8*(ran(linear)-0.5)
+Evaluated to: v = 8*(0.019193442775680087664-0.5)
+Coords -4.55423e+06 2.81676e+06 -3.45404e+06 148.264
+RA = 114.635
+almst = 0.254183, ha0 = 0.935753, ha = -3.84645
 Outlier here:  
 Evaluating expression: v = 0.042
 Evaluated to: v = 0.042
 writeArrivalTimes 0
 Create radiometer noise 0
-Processing pulsar: J0835-4510
+Processing pulsar: J0738-4042
 ... Created header
 ... Opening file
 GOT HERE
 AND HERE
 RETUNRING
-... Creating offsets: 8
-have efac 0.00026471 1 0 ><
-have efac 0.00026471 1 0 ><
-have efac 0.00026471 1 0 ><
-have efac 0.00026471 1 0 ><
-have efac 0.00026471 1 0 ><
-have efac 0.00026471 1 0 ><
-have efac 0.00026471 1 0 ><
-have efac 0.00026471 1 0 ><
+... Creating offsets: 24
+have efac 2.41269e-07 1 0 ><
+have efac 1.26259e-07 1 0 ><
+have efac 2.41269e-07 1 0 ><
+have efac 1.26259e-07 1 0 ><
+have efac 2.41269e-07 1 0 ><
+have efac 1.26259e-07 1 0 ><
+have efac 2.41269e-07 1 0 ><
+have efac 1.26259e-07 1 0 ><
+have efac 2.41269e-07 1 0 ><
+have efac 1.26259e-07 1 0 ><
+have efac 2.41269e-07 1 0 ><
+have efac 1.26259e-07 1 0 ><
+have efac 2.41269e-07 1 0 ><
+have efac 1.26259e-07 1 0 ><
+have efac 2.41269e-07 1 0 ><
+have efac 1.26259e-07 1 0 ><
+have efac 2.41269e-07 1 0 ><
+have efac 1.26259e-07 1 0 ><
+have efac 2.41269e-07 1 0 ><
+have efac 1.26259e-07 1 0 ><
+have efac 2.41269e-07 1 0 ><
+have efac 1.26259e-07 1 0 ><
+have efac 2.41269e-07 1 0 ><
+have efac 1.26259e-07 1 0 ><
  ... Outputing file
 ... Closing file
-Processing pulsar: J1939+2134
+Processing pulsar: J0332+5434
 ... Created header
 ... Opening file
 GOT HERE
 AND HERE
 RETUNRING
-... Creating offsets: 8
-have efac 0.00026471 1 0 ><
-have efac 0.00026471 1 0 ><
-have efac 0.00026471 1 0 ><
-have efac 0.00026471 1 0 ><
-have efac 0.00026471 1 0 ><
-have efac 0.00026471 1 0 ><
-have efac 0.00026471 1 0 ><
-have efac 0.00026471 1 0 ><
+... Creating offsets: 0
  ... Outputing file
 ... Closing file
 ProcessTnoise 0
@@ -606,10 +767,12 @@ Making script
 End making script
 Making master script
 Complete making master script
-[1] 471340
+rm: cannot remove '/home/naverill/workspace/rpnav/rpnav/simulate/woodchester_weak_0.5d_sim/scripts/status/runStat': No such file or directory
+[1] 1553738
 Processing realisation 0
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
+master script for woodchester_weak_0.5d_sim sleeping 1 second (processed 0 realisations)
+master script for woodchester_weak_0.5d_sim sleeping 1 second (processed 0 realisations)
+master script for woodchester_weak_0.5d_sim sleeping 1 second (processed 0 realisations)
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it
 under conditions of GPL license.
@@ -619,32 +782,33 @@ Graphical Interface: formIdeal
 Author:              G. Hobbs, M. Keith
 Version:             1.0
 WARNING: All pulsars will use the EOPC04 file: /earth/eopc04_IAU2000.62-now
-'J0835-4510.par.sim' NOBS 8
-[tempo2Util.C:396] Warning: [CLK3] no clock corrections available for clock UTC(navigate) for MJD 60002.4
-[tempo2Util.C:396] Warning: [CLK4] Trying assuming UTC = UTC(navigate)
+'J0738-4042.par.sim' NOBS 24
+[tempo2Util.C:396] Warning: [CLK3] no clock corrections available for clock UTC(woodchester for MJD 53043.6
+[tempo2Util.C:396] Warning: [CLK4] Trying assuming UTC = UTC(woodchester
 [tempo2Util.C:396] Warning: [CLK9] ... ok, using stated approximation 
 [tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.
-[tempo2Util.C:396] Warning: [CLK6] Proceeding assuming UTC =  UTC(navigate)
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
+[tempo2Util.C:396] Warning: [CLK6] Proceeding assuming UTC =  UTC(woodchester
+master script for woodchester_weak_0.5d_sim sleeping 1 second (processed 0 realisations)
+master script for woodchester_weak_0.5d_sim sleeping 1 second (processed 0 realisations)
+master script for woodchester_weak_0.5d_sim sleeping 1 second (processed 0 realisations)
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it
 under conditions of GPL license.
 
 WARNING: All pulsars will use the EOPC04 file: /earth/eopc04_IAU2000.62-now
 [tempo2Util.C:396] Warning: [TIM1] Please place MODE flags in the parameter file 
-[tempo2Util.C:396] Warning: [CLK3] no clock corrections available for clock UTC(navigate) for MJD 60002.4
-[tempo2Util.C:396] Warning: [CLK4] Trying assuming UTC = UTC(navigate)
+[tempo2Util.C:396] Warning: [CLK3] no clock corrections available for clock UTC(woodchester for MJD 53043.6
+[tempo2Util.C:396] Warning: [CLK4] Trying assuming UTC = UTC(woodchester
 [tempo2Util.C:396] Warning: [CLK9] ... ok, using stated approximation 
 [tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.
-[tempo2Util.C:396] Warning: [CLK6] Proceeding assuming UTC =  UTC(navigate)
+[tempo2Util.C:396] Warning: [CLK6] Proceeding assuming UTC =  UTC(woodchester
 [t2fit.C:640] ss/fs 0 0
-[t2fit.C:669] START=60002.3967394285355 FINISH = 60003.4941799293229
-[TKfit.C:345] SVD nparams=1 nconst=0 ndata=8
+[t2fit.C:669] START=53043.3659766183482 FINISH = 53043.668201695793
+[TKfit.C:345] SVD nparams=1 nconst=0 ndata=24
 [tempo2.C:565] Complete fit
 Looking for /usr/local/tempo2/plugins//add_pulseNumber_linux_plug.t2
 In here
-Finishing off: time taken = 1.77 (s)
+Finishing off: time taken = 2.61 (s)
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it
 under conditions of GPL license.
@@ -654,61 +818,59 @@ Graphical Interface: createRealisation
 Author:              G. Hobbs, M. Keith
 Version:             1.0
 [tempo2Util.C:396] Warning: [TIM1] Please place MODE flags in the parameter file 
-Writing file: J0835-4510.sim.real
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
+Writing file: J0738-4042.sim.real
+master script for woodchester_weak_0.5d_sim sleeping 1 second (processed 0 realisations)
+master script for woodchester_weak_0.5d_sim sleeping 1 second (processed 0 realisations)
+master script for woodchester_weak_0.5d_sim sleeping 1 second (processed 0 realisations)
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it
 under conditions of GPL license.
 
 WARNING: All pulsars will use the EOPC04 file: /earth/eopc04_IAU2000.62-now
 [tempo2Util.C:396] Warning: [TIM1] Please place MODE flags in the parameter file 
-[tempo2Util.C:396] Warning: [CLK3] no clock corrections available for clock UTC(navigate) for MJD 60002.4
-[tempo2Util.C:396] Warning: [CLK4] Trying assuming UTC = UTC(navigate)
+[tempo2Util.C:396] Warning: [CLK3] no clock corrections available for clock UTC(woodchester for MJD 53043.6
+[tempo2Util.C:396] Warning: [CLK4] Trying assuming UTC = UTC(woodchester
 [tempo2Util.C:396] Warning: [CLK9] ... ok, using stated approximation 
 [tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.
-[tempo2Util.C:396] Warning: [CLK6] Proceeding assuming UTC =  UTC(navigate)
+[tempo2Util.C:396] Warning: [CLK6] Proceeding assuming UTC =  UTC(woodchester
 [t2fit.C:640] ss/fs 0 0
-[t2fit.C:669] START=60002.3967394277861 FINISH = 60003.4941799283188
-[TKfit.C:345] SVD nparams=3 nconst=0 ndata=8
+[t2fit.C:669] START=53043.3659766183409 FINISH = 53043.668201695793
+[TKfit.C:345] SVD nparams=3 nconst=0 ndata=24
 [tempo2.C:565] Complete fit
 
 
-Results for PSR J0835-4510
+Results for PSR J0738-4042
 
 
-RMS pre-fit residual = 228.239 (us), RMS post-fit residual = 298.111 (us)
-Fit Chisq = 5.79	Chisqr/nfree = 5.79/5 = 1.15804	pre/post = 0.765615
+RMS pre-fit residual = 0.125 (us), RMS post-fit residual = 0.121 (us)
+Fit Chisq = 14.14	Chisqr/nfree = 14.14/21 = 0.673367	pre/post = 1.02785
 Number of fit parameters: 3
-Number of points in fit = 8
-Offset: 27028 100927 offset_e*sqrt(n) = 285465 n = 8
+Number of points in fit = 24
+Offset: 5.95877 5.5069 offset_e*sqrt(n) = 26.9782 n = 24
 
 
 PARAMETER       Pre-fit                   Post-fit                  Uncertainty   Difference   Fit
 ---------------------------------------------------------------------------------------------------
-RAJ (rad)       2.24861032179371          2.24861032179371          0             0             N
-RAJ (hms)       08:35:20.61149            08:35:20.61149            0             0            
-DECJ (rad)      -0.788476124740206        -0.788476124740206        0             0             N
-DECJ (dms)      -45:10:34.8751            -45:10:34.8751            0             0            
-F0 (s^-1)       11.1946499395             11.1954794381295          0.0030975     0.0008295     Y
-F1 (s^-2)       -1.5666e-11               -1.68031269007553e-11     4.2461e-12    -1.1371e-12   Y
-F2 (s^-3)       1.028e-21                 1.028e-21                 0             0             N
-PEPOCH (MJD)    51559.319                 51559.319                 0             0             N
-POSEPOCH (MJD)  51544                     51544                     0             0             N
-DMEPOCH (MJD)   58645.5                   58645.5                   0             0             N
-DM (cm^-3 pc)   67.771                    67.771                    0             0             N
-DM1 (cm^-3 pc y 0.005                     0.005                     0             0             N
-PMRA (mas/yr)   -49.68                    -49.68                    0             0             N
-PMDEC (mas/yr)  29.9                      29.9                      0             0             N
-PX (mas)        3.5                       3.5                       0             0             N
-START (MJD)     0                         60002.3967394278          0             60002         N
-FINISH (MJD)    0                         60003.4941799283          0             60003         N
+RAJ (rad)       2.00075215209337          2.00075215209337          0             0             N
+RAJ (hms)       07:38:32.317              07:38:32.317              0             0            
+DECJ (rad)      -0.71054385218013         -0.71054385218013         0             0             N
+DECJ (dms)      -40:42:40.19              -40:42:40.19              0             0            
+F0 (s^-1)       2.667235748               2.66723602183697          2.5307e-07    2.7384e-07    Y
+F1 (s^-2)       -1.15e-14                 -1.38590449525627e-14     2.1801e-15    -2.359e-15    Y
+F2 (s^-3)       -4e-26                    -4e-26                    0             0             N
+PEPOCH (MJD)    51700                     51700                     0             0             N
+POSEPOCH (MJD)  51360                     51360                     0             0             N
+DMEPOCH (MJD)   51700                     51700                     0             0             N
+DM (cm^-3 pc)   160.49                    160.49                    0             0             N
+PMRA (mas/yr)   -37                       -37                       0             0             N
+PMDEC (mas/yr)  30                        30                        0             0             N
+START (MJD)     0                         53043.3659766183          0             53043         N
+FINISH (MJD)    0                         53043.6682016958          0             53044         N
 TRACK (MJD)     -2                        -2                        0             0             N
-TZRMJD          0                         60002.6520076258          0             60003         N
+TZRMJD          0                         53043.5210140545          0             53044         N
 TZRFRQ (MHz)    0                         820                       0             820           N
-TZRSITE         navigate                 
-TRES            0                         298.111493107519          0             298.11        N
+TZRSITE         woodchester              
+TRES            0                         0.121436786345999         0             0.12144       N
 EPHVER          0                         TEMPO2                    
 NE_SW (cm^-3)   4                         4                         0             0             N
 DM_SERIES       TAYLOR                   
@@ -718,14 +880,14 @@ DM_SERIES       TAYLOR
 
 Derived parameters:
 
-P0 (s)      = 0.0893217664796208        2.4713e-05   
-P1          = 1.34061697442362e-13      3.3877e-14   
-tau_c (Myr) = 0.010564
-bs (G)      = 3.5017e+12
+P0 (s)      = 0.374919951520182         3.5573e-08   
+P1          = 1.94809623864942e-15      3.0645e-16   
+tau_c (Myr) = 3.0513
+bs (G)      = 8.6482e+11
 
-Braking index derived from F0,F1,F2 40.762
-Total proper motion = 57.984 +/- 0 mas/yr
-Total time span = 1.097 days = 0.003 years
+Braking index derived from F0,F1,F2 -555.463
+Total proper motion = 47.634 +/- 0 mas/yr
+Total time span = 0.302 days = 0.001 years
 
 Tempo2 usage
 Units:                 TCB (tempo2)
@@ -745,17 +907,14 @@ In here writing a new parameter file: new.par
                   F1                   F0 -1.00000
 Notice: There were 8 warnings. Summaries are shown below, check logs for full details.
 Warning #1: [TIM1] Please place MODE flags in the parameter file 
-Warning #2: [CLK3] no clock corrections available for clock UTC(navigate) for MJD 60002.4
-Warning #3: [CLK4] Trying assuming UTC = UTC(navigate)
+Warning #2: [CLK3] no clock corrections available for clock UTC(woodchester for MJD 53043.6
+Warning #3: [CLK4] Trying assuming UTC = UTC(woodchester
 Warning #4: [CLK9] ... ok, using stated approximation 
 Warning #5: [DUP1] duplicated warnings have been suppressed.
-Warning #6: [CLK6] Proceeding assuming UTC =  UTC(navigate)
+Warning #6: [CLK6] Proceeding assuming UTC =  UTC(woodchester
 Warning #7: UNITS was not set in the parameter file: using TCB (tempo2)
 Warning #8: There are output parameters with very high covariance
-Finishing off: time taken = 2.92 (s)
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
+Finishing off: time taken = 2.81 (s)
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it
 under conditions of GPL license.
@@ -765,35 +924,13 @@ Graphical Interface: formIdeal
 Author:              G. Hobbs, M. Keith
 Version:             1.0
 WARNING: All pulsars will use the EOPC04 file: /earth/eopc04_IAU2000.62-now
-[tempo2Util.C:396] Warning: [PAR2] Have not set a DM epoch. The period epoch will be used instead. J1939+2134.par.sim
-'J1939+2134.par.sim' NOBS 8
-[tempo2Util.C:396] Warning: [CLK3] no clock corrections available for clock UTC(navigate) for MJD 60003.3
-[tempo2Util.C:396] Warning: [CLK4] Trying assuming UTC = UTC(navigate)
-[tempo2Util.C:396] Warning: [CLK9] ... ok, using stated approximation 
-[tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.
-[tempo2Util.C:396] Warning: [CLK6] Proceeding assuming UTC =  UTC(navigate)
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-WARNING: All pulsars will use the EOPC04 file: /earth/eopc04_IAU2000.62-now
-[tempo2Util.C:396] Warning: [PAR2] Have not set a DM epoch. The period epoch will be used instead. J1939+2134.par.sim
-[tempo2Util.C:396] Warning: [TIM1] Please place MODE flags in the parameter file 
-[tempo2Util.C:396] Warning: [CLK3] no clock corrections available for clock UTC(navigate) for MJD 60003.3
-[tempo2Util.C:396] Warning: [CLK4] Trying assuming UTC = UTC(navigate)
-[tempo2Util.C:396] Warning: [CLK9] ... ok, using stated approximation 
-[tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.
-[tempo2Util.C:396] Warning: [CLK6] Proceeding assuming UTC =  UTC(navigate)
-[t2fit.C:640] ss/fs 0 0
-[t2fit.C:669] START=60003.0079674872468 FINISH = 60003.3161398936936
-[TKfit.C:345] SVD nparams=1 nconst=0 ndata=8
-[tempo2.C:565] Complete fit
-Looking for /usr/local/tempo2/plugins//add_pulseNumber_linux_plug.t2
-In here
-Finishing off: time taken = 2.24 (s)
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
+[tempo2Util.C:396] Warning: [PAR2] Have not set a DM epoch. The period epoch will be used instead. J0332+5434.par.sim
+'J0332+5434.par.sim' NOBS 0
+tempo2: t2fit.C:130: void t2Fit(pulsar*, unsigned int, const char*): Assertion `psr_ndata > 0u' failed.
+master script for woodchester_weak_0.5d_sim sleeping 1 second (processed 0 realisations)
+master script for woodchester_weak_0.5d_sim sleeping 1 second (processed 0 realisations)
+Abort (core dumped)
+mv: cannot stat 'withpn.tim': No such file or directory
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it
 under conditions of GPL license.
@@ -802,1329 +939,199 @@ Looking for /usr/local/tempo2/plugins//createRealisation_linux_plug.t2
 Graphical Interface: createRealisation
 Author:              G. Hobbs, M. Keith
 Version:             1.0
-[tempo2Util.C:396] Warning: [TIM1] Please place MODE flags in the parameter file 
-Writing file: J1939+2134.sim.real
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
-master script for navigate_small_0.3d_sim sleeping 1 second (processed 0 realisations)
+ERROR [FILE4]: Unable to open timfile >J0332+5434.sim<
+mv: cannot stat 'J0332+5434.sim.real': No such file or directory
+cp: cannot stat 'J0332+5434.tim': No such file or directory
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it
 under conditions of GPL license.
 
 WARNING: All pulsars will use the EOPC04 file: /earth/eopc04_IAU2000.62-now
-[tempo2Util.C:396] Warning: [PAR2] Have not set a DM epoch. The period epoch will be used instead. J1939+2134.par
-[tempo2Util.C:396] Warning: [TIM1] Please place MODE flags in the parameter file 
-[tempo2Util.C:396] Warning: [CLK3] no clock corrections available for clock UTC(navigate) for MJD 60003.3
-[tempo2Util.C:396] Warning: [CLK4] Trying assuming UTC = UTC(navigate)
-[tempo2Util.C:396] Warning: [CLK9] ... ok, using stated approximation 
-[tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.
-[tempo2Util.C:396] Warning: [CLK6] Proceeding assuming UTC =  UTC(navigate)
-[t2fit.C:640] ss/fs 0 0
-[t2fit.C:669] START=60003.0079674847584 FINISH = 60003.3161398990123
-[TKfit.C:345] SVD nparams=3 nconst=0 ndata=8
-[tempo2.C:565] Complete fit
-
-
-Results for PSR J1939+2134
-
-
-RMS pre-fit residual = 261.090 (us), RMS post-fit residual = 22234.107 (us)
-Fit Chisq = 4.45	Chisqr/nfree = 4.45/5 = 0.890027	pre/post = 0.0117428
-Number of fit parameters: 3
-Number of points in fit = 8
-Offset: 272117 265368 offset_e*sqrt(n) = 750574 n = 8
-
-
-PARAMETER       Pre-fit                   Post-fit                  Uncertainty   Difference   Fit
----------------------------------------------------------------------------------------------------
-ELONG           301.973244511             301.973244511             0             0             N
-ELAT            42.296752229              42.296752229              0             0             N
-F0 (s^-1)       641.928222127829          642.858380343457          0.90708       0.93016       Y
-F1 (s^-2)       -4.330987e-14             -2.48014891111277e-09     2.4185e-09    -2.4801e-09   Y
-PEPOCH (MJD)    55656                     55656                     0             0             N
-POSEPOCH (MJD)  55656                     55656                     0             0             N
-DMEPOCH (MJD)   55656                     55656                     0             0             N
-DM (cm^-3 pc)   71                        71                        0             0             N
-PX (mas)        0.35                      0.35                      0             0             N
-START (MJD)     0                         60003.0079674848          0             60003         N
-FINISH (MJD)    0                         60003.316139899           0             60003         N
-TRACK (MJD)     -2                        -2                        0             0             N
-TZRMJD          0                         60003.0862983625          0             60003         N
-TZRFRQ (MHz)    0                         820                       0             820           N
-TZRSITE         navigate                 
-TRES            0                         22234.1065501784          0             22234         N
-EPHVER          0                         TEMPO2                    
-NE_SW (cm^-3)   4                         4                         0             0             N
-DM_SERIES       TAYLOR                   
----------------------------------------------------------------------------------------------------
-[textOutput.C:304] Notice: Parameter uncertainties multiplied by sqrt(red. chisq)
-
-
-Derived parameters:
-
-P0 (s)      = 0.00155555256114999       2.1949e-06   
-P1          = 6.00132487757822e-15      5.8523e-15   
-tau_c (Myr) = 0.0041096
-bs (G)      = 9.7772e+10
-
-Total time span = 0.308 days = 0.001 years
-
-Tempo2 usage
-Units:                 TCB (tempo2)
-Time ephemeris:        IF99 (tempo2)
-Troposphere corr.?     No (tempo1)
-Dilate freq?           Yes (tempo2)
-Electron density (1AU) 4
-Solar system ephem     DE421
-Time scale             TT(TAI)
-Binary model           NONE
-[textOutput.C:1130] Warning: UNITS was not set in the parameter file: using TCB (tempo2)
-In here writing a new parameter file: new.par
-
-[textOutput.C:1728] Warning: There are output parameters with very high covariance
-                  F0        param_ZERO(0) -1.00000
-                  F1        param_ZERO(0) +1.00000
-                  F1                   F0 -1.00000
-Notice: There were 9 warnings. Summaries are shown below, check logs for full details.
-Warning #1: [PAR2] Have not set a DM epoch. The period epoch will be used instead. J1939+2134.par
-Warning #2: [TIM1] Please place MODE flags in the parameter file 
-Warning #3: [CLK3] no clock corrections available for clock UTC(navigate) for MJD 60003.3
-Warning #4: [CLK4] Trying assuming UTC = UTC(navigate)
-Warning #5: [CLK9] ... ok, using stated approximation 
-Warning #6: [DUP1] duplicated warnings have been suppressed.
-Warning #7: [CLK6] Proceeding assuming UTC =  UTC(navigate)
-Warning #8: UNITS was not set in the parameter file: using TCB (tempo2)
-Warning #9: There are output parameters with very high covariance
-Finishing off: time taken = 2.33 (s)
-[1]  + Done                          source /home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/scripts/runScripts_proc_0
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//transform_linux_plug.t2
-Graphical Interface: transform
-Author:              George Hobbs
-Version:             1
-Transforms parameter files from old format to new format
-[transform_plug.C:108] Transform from TCB to TDB
-
-
-Results for PSR J0835-4510
-
-
-RMS pre-fit residual = nan (us), RMS post-fit residual = nan (us)
-Fit Chisq = 0	Chisqr/nfree = 0.00/0 = nan	pre/post = nan
-Number of fit parameters: 0
-Number of points in fit = 0
-Offset: 0 0 offset_e*sqrt(n) = 0 n = 0
-
-
-PARAMETER       Pre-fit                   Post-fit                  Uncertainty   Difference   Fit
----------------------------------------------------------------------------------------------------
-RAJ (rad)       2.24861032179371          2.24861032179371          0             0             N
-RAJ (hms)       08:35:20.61149             08:35:20.6114900         0             0            
-DECJ (rad)      -0.788476124740206        -0.788476124740206        0             0             N
-DECJ (dms)      -45:10:34.8751            -45:10:34.87510           0             0            
-F0 (s^-1)       11.1954796117176          11.1954796117176          0             0             Y
-F1 (s^-2)       -1.6803127421827e-11      -1.6803127421827e-11      0             0             Y
-F2 (s^-3)       1.02800004781803e-21      1.02800004781803e-21      0             0             N
-PEPOCH (MJD)    51559.3188695188          51559.3188695188          0             0             N
-POSEPOCH (MJD)  51543.9998697563          51543.9998697563          0             0             N
-DMEPOCH (MJD)   58645.5                   58645.5                   0             0             N
-DM (cm^-3 pc)   67.7710010508028          67.7710010508028          0             0             N
-DM1 (cm^-3 pc y 0.00500000015505198       0.00500000015505198       0             0             N
-PMRA (mas/yr)   -49.6800007702982         -49.6800007702982         0             0             N
-PMDEC (mas/yr)  29.9000004636054          29.9000004636054          0             0             N
-PX (mas)        3.5                       3.5                       0             0             N
-START (MJD)     60002.396478035           60002.396478035           0             0             N
-FINISH (MJD)    60003.4939185185          60003.4939185185          0             0             N
-TRACK (MJD)     -2                        -2                        0             0             N
-TZRMJD          60002.6517462291          60002.6517462291          0             0             N
-TZRFRQ (MHz)    820.000012714262          820.000012714262          0             0             N
-TZRSITE         navigate                 
-TRES            298.111                   nan                       0             nan           N
-EPHVER          TEMPO2                    TEMPO2                    
-NE_SW (cm^-3)   4                         4                         0             0             N
-DM_SERIES       TAYLOR                   
----------------------------------------------------------------------------------------------------
-[textOutput.C:304] Notice: Parameter uncertainties multiplied by sqrt(red. chisq)
-
-
-Derived parameters:
-
-P0 (s)      = 0.0893217650946692        0            
-P1          = 1.34061697442362e-13      0            
-tau_c (Myr) = 0.010564
-bs (G)      = 3.5017e+12
-
-Braking index derived from F0,F1,F2 40.762
-Total proper motion = 57.984 +/- 0 mas/yr
-Total time span = 0.000 days = 0.000 years
-
-Tempo2 usage
-Units:                 TDB (tempo1)
-Time ephemeris:        IF99 (tempo2)
-Troposphere corr.?     No (tempo1)
-Dilate freq?           Yes (tempo2)
-Electron density (1AU) 4
-Solar system ephem     DE421
-Time scale             TT(TAI)
-Binary model           NONE
-In here writing a new parameter file: /home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/real_0/J0835-4510.tdb.par
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//transform_linux_plug.t2
-Graphical Interface: transform
-Author:              George Hobbs
-Version:             1
-Transforms parameter files from old format to new format
-[transform_plug.C:108] Transform from TCB to TDB
-
-
-Results for PSR J1939+2134
-
-
-RMS pre-fit residual = nan (us), RMS post-fit residual = nan (us)
-Fit Chisq = 0	Chisqr/nfree = 0.00/0 = nan	pre/post = nan
-Number of fit parameters: 0
-Number of points in fit = 0
-Offset: 0 0 offset_e*sqrt(n) = 0 n = 0
-
-
-PARAMETER       Pre-fit                   Post-fit                  Uncertainty   Difference   Fit
----------------------------------------------------------------------------------------------------
-ELONG           301.973244511             301.973244511             0             0             N
-ELAT            42.296752229              42.296752229              0             0             N
-F0 (s^-1)       642.858390311104          642.858390311104          0             0             Y
-F1 (s^-2)       -2.48014898802317e-09     -2.48014898802317e-09     0             0             Y
-PEPOCH (MJD)    55655.999805999           55655.999805999           0             0             N
-POSEPOCH (MJD)  55655.999805999           55655.999805999           0             0             N
-DMEPOCH (MJD)   55656                     55656                     0             0             N
-DM (cm^-3 pc)   71.0000011008691          71.0000011008691          0             0             N
-PX (mas)        0.35                      0.35                      0             0             N
-START (MJD)     60003.0077060825          60003.0077060825          0             0             N
-FINISH (MJD)    60003.315878492           60003.315878492           0             0             N
-TRACK (MJD)     -2                        -2                        0             0             N
-TZRMJD          60003.0860369591          60003.0860369591          0             0             N
-TZRFRQ (MHz)    820.000012714262          820.000012714262          0             0             N
-TZRSITE         navigate                 
-TRES            22234.107                 nan                       0             nan           N
-EPHVER          TEMPO2                    TEMPO2                    
-NE_SW (cm^-3)   4                         4                         0             0             N
-DM_SERIES       TAYLOR                   
----------------------------------------------------------------------------------------------------
-[textOutput.C:304] Notice: Parameter uncertainties multiplied by sqrt(red. chisq)
-
-
-Derived parameters:
-
-P0 (s)      = 0.00155555253703084       0            
-P1          = 6.00132487757822e-15      0            
-tau_c (Myr) = 0.0041096
-bs (G)      = 9.7772e+10
-
-Total time span = 0.000 days = 0.000 years
-
-Tempo2 usage
-Units:                 TDB (tempo1)
-Time ephemeris:        IF99 (tempo2)
-Troposphere corr.?     No (tempo1)
-Dilate freq?           Yes (tempo2)
-Electron density (1AU) 4
-Solar system ephem     DE421
-Time scale             TT(TAI)
-Binary model           NONE
-In here writing a new parameter file: /home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/real_0/J1939+2134.tdb.par
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I00.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I01.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I02.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I03.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I04.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I05.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I06.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I07.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I08.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I09.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I10.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I11.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I12.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I13.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I14.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I15.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I16.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I17.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I18.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I19.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I20.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I21.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I22.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I23.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I24.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I25.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I26.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I27.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I28.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I29.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I30.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I31.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I32.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I33.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I34.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I35.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I36.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I37.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I38.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I39.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I40.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I41.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I42.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I43.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I44.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I45.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I46.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I47.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I48.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I49.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I50.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I51.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I52.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I53.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I54.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I55.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I56.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I57.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I58.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I59.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I60.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I61.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I62.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I63.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I64.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I65.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I66.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I67.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I68.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I69.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I70.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I71.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I72.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I73.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I74.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I75.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I76.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I77.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I78.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I79.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I80.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I81.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I82.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I83.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I84.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I85.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I86.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I87.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I88.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I89.csv' for reading: No such file or directory
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it
-under conditions of GPL license.
-
-Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
-Graphical Interface: pulsarPositioning
-Author:              N. Averill
-Version:             1.0
- --- type 'h' for help information
-[63:graphicalInterface] ERROR 0 processing input arguments
-ERROR [FILE3]: Unable to open parfile /J0835-4510.par for pulsar 0
-tail: cannot open '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/navigate_small_0.3d_sim/output/S00/results_S00I90.csv' for reading: No such file or directory
+[tempo2Util.C:396] Warning: [PAR2] Have not set a DM epoch. The period epoch will be used instead. J0332+5434.par
+ERROR [FILE4]: Unable to open timfile >J0332+5434.tim<
+[1]  + Done                          source /home/naverill/workspace/rpnav/rpnav/simulate/woodchester_weak_0.5d_sim/scripts/runScripts_proc_0
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GPL license.
+
+Looking for /usr/local/tempo2/plugins//pulsar_positioning_linux_plug.t2
+Graphical Interface: pulsarPositioning
+Author:              N. Averill
+Version:             1.0
+ --- type 'h' for help information
+ERROR [FILE3]: Unable to open parfile /home/naverill/workspace/rpnav/rpnav/simulate/outputs/woodchester_weak/woodchester_weak_0.5d_sim/output/real_0/B0329+54.par for pulsar 0
+/home/naverill/workspace/rpnav/rpnav/simulate/woodchester_weak_0.5d_sim
+{'define': [{'name': 'woodchester_weak_0.5d_sim'}, {'nproc': '1'}, {'nreal': '1'}], 'pulsars': [{'psr': {'name': np.str_('B0736-40')}}, {'psr': {'name': np.str_('B0329+54')}}], 'obsRun': [{'name': 'WOODCHESTER'}, {'tel': 'woodchester'}, {'start': '53043.0'}, {'finish': 53043.5}, {'sampling': {'cadence': '0.042'}}, {'sched': 'sched1'}], 'schedule': [{'name': 'sched1'}, {'observe': {'psr': np.str_('B0736-40'), 'toaerr': 2.4126898871454585e-07, 'freq': '820', 'ha': '8*(ran(linear)-0.5)'}}, {'observe': {'psr': np.str_('B0329+54'), 'toaerr': 1.262586845681024e-07, 'freq': '820', 'ha': '8*(ran(linear)-0.5)'}}]}
+[{'name': 'woodchester_weak_0.5d_sim'}, {'nproc': '1'}, {'nreal': '1'}]
+[{'psr': {'name': np.str_('B0736-40')}}, {'psr': {'name': np.str_('B0329+54')}}]
+[{'name': 'WOODCHESTER'}, {'tel': 'woodchester'}, {'start': '53043.0'}, {'finish': 53043.5}, {'sampling': {'cadence': '0.042'}}, {'sched': 'sched1'}]
+[{'name': 'sched1'}, {'observe': {'psr': np.str_('B0736-40'), 'toaerr': 2.4126898871454585e-07, 'freq': '820', 'ha': '8*(ran(linear)-0.5)'}}, {'observe': {'psr': np.str_('B0329+54'), 'toaerr': 1.262586845681024e-07, 'freq': '820', 'ha': '8*(ran(linear)-0.5)'}}]
+FAILED
+
+=================================== FAILURES ===================================
+__________________________________ test_main ___________________________________
+
+    def test_main():
+        observations = []
+    
+        # psrList=["J0835-4510", "J1017-7156", "J1024-0719", "J1600-3053", "J1732-5049", "J1909-3744", "J2129-5721", "J2241-5236", "J0613-0200", "J0711-6830", "J1022+1001", "J1045-4509", "J1125-6014", "J1446-4701", "J1545-4550", "J1603-7202", "J1643-1224", "J1713+0747", "J1730-2304", "J1744-1134", "J1824-2452A", "J1832-0836", "J1857+0943", "J1939+2134", "J2124-3358", "J2145-0750"]
+        obsTime=[0.5, 1, 2, 3, 5, 8, 13, 21, 25, 28, 31]
+    
+        # wood_strong = Observation(
+        #     observer=WOODCHESTER,
+        #     pulsar=obs.pulsar,
+        #     snr=20 * u.dimensionless_unscaled,
+        #     integration_time=60 * 60 * u.s
+        # )
+    
+        """
+        Reference antenna defined in Feasibility Study for Pulsar Tim
+        """
+        SALA = Antenna(
+            name="SALA",
+            centre_frequency=1 * u.GHz,
+            bandwidth=200 * u.MHz,
+            effective_area=10 * u.m * u.m,
+            location=PARKES.location,
+            time=PARKES.time,
+        )
+    
+    
+        pulsars = Pulsar.load_catalogue()
+        for p in pulsars:
+            if p.name == "J1909-3744":
+                observations.append(
+                    Observation(
+                        PARKES,
+                        p,
+                        snr=146.09 * u.dimensionless_unscaled,
+                        toa_err=(145 * u.ns).to(u.s),
+                        integration_time= 1800 * u.s
+                    )
+                )
+            elif p.name == "B1937+21":
+                observations.append(
+                    Observation(
+                        SALA,
+                        p,
+                        snr= (-55.6 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
+                        toa_err=(3162 * u.m / const.c).to(u.s),
+                        integration_time=(36.36 * u.min).to(u.s)
+                    )
+                )
+            elif p.name in ["B0736-40", "J0738-4042"]:
+                observations.append(
+                    Observation(
+                        SALA,
+                        p,
+                        snr= (-50.2 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
+                        toa_err=(9246467 * u.m / const.c).to(u.s),
+                        integration_time=(3.07 * u.min).to(u.s)
+                    )
+                )
+            elif p.name == "B1451-68":
+                observations.append(
+                    Observation(
+                        SALA,
+                        p,
+                        snr= (-50.0 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
+                        toa_err=(452529 * u.m / const.c).to(u.s),
+                        integration_time=(2.35 * u.min).to(u.s)
+                    )
+                )
+            elif p.name == "B0950-08":
+                observations.append(
+                    Observation(
+                        SALA,
+                        p,
+                        snr= (-49.8 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
+                        toa_err=(316174 * u.m / const.c).to(u.s),
+                        integration_time=(1.04 * u.min).to(u.s)
+                    )
+                )
+            elif p.name in ["B0329+54", "J0332+5434"]:
+                observations.append(
+                    Observation(
+                        observer=SALA,
+                        pulsar=p,
+                        snr= (-45.2 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
+                        toa_err=(290556 * u.m / const.c).to(u.s),
+                        integration_time=(0.12 * u.min).to(u.s)
+                    )
+                )
+    
+        psrNum = len(observations)
+    
+        observer: Antenna = WOODCHESTER
+        for t in obsTime:
+            for pi in range(psrNum):
+                psr1 = observations[pi].pulsar
+                obs1 = Observation(
+                    observer=observer,
+                    pulsar=psr1,
+                    snr=5 * u.dimensionless_unscaled,
+                    integration_time=60 * 60 * u.s
+                )
+    
+                for pj in range(psrNum):
+                    if pi >= pj:
+                        continue
+                    psr2 = observations[pj].pulsar
+    
+                    obs2 = Observation(
+                        observer=observer,
+                        pulsar=psr2,
+                        snr=5 * u.dimensionless_unscaled,
+                        integration_time=60 * 60 * u.s
+                    )
+    
+                    simName = f"{observer.name}_weak"
+                    RES_DIR=f"{OUTPUT_DIR}/{simName}"
+    
+                    sim = SimParams(
+                        name=simName,
+                        antenna=observer,
+                        psr1=psr1.name,
+                        psr2=psr2.name,
+                        resultsDir=RES_DIR,
+                        toa_err={
+                            psr1.name: float(obs1.toa_err(reference=obs1).value),
+                            psr2.name: float(obs2.toa_err(reference=obs2).value)
+                        },
+                        t=t
+                    )
+>                   run(sim)
+
+simulate.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+simulate.py:228: in run
+    runSimulate(sim, iterDir)
+../run.py:95: in runSimulate
+    runIteration(sim, simFile, resultsFile)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+sim = <rpnav.simulate.simulate.SimParams object at 0xf0a473e2c6d0>
+simfile = '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/woodchester_weak/B0329+54/B0736-40/0.5h/S1/results_B0329+54_B0736-40_I0_chi.csv'
+resfile = '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/woodchester_weak/B0329+54/B0736-40/0.5h/S1/results_B0329+54_B0736-40_chi.csv'
+
+    def runIteration(sim: RunParams, simfile: int, resfile: str):
+        tempo2Path = os.environ.get("TEMPO2")
+        subprocess.run([
+            f"{tempo2Path}/bin/tempo2 -gr pulsar_positioning -o PARKES "
+            f"-f {sim.parFiles[sim.psr1]} {sim.timFiles[sim.psr1]} "
+            f"-f {sim.parFiles[sim.psr2]} {sim.timFiles[sim.psr2]} "
+            f"-a grde -e {str(sim.err)} -n -r -s {simfile}"
+        ], shell=True)
+    
+>       with open(simfile, "r+") as fsim:
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/naverill/workspace/rpnav/rpnav/simulate/outputs/woodchester_weak/B0329+54/B0736-40/0.5h/S1/results_B0329+54_B0736-40_I0_chi.csv'
+
+../run.py:81: FileNotFoundError
+=============================== warnings summary ===============================
+../../venv/lib/python3.11/site-packages/pint/__init__.py:19
+  DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED simulate.py::test_main - FileNotFoundError: [Errno 2] No such file or ...
+======================== 1 failed, 1 warning in 16.19s =========================

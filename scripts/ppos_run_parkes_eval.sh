@@ -64,7 +64,7 @@ do
                 PSR1Start=$(($RANDOM % $PSR1Len))
                 PSR1End=$(($PSR1Start + $t))
 
-                if [ $t -ge $PSR1End ]; then
+                if [ $t -ge $PSR1Len ]; then
                     echo $PSR1End
                     echo $t
                     echo "INVALID obs time for PSR1"
@@ -80,7 +80,7 @@ do
                 PSR2Start=$(($RANDOM % $PSR2Len))
                 PSR2End=$(($PSR2Start + $t))
 
-                if [ $t -ge $PSR2End ]; then
+                if [ $PSR2End -ge $PSR2Len ]; then
                     echo "INVALID obs time for PSR1"
                     break
                 fi

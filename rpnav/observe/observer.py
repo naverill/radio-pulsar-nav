@@ -18,7 +18,7 @@ class Observer(Observatory):
         timescale: str = "TCB",
         itoa_code: str = None,
     ):
-        super().__init__(name, aliases, timescale)
+        super().__init__(name, aliases, timescale, overwrite=True)
         self.update(
             location=location,
             origin=origin,
@@ -58,5 +58,5 @@ class Observer(Observatory):
         try:
             load_observatories(io.StringIO(json.dumps(self.to_json())), overwrite=True)
         except ValueError:
-            load_observatories(io.StringIO(json.dumps(self.to_json())))
+            load_observatories(io.StringIO(json.dumps(self.to_json())), overwrite=True)
         return self
