@@ -3,6 +3,7 @@ Antenna observer object
 """
 from math import pi, sqrt
 from typing import Any
+import hashlib
 
 import numpy as np
 
@@ -333,3 +334,5 @@ where
             for var in type(self).__dict__:
                 getattr(self, var)
 
+    def __hash__(self):
+        return int(hashlib.sha1(self._name.encode("utf-8")).hexdigest(), 16)

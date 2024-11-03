@@ -1,6 +1,7 @@
 import pandas as pd
 import psrqpy
 from typing import Any
+import hashlib
 
 from math import pi, sqrt
 import numpy as np
@@ -27,7 +28,9 @@ class Pulsar(SkyCoord):
         dispersion_measure: u.cm**-3 * u.pc,
         pulse_width_50: u.ms,
         pulse_width_10: u.ms,
+        jname: str = None,
         spectral_index: u.dimensionless_unscaled = None,
+        pulse_peak_amplitude: u.dimensionless_unscaled = None,
     ):
         """
         Initialise Pulsar object
@@ -45,6 +48,7 @@ class Pulsar(SkyCoord):
             ref_flux_density:       reference flux density - brightness at known measurement frequency (mJy)
         """
         self._name = name
+        self._jname = jname
         self._period = period
         self._dispersion_measure = dispersion_measure
         self._pulse_width_50 = pulse_width_50
@@ -53,6 +57,7 @@ class Pulsar(SkyCoord):
         self._distance = distance
         self._ref_flux_density = ref_flux_density
         self._spectral_index = spectral_index
+        self._pulse_peak_amplitude = pulse_peak_amplitude
         super().__init__(frame=ICRS, ra=ra, dec=dec, unit="deg")
     
     def _to_sky_coord(self) -> SkyCoord:
@@ -95,6 +100,7 @@ class Pulsar(SkyCoord):
 
         params = [
             "NAME",
+            "JNAME",
             "RAJD",             # Right ascension (J2000) (degrees)
             "DECJD",            # Declination (J2000) (degrees)
             "P0",               # Barycentric period of the pulsar (s)
@@ -169,7 +175,8 @@ class Pulsar(SkyCoord):
         scode = f"S{int(ref_freq.to_value(u.MHz))}"
 
         params = [
-            "NAME",
+            "NAME",             # Pulsar name.  The B name if exists, otherwise the J name.
+            "JNAME",            # Pulsar name based on J2000 coordinates 
             "RAJD",             # Right ascension (J2000) (degrees)
             "DECJD",            # Declination (J2000) (degrees)
             "P0",               # Barycentric period of the pulsar (s)
@@ -199,6 +206,7 @@ class Pulsar(SkyCoord):
             pulsars.append(
                 Pulsar(
                     name=row.get("NAME"),
+                    jname=row.get("JNAME"),
                     ra=row.get("RAJD") * u.deg,
                     dec=row.get("DECJD") * u.deg,
                     period=row.get("P0") * u.s,
@@ -229,10 +237,6 @@ class Pulsar(SkyCoord):
         """
         return self.pulse_width_10 / 10
 
-    @property
-    def name(self) -> str:
-        return self._name 
-
     def flux_density(self, centre_frequency: u.MHz) -> u.mJy:
         """
         Flux density of the pulsar at centre frequency
@@ -245,6 +249,14 @@ class Pulsar(SkyCoord):
                 * (centre_frequency.to(u.GHz) / self._ref_frequency.to(u.GHz))**(self._spectral_index)
             )
         return flux_density 
+
+    @property
+    def name(self) -> str:
+        return self._name 
+
+    @property
+    def jname(self) -> str:
+        return self._jname 
 
     @property
     def flux_density_err(self) -> u.mJy:
@@ -267,6 +279,10 @@ class Pulsar(SkyCoord):
         return self._pulse_width_10
 
     @property
+    def pulse_peak_amplitude(self) -> u.dimensionless_unscaled:
+        return self._pulse_peak_amplitude
+
+    @property
     def distance(self) -> u.kpc:
         return self._distance
 
@@ -281,3 +297,6 @@ class Pulsar(SkyCoord):
         for _ in range(3):
             for var in type(self).__dict__:
                 getattr(self, var)
+
+    def __hash__(self):
+        return int(hashlib.sha1(self._name.encode("utf-8")).hexdigest(), 16)

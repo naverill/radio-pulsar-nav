@@ -3,10 +3,12 @@ name: woodchester_weak_0.168d_sim
 nproc: 1
 nreal: 1
 </define>
+
 <pulsars>
-psr: name=J1017-7156
-psr: name=J0835-4510
+psr: name=J0711-6830
+psr: name=J0613-0200
 </pulsars>
+
 <obsRun>
 name: WOODCHESTER
 tel: woodchester
@@ -15,8 +17,10 @@ finish: 53043.168
 sampling: cadence=0.042
 sched: sched1
 </obsRun>
+
 <schedule>
 name: sched1
-observe: psr=J1017-7156toaerr=2.9000000000000003e-07freq=820ha=8*(ran(linear)-0.5)
-observe: psr=J0835-4510toaerr=2.9000000000000003e-07freq=820ha=8*(ran(linear)-0.5)
+observe: psr=J0711-6830,toaerr=1.1982942640970956e-05,freq=820,ha=8*(ran(linear)-0.5)
+observe: psr=J0613-0200,toaerr=1.1982942640970956e-05,freq=820,ha=8*(ran(linear)-0.5)
 </schedule>
+

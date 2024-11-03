@@ -22,7 +22,9 @@ class Observation:
         snr: u.dimensionless_unscaled = None,
         receive_power: u.W = None,
         toa_err:  u.ns = None,
+        name: str = ""
     ):
+        self._name = name
         self._pulsar = pulsar
         self._antenna = observer
         self._localtime = localtime
@@ -37,24 +39,18 @@ class Observation:
         observer = self._antenna
         snr = None
         if self._snr is None:
-            # snr = (Smean*jy) * Aeff * sqrt(np*deltaNu*tobs)/2.0/k/(tsys+tsky)*sqrt((psr[i].p0-w)/w);
             if self._is_set([self._receive_power, observer.noise_power]):
                 snr = self._receive_power / self._noise_power
             elif self._is_set([integtime, observer.n_polarisations, observer.bandwidth, psr.pulse_peak_amplitude, 
                 observer.system_temp]):
                 """
                 Reference:
-                Buist, P.J., Engelen, S., Noroozi, A., Sundaramoorthy, P., Verhagen, S., Verhoeven, C., 
-                "Principles and Potential of Pulsar Navigation," Proceedings of the 24th International 
-                Technical Meeting of the Satellite Division of The Institute of Navigation (ION GNSS 2011), 
-                Portland, OR, September 2011, pp. 3503-3515. 
-                Equation  (15)
+                    Lorimer D. R., Kramer M., 2004, Handbook of Pulsar Astronomy. Vol. 4
                 """
                 snr = (
                     sqrt(self._n_polarisations * integtime * observer.bandwidth) 
                     * (psr.flux_density(observer.centre_frequency) * observer.gain_dpfu / observer.system_temp)
-                    * sqrt(psr.pulse_width(psr.period - psr.pulse_width))
-                    / psr.period
+                    * sqrt((psr.period - psr.pulse_width)  / psr.width)
                 ) 
         else:
             snr = self._snr
@@ -98,7 +94,7 @@ class Observation:
         observer = self._antenna
         width_to_period = self._pulsar.pulse_width_10 / self._pulsar.period
 
-        flux_dens = flux_dens
+        flux_dens = None
         if self._is_set([observer, observer.bandwidth, observer.radio_gain, observer.snr(integtime)]):
             flux_dens = (
                 self.snr(integtime) * (correction * observer.system_temp)
@@ -144,16 +140,15 @@ class Observation:
                 if reference.pulsar.name != psr.name:
                     raise Exception(f"Reference pulsar must be the same as observation pulsar {reference.pulsar.name} {psr.name}")
                 toa_err = (
-                    reference.toa_err().to(u.s) * np.sqrt(
+                    reference.toa_err().to(u.ns) * np.sqrt(
                         (reference.snr() / self.snr(integtime)).to(u.dimensionless_unscaled)**2
-                        * (
-                            (reference.bandwidth * reference.integration_time.to(u.s))
-                            / ( self.bandwidth * integtime.to(u.s))
-                        ).to(u.dimensionless_unscaled)
+                        * (reference.bandwidth / self.bandwidth).to(u.dimensionless_unscaled)
+                        * (reference.integration_time.to(u.s) /  integtime.to(u.s)).to(u.dimensionless_unscaled)
                     )
-                ).value * u.s
-            if self._is_set([psr.pulse_width_10, psr.period, observer.bandwidth, observer.radio_gain, self.snr(integtime), integtime]):
+                )
+            elif self._is_set([psr.pulse_width_10, psr.period, observer.bandwidth, observer.radio_gain, self.snr(integtime), integtime]):
                 """
+                TODO Debug
                 Reference:
                     Radio-Frequency Pulsar Observation using Small-Aperture Antennas (Eqn 9)
                 """
@@ -165,7 +160,7 @@ class Observation:
                         * pow(2 * pi * np.log(2), 1/4) 
                         *  np.sqrt(observer.bandwidth * integtime)
                     )
-                )
+                ).to(u.ns)
         else:
             toa_err = self._toa_err
         return toa_err
@@ -222,6 +217,10 @@ class Observation:
     @property
     def bandwidth(self) -> u.MHz:
         return self._antenna.bandwidth
+
+    @property
+    def name(self) -> str:
+        return self._name
 
     def _is_set(self, vals: list[Any]) -> bool:
         return None not in vals

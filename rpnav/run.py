@@ -78,17 +78,18 @@ def runIteration(sim: RunParams, simfile: int, resfile: str):
         f"-a grde -e {str(sim.err)} -n -r -s {simfile}"
     ], shell=True)
 
-    with open(simfile, "r+") as fsim:
-        with open(resfile, "a+") as fres:
-            psrLines = fsim.readlines()
+    if os.path.exists(simfile):
+        with open(simfile, "r+") as fsim:
+            with open(resfile, "a+") as fres:
+                psrLines = fsim.readlines()
 
-            fres.write(psrLines[-1])
+                fres.write(psrLines[-1])
 
 def runSimulate(sim: RunParams, outdir: str):
     resultsFile=f"{outdir}/results_{sim.psr1}_{sim.psr2}_{sim.err}.csv"
 
     with open(resultsFile, "w+") as f:
-        f.write("Iteration,Longitude(deg),Latitude(deg),X(m),Y(m),Z(m),Error,Step Size")
+        f.write("Iteration,Longitude(deg),Latitude(deg),X(m),Y(m),Z(m),Error,Step Size\n")
     
     for i in range(sim.niter):
         simFile=f"{outdir}/results_{sim.psr1}_{sim.psr2}_I{i}_{sim.err}.csv"
@@ -114,7 +115,7 @@ def run(sim: RunParams, psr1Par: str, psr1Tim: str, psr2Par: str, psr2Tim: str):
 
     sim.parFiles[sim.psr1] = psr1Par
     sim.parFiles[sim.psr2] = psr2Par
-    for si in range(2, sim.nsim):
+    for si in range(0, sim.nsim):
         outdir=f"{sim.resultsDir}/{sim.psr1}/{sim.psr2}/{sim.t}h/S{si}"
         os.makedirs(outdir, exist_ok=True)
 

@@ -1,0 +1,26 @@
+<define>
+name: woodchester_weak_1d_sim
+nproc: 1
+nreal: 1
+</define>
+
+<pulsars>
+psr: name=J0900-3144
+psr: name=B0329+54
+</pulsars>
+
+<obsRun>
+name: WOODCHESTER
+tel: woodchester
+start: 53043.0
+finish: 53044.0
+sampling: cadence=0.042
+sched: sched1
+</obsRun>
+
+<schedule>
+name: sched1
+observe: psr=J0900-3144,toaerr=0.00016327210913686903,freq=820,ha=8*(ran(linear)-0.5)
+observe: psr=B0329+54,toaerr=2.7032993956367473e-05,freq=820,ha=8*(ran(linear)-0.5)
+</schedule>
+

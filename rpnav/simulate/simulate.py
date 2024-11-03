@@ -13,6 +13,7 @@ from rpnav.observe.observation import Observation
 from rpnav.observe.pulsar import Pulsar
 from rpnav.observe.observatories import PARKES
 from rpnav.observe.observatories import WOODCHESTER
+from rpnav.observe.reference import OBSERVATIONS
 from astropy import constants as const
 
 from rpnav.run import RunParams, runSimulate, run
@@ -202,151 +203,64 @@ def run(sim: RunParams) -> dict:
     inputFile=f"{INPUT_DIR}/{sim.name}.input"
     outputFile = f"{outdir}/{simName}.input"
 
-    # Clear old results
-    print(f"{FILE_DIR}/{simName}")
+    # Clear old simulation results
     if os.path.exists(f"{FILE_DIR}/{simName}"):
         shutil.rmtree(f"{FILE_DIR}/{simName}")
 
     if os.path.exists(f"{sim.resultsDir}/{simName}"):
         shutil.rmtree(f"{sim.resultsDir}/{simName}")
 
-    # Create input file
+    # Create input file based on simulation parameters
     formatInput(sim, inputFile, outputFile, simName)
 
-
-    for si in range(1, sim.nsim):
+    for si in range(0, sim.nsim):
         iterDir=f"{outdir}/S{si}"
         os.makedirs(iterDir, exist_ok=True)
 
         simulateTiming(sim, outputFile, simName)
 
-        sim.parFiles[sim.psr1] = f"{simResDir}/{sim.psr1}.par"
-        sim.timFiles[sim.psr1] = f"{simResDir}/{sim.psr1}.tim"
-        sim.parFiles[sim.psr2] = f"{simResDir}/{sim.psr2}.par"
-        sim.timFiles[sim.psr2] = f"{simResDir}/{sim.psr2}.tim"
+        sim.parFiles = {
+            sim.psr1: f"{simResDir}/{sim.psr1}.par",
+            sim.psr2: f"{simResDir}/{sim.psr2}.par",
+        }
+        sim.timFiles = {
+            sim.psr1: f"{simResDir}/{sim.psr1}.tim",
+            sim.psr2: f"{simResDir}/{sim.psr2}.tim",
+        }
         runSimulate(sim, iterDir) 
         if os.path.exists(f"{sim.resultsDir}/{simName}"):
             shutil.rmtree(f"{sim.resultsDir}/{simName}")
 
 # if __name__ == "__main__":
 def test_main():
-    observations = []
-
-    # psrList=["J0835-4510", "J1017-7156", "J1024-0719", "J1600-3053", "J1732-5049", "J1909-3744", "J2129-5721", "J2241-5236", "J0613-0200", "J0711-6830", "J1022+1001", "J1045-4509", "J1125-6014", "J1446-4701", "J1545-4550", "J1603-7202", "J1643-1224", "J1713+0747", "J1730-2304", "J1744-1134", "J1824-2452A", "J1832-0836", "J1857+0943", "J1939+2134", "J2124-3358", "J2145-0750"]
-    # obsTime=[0.5, 1, 2, 3, 5, 8, 13, 21, 25, 28, 31]
-    obsTime=[31]
-
-    # wood_strong = Observation(
-    #     observer=WOODCHESTER,
-    #     pulsar=obs.pulsar,
-    #     snr=20 * u.dimensionless_unscaled,
-    #     integration_time=60 * 60 * u.s
-    # )
-
-    """
-    Reference antenna defined in Feasibility Study for Pulsar Tim
-    """
-    SALA = Antenna(
-        name="SALA",
-        centre_frequency=1 * u.GHz,
-        bandwidth=200 * u.MHz,
-        effective_area=10 * u.m * u.m,
-        location=PARKES.location,
-        time=PARKES.time,
-    )
-
-
-    pulsars = Pulsar.load_catalogue()
-    for p in pulsars:
-        print(p.name)
-        if p.name == "J1909-3744":
-            observations.append(
-                Observation(
-                    PARKES,
-                    p,
-                    snr=146.09 * u.dimensionless_unscaled,
-                    toa_err=(145 * u.ns).to(u.s),
-                    integration_time= 1800 * u.s
-                )
-            )
-        if p.name in ["J0835-4510", "J1017-7156", "J1024-0719", "J1600-3053", "J1732-5049", "J2129-5721", "J2241-5236", "J0613-0200", "J0711-6830", "J1022+1001", "J1045-4509", "J1125-6014", "J1446-4701", "J1545-4550", "J1603-7202", "J1643-1224", "J1713+0747", "J1730-2304", "J1744-1134", "J1824-2452A", "J1832-0836", "J1857+0943", "J1939+2134", "J2124-3358", "J2145-0750"]:
-            observations.append(
-                Observation(
-                    PARKES,
-                    p,
-                    snr=146.09 * u.dimensionless_unscaled,
-                    toa_err=(145 * u.ns).to(u.s),
-                    integration_time= 1800 * u.s
-                )
-            )
-        # elif p.name == "B1937+21": 
-        #     observations.append(
-        #         Observation(
-        #             SALA,
-        #             p,
-        #             snr= (-55.6 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
-        #             toa_err=(3162 * u.m / const.c).to(u.s),
-        #             integration_time=(36.36 * u.min).to(u.s)
-        #         )
-        #     )
-        # elif p.name in ["B0736-40", "J0738-4042"]: 
-        #     observations.append(
-        #         Observation(
-        #             SALA,
-        #             p,
-        #             snr= (-50.2 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
-        #             toa_err=(9246467 * u.m / const.c).to(u.s),
-        #             integration_time=(3.07 * u.min).to(u.s)
-        #         )
-        #     )
-        # elif p.name == "B1451-68":
-        #     observations.append(
-        #         Observation(
-        #             SALA,
-        #             p,
-        #             snr= (-50.0 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
-        #             toa_err=(452529 * u.m / const.c).to(u.s),
-        #             integration_time=(2.35 * u.min).to(u.s)
-        #         )
-        #     )
-        # elif p.name == "B0950-08": 
-        #     observations.append(
-        #         Observation(
-        #             SALA,
-        #             p,
-        #             snr= (-49.8 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
-        #             toa_err=(316174 * u.m / const.c).to(u.s),
-        #             integration_time=(1.04 * u.min).to(u.s)
-        #         )
-        #     )
-        # elif p.name in ["B0329+54", "J0332+5434"]: 
-        #     observations.append(
-        #         Observation(
-        #             observer=SALA,
-        #             pulsar=p,
-        #             snr= (-45.2 * u.dB(u.dimensionless_unscaled)).to(u.dimensionless_unscaled),
-        #             toa_err=(290556 * u.m / const.c).to(u.s),
-        #             integration_time=(0.12 * u.min).to(u.s)
-        #         )
-        #     )
-
-    psrNum = len(observations)
-
     observer: Antenna = WOODCHESTER
+    observations: list[Observation] = OBSERVATIONS
+    obsTime=[0.168, 0.33, 0.5, 1, 2, 3, 5, 8, 13, 21, 25, 28, 31]
+
+    toa_errtol = 1e-4
+    psrs = list({obs.pulsar for obs in observations})
+    psrNum = len(psrs)
     for t in obsTime:
-        for pi in range(psrNum):
-            psr1 = observations[pi].pulsar
+        for pi, psr1 in enumerate(psrs):
+            ref_obs1 = max([obs for obs in observations if obs.pulsar.name == psr1.name], key=lambda x: x.toa_err())
+
             obs1 = Observation(
                 observer=observer,
                 pulsar=psr1,
                 snr=5 * u.dimensionless_unscaled,
                 integration_time=60 * 60 * u.s
             )
+            obs1_toa_err = obs1.toa_err(reference=ref_obs1).to_value(u.s)
 
-            for pj in range(psrNum):
+            # if obs1_toa_err > 1e-3 or psr1.name[0] == "B":
+            if obs1_toa_err > toa_errtol:
+                continue
+
+            for pj, psr2 in enumerate(psrs):
                 if pi >= pj:
                     continue    
-                psr2 = observations[pj].pulsar
+
+                ref_obs2 = max([obs for obs in observations if obs.pulsar.name == psr2.name], key=lambda x: x.toa_err())
 
                 obs2 = Observation(
                     observer=observer,
@@ -354,7 +268,11 @@ def test_main():
                     snr=5 * u.dimensionless_unscaled,
                     integration_time=60 * 60 * u.s
                 )
-                
+                obs2_toa_err = obs2.toa_err(reference=ref_obs2).to_value(u.s)
+
+                if obs2_toa_err > toa_errtol:
+                    continue
+
                 simName = f"{observer.name}_weak"
                 RES_DIR=f"{OUTPUT_DIR}/{simName}"
 
@@ -365,12 +283,10 @@ def test_main():
                     psr2=psr2.name,
                     resultsDir=RES_DIR,
                     toa_err={
-                        psr1.name: float(obs1.toa_err(reference=obs1).value),
-                        psr2.name: float(obs2.toa_err(reference=obs2).value)
+                        psr1.name: float(obs1.toa_err(reference=ref_obs1).to_value(u.s)),
+                        psr2.name: float(obs2.toa_err(reference=ref_obs2).to_value(u.s))
                     },
                     t=t
                 )
                 run(sim)
-                # run(sim)
-                return
 
