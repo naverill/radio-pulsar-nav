@@ -132,7 +132,8 @@ def run(sim: RunParams, psr1Par: str, psr1Tim: str, psr2Par: str, psr2Tim: str):
 
 
 if __name__ == "__main__":
-    psrList=["J0613-0200", "J0711-6830", "J1024-0719",  "J1017-7156", "J1022+1001", "J1024-0719"]
+    # psrList=["J0613-0200", , "J1024-0719",  "J1017-7156", "J1022+1001", "J1024-0719"]
+    psrList=["J0711-6830", "J1024-0719"]
     obsTime=[744]
 
     psrNum = len(psrList)
@@ -153,6 +154,7 @@ if __name__ == "__main__":
                     psr1=psr1,
                     psr2=psr2,
                     resultsDir=RES_DIR,
+                    nsim=50,
                     t=t
                 )
                 psr1Par = f"{INPUT_DIR}/{psr1}.par"

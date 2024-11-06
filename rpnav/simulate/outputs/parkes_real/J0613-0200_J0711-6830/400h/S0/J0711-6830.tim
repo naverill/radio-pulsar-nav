@@ -1,3 +1,0 @@
-FORMAT 1
-MODE 1
- n2008-02-11-07:01:59.rf.pcm.dzTf8p 675.24902300 54507.31521001160664142 5.69600 pks -f 1050CM_CPSR2 -g 50CM_CPSR2 -h 50CM_1050CM_CPSR2 -fe 1050CM -be CPSR2 -B 50CM -length 3851.34 -tobs 3851.34 -bw 64.00 -nchan 128 -pta PPTA -tmplt J0711-6830_50cm_ana_CPSR2.std -cpsr2_50cm 1 -projid -beconfig -snr 46.32 -gof 1.00 -group CPSR2_50CM -v 50CM_CPSR2 

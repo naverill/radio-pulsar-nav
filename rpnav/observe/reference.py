@@ -17,14 +17,13 @@ Define set of known reference observations and use as a reference with
 
 References:
     The second data release from the European Pulsar Timing Array
+    An ultra-wide bandwidth (704 to 4 032 MHz) receiver for the Parkes radio telescope (Hobbs, 2020)
+    Timing analysis for 20 millisecond pulsars in the Parkes Pulsar Timing Array (Reardon, 2016)
+    Feasibility Study for a Spacecraft Navigation System relying on Pulsar Timing Information Final Report (Sala, 2004)
 """
 OBSERVATIONS = []
 pulsars = Pulsar.load_catalogue()
 for p in pulsars:
-    """
-    Reference:
-        An ultra-wide bandwidth (704 to 4 032 MHz) receiver for the Parkes radio telescope (Hobbs, 2020)
-    """
     if p.jname == "J1909-3744":
         OBSERVATIONS.append(
             Observation(
@@ -36,10 +35,16 @@ for p in pulsars:
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
-        """
-        Reference:
-            Timing analysis for 20 millisecond pulsars in the Parkes Pulsar Timing Array (Reardon, 2016)
-        """
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(0.33 * u.us).to(u.ns),
+                integration_time= 1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
     elif p.jname == "J0711-6830":
         OBSERVATIONS.append(
             Observation(
@@ -47,7 +52,17 @@ for p in pulsars:
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
                 toa_err=(2.0 * u.us).to(u.ns),
-                integration_time= 556 * 1800 * u.s,
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(4.67 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -58,7 +73,17 @@ for p in pulsars:
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
                 toa_err=(10.4 * u.us).to(u.ns),
-                integration_time= 493 * 1800 * u.s,
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(2.64 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -78,8 +103,8 @@ for p in pulsars:
                 PARKES,
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
-                toa_err=(1.9 * u.us).to(u.ns),
-                integration_time= 390 * 1800 * u.s,
+                toa_err=(3.78 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -99,8 +124,8 @@ for p in pulsars:
                 PARKES,
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
-                toa_err=(0.5 * u.us).to(u.ns),
-                integration_time= 534 * 1800 * u.s,
+                toa_err=(1.28 * u.us).to(u.ns), 
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -114,14 +139,14 @@ for p in pulsars:
                 name=f"{p.jname}_{LEAP.name}",
             )
         )
-    elif p.jname in ["J1824-2452A", "B1821-24A"]:
+    elif p.name in ["J1824-2452A", "B1821-24A"]:
         OBSERVATIONS.append(
             Observation(
                 PARKES,
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
                 toa_err=(5.5 * u.us).to(u.ns),
-                integration_time= 313 * 1800 * u.s,
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -131,8 +156,8 @@ for p in pulsars:
                 PARKES,
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
-                toa_err=(5.8 * u.us).to(u.ns),
-                integration_time= 397 * 1800 * u.s,
+                toa_err=(0.11 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -152,8 +177,8 @@ for p in pulsars:
                 PARKES,
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
-                toa_err=(2.9 * u.us).to(u.ns),
-                integration_time= 652 * 1800 * u.s,
+                toa_err=(2.66 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -174,7 +199,17 @@ for p in pulsars:
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
                 toa_err=(1.0 * u.us).to(u.ns),
-                integration_time= 639 * 1800 * u.s,
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(0.81 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -195,7 +230,17 @@ for p in pulsars:
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
                 toa_err=(11.9 * u.us).to(u.ns),
-                integration_time= 646 * 1800 * u.s,
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(5.87 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -205,8 +250,8 @@ for p in pulsars:
                 PARKES,
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
-                toa_err=(3.1 * u.us).to(u.ns),
-                integration_time= 244 * 1800 * u.s,
+                toa_err=(4.47 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -216,8 +261,8 @@ for p in pulsars:
                 PARKES,
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
-                toa_err=(1.1 * u.us).to(u.ns),
-                integration_time= 291 * 1800 * u.s,
+                toa_err=(5.32 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -238,7 +283,7 @@ for p in pulsars:
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
                 toa_err=(1.4 * u.us).to(u.ns),
-                integration_time=448 * 1800 * u.s,
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -248,8 +293,8 @@ for p in pulsars:
                 PARKES,
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
-                toa_err=(1.7 * u.us).to(u.ns),
-                integration_time=972 * 1800 * u.s,
+                toa_err=(2.55 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -260,7 +305,17 @@ for p in pulsars:
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
                 toa_err=(1.8 * u.us).to(u.ns),
-                integration_time=615 * 1800 * u.s,
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(3 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -280,8 +335,8 @@ for p in pulsars:
                 PARKES,
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
-                toa_err=(0.8 * u.us).to(u.ns),
-                integration_time=715 * 1800 * u.s,
+                toa_err=(2.2 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -301,8 +356,8 @@ for p in pulsars:
                 PARKES,
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
-                toa_err=(2.8 * u.us).to(u.ns),
-                integration_time=488 * 1800 * u.s,
+                toa_err=(3.32 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -313,7 +368,17 @@ for p in pulsars:
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
                 toa_err=(0.3 * u.us).to(u.ns),
-                integration_time=5065 * 1800 * u.s,
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(0.31 * u.us).to(u.ns), 
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -323,8 +388,8 @@ for p in pulsars:
                 PARKES,
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
-                toa_err=(0.4 * u.us).to(u.ns),
-                integration_time=622 * 1800 * u.s,
+                toa_err=(2.12 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -345,7 +410,7 @@ for p in pulsars:
                 p,
                 snr=146.09 * u.dimensionless_unscaled,
                 toa_err=(0.2 * u.us).to(u.ns),
-                integration_time=1368 * 1800 * u.s,
+                integration_time=1800 * u.s,
                 name=f"{p.jname}_{PARKES.name}",
             )
         )
@@ -359,21 +424,6 @@ for p in pulsars:
                 name=f"{p.jname}_{LEAP.name}",
             )
         )
-    # elif p.name in ["J0835-4510", "J1017-7156", "J1732-5049", "J2241-5236", "J1125-6014", "J1446-4701", "J1545-4550", "J1713+0747", "J1832-0836"]:
-    #     OBSERVATIONS.append(
-    #         Observation(
-    #             PARKES,
-    #             p,
-    #             snr=146.09 * u.dimensionless_unscaled,
-    #             toa_err=(145 * u.ns).to(u.ns), # TODO fix value
-    #             integration_time= 1800 * u.s,
-    #             name=f"{p.jname}_{PARKES.name}",
-    #         )
-    #     )
-        """
-        Reference:
-            Feasibility Study for a Spacecraft Navigation System relying on Pulsar Timing Information Final Report (Sala, 2004)
-        """
     elif p.name in ["B0736-40", "J0738-4042"]: 
         OBSERVATIONS.append(
             Observation(
@@ -414,7 +464,7 @@ for p in pulsars:
                 pulsar=p,
                 snr= (-45.2 * u.dB(u.dimensionless_unscaled)),
                 toa_err=(290556 * u.m / const.c).to(u.ns),
-                integration_time=(0.12 * u.min).to(u.s),
+                integration_time=(1.19 * u.min).to(u.s),
                 name=f"{p.jname}_{SALA.name}",
             )
         )
@@ -449,6 +499,16 @@ for p in pulsars:
                 toa_err=(2.95 * u.us).to(u.ns),
                 integration_time=(60 * u.min).to(u.s),
                 name=f"{p.jname}_{NRT.name}",
+            )
+        )
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(10.11 * u.us).to(u.ns), 
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
             )
         )
     elif p.jname == "J1012+5307": 
@@ -581,5 +641,148 @@ for p in pulsars:
                 toa_err=(10.9 * u.us).to(u.ns),
                 integration_time=(60 * u.min).to(u.s),
                 name=f"{p.jname}_{NRT.name}",
+            )
+        )
+    elif p.jname in ["J0835-4510",]:
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(100 * u.ns).to(u.ns), 
+                integration_time= 1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+    elif p.jname in ["J0030+0451",]:
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(3.81 * u.us).to(u.ns), 
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+    elif p.jname in ["J2241-5236",]:
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(0.43 * u.us).to(u.ns), 
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+    elif p.jname in ["J1545-4550",]:
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(2.6 * u.us).to(u.ns), 
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+    elif p.jname in ["J1446-4701",]:
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(1.77 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+    elif p.jname in ["J1125-6014",]:
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(1.33 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+    elif p.jname in ["J1017-7156",]:
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(1.2 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+    elif p.jname in ["J0125–2327",]:
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(2.98 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+    elif p.jname in ["J0614–3329",]:
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(3.16 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+    elif p.jname in ["J1741+1351",]:
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(2 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+    elif p.jname in ["J1832-0836",]:
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(1.3 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+    elif p.jname in ["J1902–5105",]:
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(1.74 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
+            )
+        )
+    elif p.jname in ["J1933–6211",]:
+        OBSERVATIONS.append(
+            Observation(
+                PARKES,
+                p,
+                snr=146.09 * u.dimensionless_unscaled,
+                toa_err=(2.86 * u.us).to(u.ns),
+                integration_time=1800 * u.s,
+                name=f"{p.jname}_{PARKES.name}",
             )
         )

@@ -85,7 +85,7 @@ parkes_real = SimulationParams(
 
 @pytest.fixture(scope="module")
 def sim() -> SimulationParams:
-    return wood_strong
+    return wood_weak
 
 @pytest.fixture(scope="module")
 def parkes_data() -> SimulationParams:
@@ -98,7 +98,37 @@ def fit_results(latlong, k: int = 2) -> KMeans:
     return kmeans
 
 
-def test_rmse_surface(sim):
+def test_err_heatmap(sim):
+    fpath = f"{FILE_DIR}/../observe/outputs/"
+    df1 = pd.read_csv(fpath + "ALPSMLC30_S033E148_DSM_GRID_CHI.csv", index_col=0)
+    df1 = df1.iloc[:, [i for i in range(3600) if (i % 3 == 0)]]
+    
+    df2 = pd.read_csv(fpath + "ALPSMLC30_S034E148_DSM_GRID_CHI.csv", index_col=0)
+    df2 = df2.iloc[:, [i for i in range(3600) if (i % 3 == 0)]]
+
+    df = pd.concat([df1, df2])
+
+    # df.columns.values = df.columns.values.to(float)
+    # lat = df.index.values
+    # err = df.values
+    # print(lat)
+    fig = plot_heatmap(df)
+    fig.update_layout(
+        title=dict(
+            text=f"Reduced χ² Error",
+            xanchor="center",
+            yanchor="top",
+            x=0.5,
+        ),
+    )
+    
+    fig.update_scenes(xaxis_title_text="Longitude (deg)",  
+                      yaxis_title_text="Latitude (deg)",  
+                      )
+    # fig.write_image("outputs/residErrSurface.png")
+    fig.show()
+
+def test_err_surface(sim):
     fpath = f"{FILE_DIR}/outputs/parkes_1d_sim/output/"
     fpath = f"{FILE_DIR}/inputs/ppta_data/averaged/"
     df1 = pd.read_csv(fpath + "ALPSMLC30_S033E148_DSM_GRID_CHI.csv", index_col=0)
@@ -234,123 +264,148 @@ def test_scattermap(sim):
         fig.show()
 
 def test_centroid_scattermap(sim):
-    for t in [0.168,0.33,0.5,1,2,3,5,8,13,21,25,28,31]:
-        print(t)
-        sim_name = sim.name + f"_{t}d_sim"
-    
-        fig = go.Figure()
-        fig.add_trace(
-            go.Scattermap(
-                lon=[float(sim.antenna.location.lon.to_value(u.deg))],
-                lat=[float(sim.antenna.location.lat.to_value(u.deg))],
-                marker={"color": "black", "size": 10, "symbol":"circle-x"},
-                opacity=0.5,
+    # for t in [0.168,0.33,0.5,1,2,3,5,8,13,21,25,28,31]:
+    test = [
+        ("J0613-0200", "J0711-6830"), 
+        ("J0437-4715", "J0613-0200"), 
+        ("J0437-4715", "J0711-6830"), 
+        ("J1909-3744", "B0329+54"), 
+        ("J1909-3744", "B1937+21"), 
+        ("J1909-3744", "B1911+1347"), 
+        ("B1911+1347", "B0329+54"), 
+        ("B1911+1347", "B1937+21"), 
+        ("B1911+1347", "B1738+0333"), 
+        # ("J0613-0200", "J1022+1001"), 
+        # ("J0613-0200", "J1024-0719"), 
+        # ("J0711-6830", "J1024-0719"), 
+    ]
+    for t in [0.168, 1]:
+        for pi, pj in test:
+            print(t)
+
+            fig = go.Figure()
+            fig.add_trace(
+                go.Scattermap(
+                    lon=[float(sim.antenna.location.lon.to_value(u.deg))],
+                    lat=[float(sim.antenna.location.lat.to_value(u.deg))],
+                    marker={"color": "black", "size": 10, "symbol":"circle-x"},
+                    opacity=0.5,
+                )
             )
-        )
 
-        # simpath = f"/media/shared/outputs/sim_data/{sim_name}"
-        simpath = f"{FILE_DIR}/outputs/{sim_name}/"
-        if not os.path.exists(simpath):
-            continue
-
-        k = 2
-        for i in range(100):
-            simdir = f"S{i:02d}"
-            fpath = f"{simpath}/output/{simdir}/"
-            if not os.path.exists(fpath):
+            # simpath = f"/media/shared/outputs/sim_data/{sim_name}"
+            simpath = f"{FILE_DIR}/outputs/{sim.name}/{pi}/{pj}/{t}h"
+            if not os.path.exists(simpath):
                 continue
 
-            fname = f"results_{simdir}"
+            k = 2
+            for i in range(100):
+                simdir = f"S{i:02d}"
+                fpath = f"{simpath}/{simdir}/"
+                if not os.path.exists(fpath):
+                    print("ERROR", fpath)
+                    continue
 
-            df = pd.read_csv(fpath + fname + ".csv")
-            try:
-                kmodel = fit_results(df[["Longitude(deg)", "Latitude(deg)"]], k=k)
-            except ValueError:
-                continue
+                fname = f"results_{pi}_{pj}_chi.csv"
 
-            for i in range(k):
-                cent = kmodel.cluster_centers_
-                cLong = df["Longitude(deg)"][kmodel.labels_ == i]
-                cLat = df["Latitude(deg)"][kmodel.labels_ == i]
-                lon = cent[i][0]
-                lat = cent[i][1]
+                df = pd.read_csv(fpath + fname)
+                try:
+                    kmodel = fit_results(df[["Longitude(deg)", "Latitude(deg)"]], k=k)
+                except ValueError:
+                    continue
 
-                fig.add_trace(
-                    go.Scattermap(
-                        lon=[lon],
-                        lat=[lat],
-                        marker={"color": "black", "size":5},
-                        opacity=0.5,
+                for i in range(k):
+                    cent = kmodel.cluster_centers_
+                    cLong = df["Longitude(deg)"][kmodel.labels_ == i]
+                    cLat = df["Latitude(deg)"][kmodel.labels_ == i]
+                    lon = cent[i][0]
+                    lat = cent[i][1]
+
+                    fig.add_trace(
+                        go.Scattermap(
+                            lon=[lon],
+                            lat=[lat],
+                            marker={"color": "black", "size":5},
+                            opacity=0.5,
+                        )
                     )
-                )
 
-                err = df["Error"][kmodel.labels_ == i]
+                    err = df["Error"][kmodel.labels_ == i]
 
-                errScaled = [5 * (1 / x) if x > 0.01 else 0.01 for x in err]
-                fig.add_trace(
-                    go.Scattermap(
-                        mode = "markers",
-                        marker = {
-                            'size': errScaled,
-                            # 'color' : errScaled,
-                            # 'colorbar_title':"Reduced Chi-squared error",
-                            # 'colorscale': 'Blues',
-                        },
-                        lon = cLong,
-                        lat = cLat,
-                        opacity=0.2,
+                    errScaled = [5 * (1 / x) if x > 0.01 else 0.01 for x in err]
+                    fig.add_trace(
+                        go.Scattermap(
+                            mode = "markers",
+                            marker = {
+                                'size': errScaled,
+                                # 'color' : errScaled,
+                                # 'colorbar_title':"Reduced Chi-squared error",
+                                # 'colorscale': 'Blues',
+                            },
+                            lon = cLong,
+                            lat = cLat,
+                            opacity=0.5,
+                        )
                     )
-                )
 
 
-        fig.update_layout(
-            # margin ={'l':0,'t':0,'b':0,'r':0},
-            width=3600,
-            height=1800,
-            map = {
-                # 'style': "white-bg",
-                'style': "open-street-map",
-                'center': {'lon': 148.26356, 'lat': -32.99841},
-                'zoom': 10})
+            fig.update_layout(
+                # margin ={'l':0,'t':0,'b':0,'r':0},
+                width=3600,
+                height=1800,
+                map = {
+                    # 'style': "white-bg",
+                    'style': "open-street-map",
+                    'center': {'lon': 148.26356, 'lat': -32.99841},
+                    'zoom': 10})
 
-        # fig.write_image(f"outputs/{resname}_zoom.png")
-        # fig.update_layout(map = {'zoom': 2.75, 'center': {'lon': 0, 'lat': 0}})
-        # fig.write_image(f"outputs/{resname}.png")
-        fig.show()
+            # fig.write_image(f"outputs/{resname}_zoom.png")
+            # fig.update_layout(map = {'zoom': 2.75, 'center': {'lon': 0, 'lat': 0}})
+            # fig.write_image(f"outputs/{resname}.png")
+            fig.show()
 
-def test_centroid_real_scattermap(parkes_real):
-    test = ["J0613-0200_J0711-6830", "J0613-0200_J1022+1001"]
+def test_centroid_real_scattermap(parkes_data):
+    test = [
+        ("J0613-0200", "J0711-6830"), 
+        # ("J0613-0200", "J1022+1001"), 
+        # ("J0613-0200", "J1024-0719"), 
+        # ("J0711-6830", "J1024-0719"), 
+    ]
     t = "744h"
 
-    for p in test:
+    for pi, pj in test:
         print(t)
     
         fig = go.Figure()
         fig.add_trace(
             go.Scattermap(
-                lon=[float(parkes_real.antenna.location.lon.to_value(u.deg))],
-                lat=[float(parkes_real.antenna.location.lat.to_value(u.deg))],
+                lon=[float(parkes_data.antenna.location.lon.to_value(u.deg))],
+                lat=[float(parkes_data.antenna.location.lat.to_value(u.deg))],
                 marker={"color": "black", "size": 10, "symbol":"circle-x"},
                 opacity=0.5,
             )
         )
 
+        lenUnf = 0
+        lenf = 0
         # simpath = f"/media/shared/outputs/sim_data/{sim_name}"
-        simpath = f"{FILE_DIR}/outputs/parkes_real/{p}/{t}"
+        simpath = f"{FILE_DIR}/outputs/parkes_real/{pi}/{pj}/{t}"
         if not os.path.exists(simpath):
             continue
 
         k = 2
         for i in range(100):
-            simdir = f"S{i:02d}"
-            fpath = f"{simpath}/{simdir}/results_{p}_{t}_rms.csv"
-            print(fpath)
+            simdir = f"S{i}"
+            fpath = f"{simpath}/{simdir}/results_{pi}_{pj}_chi.csv"
             if not os.path.exists(fpath):
+                print(fpath)
+                print("ERROR")
                 continue
 
-            
             df = pd.read_csv(fpath)
-            df = df[df["Error"] < 500]
+            lenUnf += len(df["Error"])
+            df = df[df["Error"] < 8000]
+            lenf += len(df["Error"])
             try:
                 kmodel = fit_results(df[["Longitude(deg)", "Latitude(deg)"]], k=k)
             except ValueError:
@@ -389,6 +444,7 @@ def test_centroid_real_scattermap(parkes_real):
                         opacity=0.2,
                     )
                 )
+        print("Rate:", lenf / lenUnf)
 
 
         fig.update_layout(
@@ -479,8 +535,8 @@ def test_distance_err():
 
 def test_centroid_distance_err():
     fig = make_subplots(rows=3, cols=1)
-    for sim, lcol, fcol in [(wood_strong, 'rgba(0,0,0,0.5)','rgba(68, 68, 68, 0.3)'), (wood_weak, 'rgb(0,100,80)', 'rgba(0,100,80,0.2)')]:
-    # for sim, lcol, fcol in [(parkes, 'rgb(0,100,80)', 'rgba(0,100,80,0.2)')]:
+    # for sim, lcol, fcol in [(wood_strong, 'rgba(0,0,0,0.5)','rgba(68, 68, 68, 0.3)'), (wood_weak, 'rgb(0,100,80)', 'rgba(0,100,80,0.2)')]:
+    for sim, lcol, fcol in [(parkes, 'rgb(0,100,80)', 'rgba(0,100,80,0.2)')]:
         PXList = []
         PYList = []
         PZList = []
@@ -494,8 +550,8 @@ def test_centroid_distance_err():
         NYStdList = []
         NZStdList = []
         TDList = []
-        # tlist = [0.168,0.33,0.5,1,2,3,5,8,13,21,25,28,31]
-        tlist = [0.168,0.33,0.5,1,2,3,8,]
+        tlist = [0.168,0.33,0.5,1,2,3,5,8,13,21,25,28,31]
+        # tlist = [0.168,0.33,0.5,1,2,3,8,]
         for t in tlist:
             sim_name = sim.name + f"_{t}d_sim"
 
@@ -595,6 +651,7 @@ def test_centroid_distance_err():
                 name=f"{sim.name.replace('_', ' ')} +X Error",
                 mode='lines',
                 marker=dict(color=lcol),
+
             ),
             row=1, col=1
         )
@@ -720,9 +777,9 @@ def test_centroid_distance_err():
         )
 
         # Update xaxis properties
-        fig.update_yaxes(title_text="X (m)", row=1, col=1)
-        fig.update_yaxes(title_text="Y (m)", row=2, col=1)
-        fig.update_yaxes(title_text="Z (m)", row=3, col=1)
+        fig.update_yaxes(title_text="X (m)", type="log", row=1, col=1)
+        fig.update_yaxes(title_text="Y (m)", type="log", row=2, col=1)
+        fig.update_yaxes(title_text="Z (m)", type="log", row=3, col=1)
 
         # Update xaxis properties
         fig.update_xaxes(title_text="Observation time (days)", row=1, col=1)
@@ -743,6 +800,12 @@ def test_centroid_distance_err():
 
 def test_centroid_real_distance_err(parkes_data):
     test = ["J0613-0200_J0711-6830", "J0613-0200_J1022+1001", "J0613-0200_J1024-0719"]
+    test = [
+        ("J0613-0200", "J0711-6830"), 
+        # ("J0613-0200", "J1022+1001"), 
+        # ("J0613-0200", "J1024-0719"), 
+        # ("J0711-6830", "J1024-0719"), 
+    ]
     t = "744h"
 
     lat, lon, _ = loc = parkes_data.antenna.location.to_geodetic()
@@ -750,7 +813,7 @@ def test_centroid_real_distance_err(parkes_data):
     lat = lat.to_value(u.deg)
 
     true_x, true_y, true_z = parkes_data.antenna.location.geocentric
-    for p in test:
+    for pi, pj in test:
 
         DX = []
         DY = []
@@ -758,14 +821,14 @@ def test_centroid_real_distance_err(parkes_data):
         print(t)
 
         # simpath = f"/media/shared/outputs/sim_data/{sim_name}"
-        simpath = f"{FILE_DIR}/outputs/parkes_real/{p}/{t}"
+        simpath = f"{FILE_DIR}/outputs/parkes_real/{pi}/{pj}/{t}"
         if not os.path.exists(simpath):
             continue
 
         k = 2
         for i in range(100):
             simdir = f"S{i:02d}"
-            fpath = f"{simpath}/{simdir}/results_{p}_{t}_rms.csv"
+            fpath = f"{simpath}/{simdir}/results_{pi}_{pj}_chi.csv"
             if not os.path.exists(fpath):
                 continue
 
