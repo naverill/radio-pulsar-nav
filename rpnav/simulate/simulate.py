@@ -240,7 +240,7 @@ if __name__ == "__main__":
     simName = f"{observer.name}_weak"
     RES_DIR=f"{OUTPUT_DIR}/{simName}"
 
-    toa_errtol =  10 # 1e-3  
+    toa_errtol =  1e-3  
     psrs = list({obs.pulsar for obs in observations})
     psrNum = len(psrs)
     obsTime = [1]
