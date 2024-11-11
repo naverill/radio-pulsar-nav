@@ -1,9 +1,0 @@
-# New format observatory information file.
-#
-# Values are x,y,z geocentric coordinates
-# The last column contains the old-style telescope ID code
-#
- -4554231.5     2816759.1       -3454036.3       PARKES         pks
- -4646251.90    2565112.87      -3525535.83      MSFD           msfd_actual 
- -4646251.90    2565112.87      -3525535.83      MSFD_EST       msfd_estimated
- -4554231.5     2816759.1       -3454036.3       NAVIGATE       navigate
