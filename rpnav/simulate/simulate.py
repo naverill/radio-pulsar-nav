@@ -233,17 +233,18 @@ def run(sim: RunParams) -> dict:
 
 
 if __name__ == "__main__":
-    observer: Antenna = WOODCHESTER
-    observations: list[Observation] = OBSERVATIONS
-    obsTime=[1, 2, 3, 5, 8, 13, 21, 25, 28, 31]
-
     simName = f"{observer.name}_weak"
     RES_DIR=f"{OUTPUT_DIR}/{simName}"
 
-    toa_errtol =  1e-3  
+    observer: Antenna = WOODCHESTER
+    observations: list[Observation] = OBSERVATIONS
     psrs = list({obs.pulsar for obs in observations})
-    psrNum = len(psrs)
-    obsTime = [1]
+
+
+    toa_errtol =  1e-3  
+    snr = 5 * u.dimensionless_unscaled
+    integtime = 60 * 60 * u.s
+    obsTime=[1, 2, 3, 5, 8, 13, 21, 25, 28, 31]
     for t in obsTime:
         for pi, psr1 in enumerate(psrs):
             ref_obs1 = max([obs for obs in observations if obs.pulsar.name == psr1.name], key=lambda x: x.toa_err())
@@ -252,16 +253,14 @@ if __name__ == "__main__":
                 name=f"{psr1.name}_{simName}",
                 observer=observer,
                 pulsar=psr1,
-                snr=5 * u.dimensionless_unscaled,
-                integration_time=60 * 60 * u.s
+                snr=snr,
+                integration_time=integtime
             )
             obs1_toa_err = obs1.toa_err(reference=ref_obs1).to_value(u.s)
 
             if obs1_toa_err > toa_errtol:
                 continue
 
-            print(f"{ref_obs1.pulsar.name} & {ref_obs1.pulsar.jname} & {obs1_toa_err} \\\ ")
-            continue
             for pj, psr2 in enumerate(psrs):
                 if pi >= pj:
                     continue    
@@ -272,8 +271,8 @@ if __name__ == "__main__":
                     name=f"{psr2.name}_{simName}",
                     observer=observer,
                     pulsar=psr2,
-                    snr=5 * u.dimensionless_unscaled,
-                    integration_time=60 * 60 * u.s
+                    snr=snr,
+                    integration_time=integtime
                 )
                 obs2_toa_err = obs2.toa_err(reference=ref_obs2).to_value(u.s)
 
