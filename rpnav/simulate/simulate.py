@@ -231,8 +231,8 @@ def run(sim: RunParams) -> dict:
         if os.path.exists(f"{sim.resultsDir}/{simName}"):
             shutil.rmtree(f"{sim.resultsDir}/{simName}")
 
-# if __name__ == "__main__":
-def test_main():
+
+if __name__ == "__main__":
     observer: Antenna = WOODCHESTER
     observations: list[Observation] = OBSERVATIONS
     obsTime=[1, 2, 3, 5, 8, 13, 21, 25, 28, 31]
