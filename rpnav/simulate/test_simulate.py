@@ -31,57 +31,30 @@ class SimulationParams:
         self.parfile :str = parfile
         self.antenna :Antenna = antenna
 
-
-parkes_sim = "parkes"
 parkes = SimulationParams(
-        name=parkes_sim,
-        timfile=f"{FILE_DIR}/outputs/{parkes_sim}/output/real_0/J0835-4510.tim",
-        parfile=f"{FILE_DIR}/outputs/{parkes_sim}/output/real_0/J0835-4510.tdb.par",
-        antenna = PARKES
-    )
+    name= "parkes",
+    antenna = PARKES
+)
 
-
-msfd_sim = "msfd_est"
-msfd =  SimulationParams(
-        name=msfd_sim,
-        timfile=f"{FILE_DIR}/outputs/{msfd_sim}/output/real_0/J0835-4510.tim",
-        parfile=f"{FILE_DIR}/outputs/{msfd_sim}/output/real_0/J0835-4510.tdb.par",
-        antenna = MSFD
-    )
-
-# nav_sim = "navigate_small_0.33d_sim"
-wood_weak_sim = "woodchester_weak"
 wood_weak = SimulationParams(
-        name=wood_weak_sim,
-        timfile=f"{FILE_DIR}/outputs/{wood_weak_sim}/output/real_0/J0835-4510.tim",
-        parfile=f"{FILE_DIR}/outputs/{wood_weak_sim}/output/real_0/J0835-4510.tdb.par",
-        antenna = WOODCHESTER
-    )
+    name="woodchester_weak",
+    antenna = WOODCHESTER
+)
 
-# wood_strong_sim = "woodchester_weak"
-wood_strong_sim = "woodchester_strong"
 wood_strong = SimulationParams(
-        name=wood_strong_sim,
-        timfile=f"{FILE_DIR}/outputs/{wood_strong_sim}_sim/output/real_0/J0835-4510.tim",
-        parfile=f"{FILE_DIR}/outputs/{wood_strong_sim}_sim/output/real_0/J0835-4510.tdb.par",
-        antenna = WOODCHESTER
-    )
+    name= "woodchester_strong",
+    antenna = WOODCHESTER
+)
 
-nav_sim = "navigate_small"
 navigate = SimulationParams(
-        name=nav_sim,
-        timfile=f"{FILE_DIR}/outputs/{nav_sim}_sim/output/real_0/J0835-4510.tim",
-        parfile=f"{FILE_DIR}/outputs/{nav_sim}_sim/output/real_0/J0835-4510.tdb.par",
-        antenna = NAVIGATE
-    )
+    name="navigate_small",
+    antenna = NAVIGATE
+)
 
-parkes_real_sim = "parkes_real"
 parkes_real = SimulationParams(
-        name=parkes_real_sim,
-        timfile=f"{FILE_DIR}/outputs/{parkes_real_sim}_sim/output/real_0/J0835-4510.tim",
-        parfile=f"{FILE_DIR}/outputs/{parkes_real_sim}_sim/output/real_0/J0835-4510.tdb.par",
-        antenna = PARKES
-    )
+    name="parkes_real",
+    antenna = PARKES
+)
 
 @pytest.fixture(scope="module")
 def sim() -> SimulationParams:
@@ -98,191 +71,59 @@ def fit_results(latlong, k: int = 2) -> KMeans:
     return kmeans
 
 
-def test_err_heatmap(sim):
-    fpath = f"{FILE_DIR}/../observe/outputs/"
-    df1 = pd.read_csv(fpath + "ALPSMLC30_S033E148_DSM_GRID_CHI.csv", index_col=0)
-    df1 = df1.iloc[:, [i for i in range(3600) if (i % 3 == 0)]]
-    
-    df2 = pd.read_csv(fpath + "ALPSMLC30_S034E148_DSM_GRID_CHI.csv", index_col=0)
-    df2 = df2.iloc[:, [i for i in range(3600) if (i % 3 == 0)]]
-
-    df = pd.concat([df1, df2])
-
-    # df.columns.values = df.columns.values.to(float)
-    # lat = df.index.values
-    # err = df.values
-    # print(lat)
-    fig = plot_heatmap(df)
-    fig.update_layout(
-        title=dict(
-            text=f"Reduced χ² Error",
-            xanchor="center",
-            yanchor="top",
-            x=0.5,
-        ),
-    )
-    
-    fig.update_scenes(xaxis_title_text="Longitude (deg)",  
-                      yaxis_title_text="Latitude (deg)",  
-                      )
-    # fig.write_image("outputs/residErrSurface.png")
-    fig.show()
-
-def test_err_surface(sim):
-    fpath = f"{FILE_DIR}/outputs/parkes_1d_sim/output/"
-    fpath = f"{FILE_DIR}/inputs/ppta_data/averaged/"
-    df1 = pd.read_csv(fpath + "ALPSMLC30_S033E148_DSM_GRID_CHI.csv", index_col=0)
-    df1 = df1.iloc[:, [i for i in range(3600) if (i % 3 == 0)]]
-    
-    df2 = pd.read_csv(fpath + "ALPSMLC30_S034E148_DSM_GRID_CHI.csv", index_col=0)
-    df2 = df2.iloc[:, [i for i in range(3600) if (i % 3 == 0)]]
-
-    df = pd.concat([df1, df2])
-
-    long = df.columns.values.astype(float)
-    lat = df.index.values
-    err = df.values
-    print(lat)
-    fig = plot_err_surface(long, lat, err)
-    fig.update_layout(
-        title=dict(
-            text=f"Reduced χ² Error Surface",
-            xanchor="center",
-            yanchor="top",
-            x=0.5,
-        ),
-    )
-    
-    fig.update_scenes(xaxis_title_text="Longitude (deg)",  
-                      yaxis_title_text="Latitude (deg)",  
-                      zaxis_title_text="χ²")
-    # fig.write_image("outputs/residErrSurface.png")
-    fig.show()
-
 def test_grde(parkes_data):
-    psr_name = "J0613-0200_J1022+1001"
+    psrs = [
+        ("J0613-0200", "J1022+1001"), 
+    ]
     t = "744h"
     simdir = f"S0"
-    for i in range(100):
-        fig = go.Figure()
-        fig.add_trace(
-            go.Scattermap(
-                lon=[float(parkes_data.antenna.location.lon.to_value(u.deg))],
-                lat=[float(parkes_data.antenna.location.lat.to_value(u.deg))],
-                marker={"color": "black", "size": 10, "symbol":"circle-x"},
-                opacity=0.5,
-            )
-        )
-
-        fpath = f"{FILE_DIR}/outputs/{parkes_data.name}/{psr_name}/{t}/{simdir}/results_{psr_name}_{t}_I{i}d_rms.csv"
-        if not os.path.exists(fpath):
-            continue
-
-        df = pd.read_csv(fpath)
-        long = df["Longitude(deg)"].values
-        lat = df["Latitude(deg)"].values
-        err = df["Error"]
-        print(err)
-        fig.add_trace(
-            go.Scattermap(
-                mode="lines",
-                # marker = {'size': [5 * (1 / x) if x > 0.01 else 0.01 for x in err]},
-                lon = long,
-                lat = lat,
-                # line={'width':1},
-                # opacity=1,
-                text=[str(e) for e in err] 
-            )
-        )
-
-        fig.update_layout(
-            margin ={'l':0,'t':0,'b':0,'r':0},
-            width=3600,
-            height=1800,
-            map = {
-                'style': "open-street-map",
-            })
-        fig.show()
-
-def test_scattermap(sim):
-    for t in [0.168,0.33,0.5,1,2,3,5,8,13,21,25,28,31]:
-        print(t)
-        sim_name = sim.name + f"_{t}d_sim"
-
-        fig = go.Figure()
-        fig.add_trace(
-            go.Scattermap(
-                lon=[float(sim.antenna.location.lon.to_value(u.deg))],
-                lat=[float(sim.antenna.location.lat.to_value(u.deg))],
-                marker_symbol='x', 
-                marker={"color": "black", "size": 40}
-            )
-        )
-
-        simpath = f"{FILE_DIR}/outputs/{sim_name}/"
-        simpath = f"/media/shared/outputs/{sim_name}"
-        if not os.path.exists(simpath):
-            continue
-
+    err = "chi"
+    for pi, pj in psrs:
         for i in range(100):
-            simdir = f"S{i:02d}"
-            fpath = f"{simpath}/output/{simdir}/"
+            fig = go.Figure()
+            fig.add_trace(
+                go.Scattermap(
+                    lon=[float(parkes_data.antenna.location.lon.to_value(u.deg))],
+                    lat=[float(parkes_data.antenna.location.lat.to_value(u.deg))],
+                    marker={"color": "black", "size": 10, "symbol":"circle-x"},
+                    opacity=0.5,
+                )
+            )
+
+            fpath = f"{FILE_DIR}/outputs/{parkes_data.name}/{pi}/{pj}/{t}/{simdir}/results_{pi}_{pj}_{t}_I{i}d_{err}.csv"
             if not os.path.exists(fpath):
                 continue
 
-            fname = f"results_{simdir}"
-
-            df = pd.read_csv(fpath + fname + ".csv")
+            df = pd.read_csv(fpath)
             long = df["Longitude(deg)"].values
             lat = df["Latitude(deg)"].values
             err = df["Error"]
 
             fig.add_trace(
                 go.Scattermap(
-                    mode = "markers",
-                    marker = {'size': [5 * (1 / x) if x > 0.01 else 0.01 for x in err]},
+                    mode="lines",
                     lon = long,
                     lat = lat,
-                    line={'width':1},
-                    opacity=1,
+                    text=[str(e) for e in err] 
                 )
             )
 
-        fig.update_layout(
-            margin ={'l':0,'t':0,'b':0,'r':0},
-            width=3600,
-            height=1800,
-            map = {
-                # 'style': "white-bg",
-                'style': "open-street-map",
-                'center': {'lon': 148.26356, 'lat': -32.99841},
-                'zoom': 10})
-
-        # fig.write_image(f"outputs/{resname}_zoom.png")
-        # fig.update_layout(map = {'zoom': 2.75, 'center': {'lon': 0, 'lat': 0}})
-        # fig.write_image(f"outputs/{resname}.png")
-        fig.show()
+            fig.update_layout(
+                margin ={'l':0,'t':0,'b':0,'r':0},
+                width=3600,
+                height=1800,
+                map = {
+                    'style': "open-street-map",
+                })
+            fig.show()
 
 def test_centroid_scattermap(sim):
-    # for t in [0.168,0.33,0.5,1,2,3,5,8,13,21,25,28,31]:
-    test = [
+    psrs = [
         ("J0613-0200", "J0711-6830"), 
-        ("J0437-4715", "J0613-0200"), 
-        ("J0437-4715", "J0711-6830"), 
-        ("J1909-3744", "B0329+54"), 
-        ("J1909-3744", "B1937+21"), 
-        ("J1909-3744", "B1911+1347"), 
-        ("B1911+1347", "B0329+54"), 
-        ("B1911+1347", "B1937+21"), 
-        ("B1911+1347", "B1738+0333"), 
-        # ("J0613-0200", "J1022+1001"), 
-        # ("J0613-0200", "J1024-0719"), 
-        # ("J0711-6830", "J1024-0719"), 
     ]
-    for t in [0.168, 1]:
-        for pi, pj in test:
-            print(t)
-
+    k = 2
+    for t in [0.168,0.33,0.5,1,2,3,5,8,13,21,25,28,31]:
+        for pi, pj in psrs:
             fig = go.Figure()
             fig.add_trace(
                 go.Scattermap(
@@ -293,22 +134,19 @@ def test_centroid_scattermap(sim):
                 )
             )
 
-            # simpath = f"/media/shared/outputs/sim_data/{sim_name}"
             simpath = f"{FILE_DIR}/outputs/{sim.name}/{pi}/{pj}/{t}h"
             if not os.path.exists(simpath):
                 continue
 
-            k = 2
             for i in range(100):
                 simdir = f"S{i:02d}"
-                fpath = f"{simpath}/{simdir}/"
+                fpath = f"{simpath}/{simdir}"
                 if not os.path.exists(fpath):
-                    print("ERROR", fpath)
                     continue
 
                 fname = f"results_{pi}_{pj}_chi.csv"
 
-                df = pd.read_csv(fpath + fname)
+                df = pd.read_csv(f"{fpath}/{fname}")
                 try:
                     kmodel = fit_results(df[["Longitude(deg)", "Latitude(deg)"]], k=k)
                 except ValueError:
@@ -338,9 +176,6 @@ def test_centroid_scattermap(sim):
                             mode = "markers",
                             marker = {
                                 'size': errScaled,
-                                # 'color' : errScaled,
-                                # 'colorbar_title':"Reduced Chi-squared error",
-                                # 'colorscale': 'Blues',
                             },
                             lon = cLong,
                             lat = cLat,
@@ -348,28 +183,20 @@ def test_centroid_scattermap(sim):
                         )
                     )
 
-
             fig.update_layout(
-                # margin ={'l':0,'t':0,'b':0,'r':0},
+                margin ={'l':0,'t':0,'b':0,'r':0},
                 width=3600,
                 height=1800,
                 map = {
-                    # 'style': "white-bg",
                     'style': "open-street-map",
                     'center': {'lon': 148.26356, 'lat': -32.99841},
                     'zoom': 10})
 
-            # fig.write_image(f"outputs/{resname}_zoom.png")
-            # fig.update_layout(map = {'zoom': 2.75, 'center': {'lon': 0, 'lat': 0}})
-            # fig.write_image(f"outputs/{resname}.png")
             fig.show()
 
 def test_centroid_real_scattermap(parkes_data):
     test = [
         ("J0613-0200", "J0711-6830"), 
-        # ("J0613-0200", "J1022+1001"), 
-        # ("J0613-0200", "J1024-0719"), 
-        # ("J0711-6830", "J1024-0719"), 
     ]
     t = "744h"
 
@@ -388,7 +215,6 @@ def test_centroid_real_scattermap(parkes_data):
 
         lenUnf = 0
         lenf = 0
-        # simpath = f"/media/shared/outputs/sim_data/{sim_name}"
         simpath = f"{FILE_DIR}/outputs/parkes_real/{pi}/{pj}/{t}"
         if not os.path.exists(simpath):
             continue
@@ -435,16 +261,13 @@ def test_centroid_real_scattermap(parkes_data):
                         mode = "markers",
                         marker = {
                             'size': errScaled,
-                            # 'color' : errScaled,
-                            # 'colorbar_title':"Reduced Chi-squared error",
-                            # 'colorscale': 'Blues',
                         },
                         lon = cLong,
                         lat = cLat,
                         opacity=0.2,
                     )
                 )
-        print("Rate:", lenf / lenUnf)
+        print("Convergence Rate:", lenf / lenUnf)
 
 
         fig.update_layout(
@@ -452,16 +275,11 @@ def test_centroid_real_scattermap(parkes_data):
             width=3600,
             height=1800,
             map = {
-                # 'style': "white-bg",
                 'style': "open-street-map",
                 'center': {'lon': 148.26356, 'lat': -32.99841},
                 'zoom': 10})
 
-        # fig.write_image(f"outputs/{resname}_zoom.png")
-        # fig.update_layout(map = {'zoom': 2.75, 'center': {'lon': 0, 'lat': 0}})
-        # fig.write_image(f"outputs/{resname}.png")
         fig.show()
-        # return
 
 def test_distance_err():
     fig = go.Figure()
@@ -469,11 +287,11 @@ def test_distance_err():
         errList = []
         tlist = [0.168,0.33,0.5,1,2,3,5,8,13,21,25,28,31]
         for t in tlist:
-            sim_name = sim.name + f"_{t}d_sim"
             lat, lon, _ = loc = sim.antenna.location.to_geodetic()
             lon = lon.to_value(u.deg)
             lat = lat.to_value(u.deg)
 
+            fpath = f"{FILE_DIR}/output/{sim.name}/output/{simdir}/"
             true_x, true_y, true_z = sim.antenna.location.geocentric
             DX = []
             DY = []
@@ -481,8 +299,6 @@ def test_distance_err():
             for i in range(100):
                 resid = 0
                 simdir = f"S{i:02d}"
-                # fpath = f"{FILE_DIR}/outputs/{sim_name}/output/{simdir}/"
-                fpath = f"{FILE_DIR}/demo/{sim_name}/output/{simdir}/"
                 if not os.path.exists(fpath):
                     continue
 
@@ -799,8 +615,7 @@ def test_centroid_distance_err():
 
 
 def test_centroid_real_distance_err(parkes_data):
-    test = ["J0613-0200_J0711-6830", "J0613-0200_J1022+1001", "J0613-0200_J1024-0719"]
-    test = [
+    psrs = [
         ("J0613-0200", "J0711-6830"), 
         # ("J0613-0200", "J1022+1001"), 
         # ("J0613-0200", "J1024-0719"), 
@@ -813,14 +628,13 @@ def test_centroid_real_distance_err(parkes_data):
     lat = lat.to_value(u.deg)
 
     true_x, true_y, true_z = parkes_data.antenna.location.geocentric
-    for pi, pj in test:
+    for pi, pj in psrs:
 
         DX = []
         DY = []
         DZ = []
         print(t)
 
-        # simpath = f"/media/shared/outputs/sim_data/{sim_name}"
         simpath = f"{FILE_DIR}/outputs/parkes_real/{pi}/{pj}/{t}"
         if not os.path.exists(simpath):
             continue

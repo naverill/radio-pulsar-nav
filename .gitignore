@@ -65,9 +65,10 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+.pytest_cache/
 
 #
 *_sim/
 *.t2
 *.png
-*.csv
+*outputs/*.csv
